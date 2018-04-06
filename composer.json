@@ -1,0 +1,18 @@
+{
+    "name": "ttourte/projet_5",
+    "require": {
+        "twig/twig": "~1.0"
+    },
+    "authors": [
+        {
+            "name": "MalronWall",
+            "email": "thibaut.tourte17@gmail.com"
+        }
+    ],
+    "autoload": {
+    "psr-4": {
+        "Core\\": "etc/",
+        "Blog\\": "src/"
+    }
+}
+}
