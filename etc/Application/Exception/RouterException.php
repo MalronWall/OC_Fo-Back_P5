@@ -6,6 +6,7 @@
  * Time: 02:11
  */
 namespace Core\Application\Exception;
+
 class RouterException extends \Exception
 {
 

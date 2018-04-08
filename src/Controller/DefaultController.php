@@ -10,8 +10,8 @@ namespace Blog\Controller;
 
 class DefaultController
 {
-    public function home() {
+    public function home()
+    {
         echo "Voici la homepage !!";
     }
-    
 }
