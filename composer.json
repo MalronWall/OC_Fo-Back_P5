@@ -1,0 +1,19 @@
+{
+    "name": "ttourte/projet_5",
+    "require": {
+        "squizlabs/php_codesniffer": "3.*",
+        "twig/twig": "~1.0"
+    },
+    "authors": [
+        {
+            "name": "MalronWall",
+            "email": "thibaut.tourte17@gmail.com"
+        }
+    ],
+    "autoload": {
+    "psr-4": {
+        "Core\\": "etc/",
+        "Blog\\": "src/"
+    }
+}
+}
