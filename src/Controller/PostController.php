@@ -8,7 +8,9 @@
 
 namespace Blog\Controller;
 
-class PostController
+use Core\Application\Controller\AbstractController;
+
+class PostController extends AbstractController
 {
     public function list()
     {
