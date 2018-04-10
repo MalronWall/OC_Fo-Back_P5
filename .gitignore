@@ -1,9 +1,20 @@
+#PhpStorm
 .idea/
 
+#Diagrammes du projet
 /Diagrammes
 
+#Liste des templates possibles pour ce projet
 /Templates_possibles
 
+#Notes pour le développeur
+Notes.txt
+
+# --------------------------------------------------
+
+#Dossier du fichier de connexion à la base
+#voir le fichier .gitignore dans le dossier /etc/config/database/
+
+#Dossier des dépendances
 /vendor/
 
-Notes.txt
