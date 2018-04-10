@@ -1,14 +1,15 @@
 <?php
-    require '../vendor/autoload.php';
 
-    use Core\Application\Routing\Router;
+require '../vendor/autoload.php';
 
-    $router = new Router($_GET['url']);
+use Core\Application\Routing\Router;
 
-    require_once "../etc/config/routing/routes.php";
+$router = new Router($_GET['url']);
 
-    try {
-        $router->run();
-    } catch (\Exception $e) {
-        die("An error has occurred : " . $e->getMessage());
-    }
+require_once "../etc/config/routing/routes.php";
+
+try {
+    echo $router->run();
+} catch (\Exception $e) {
+    die("An error has occurred : " . $e->getMessage());
+}

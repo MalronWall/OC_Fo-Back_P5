@@ -8,10 +8,15 @@
 
 namespace Blog\Controller;
 
-class DefaultController
+use Core\Application\Controller\AbstractController;
+
+class DefaultController extends AbstractController
 {
     public function home()
     {
-        echo "Voici la homepage !!";
+        $test = "bla";
+        return $this->render('home.html.twig', [
+            'test' => $test
+        ]);
     }
 }
