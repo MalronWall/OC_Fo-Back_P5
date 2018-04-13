@@ -31,6 +31,10 @@ trait CoreTrait
             //'cache' => __DIR__ . '/../../../tmp'
         ]);
 
+        $twig->addExtension(new \Twig_Extension_Debug());
+        $twig->addGlobal('current_page', $_GET['url']);
+        $twig->addGlobal('session', $_SESSION);
+
         return $twig;
     }
 }
