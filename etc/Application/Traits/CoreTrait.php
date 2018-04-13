@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Core\Application\Traits;
 
+use Core\Application\Twig\MyExtension;
+
 trait CoreTrait
 {
     protected $parameters;
@@ -32,6 +34,7 @@ trait CoreTrait
         ]);
 
         $twig->addExtension(new \Twig_Extension_Debug());
+        $twig->addExtension(new MyExtension());
         $twig->addGlobal('current_page', $_GET['url']);
         $twig->addGlobal('session', $_SESSION);
 

@@ -19,9 +19,11 @@ class MyExtension extends \Twig_Extension
 
     public function activeClass(array $context, $page)
     {
-        if (isset($context['current_page']) && $context['current_page'] === $page) {
+        //$context contient toutes les variables globales mises dans Twig
+        $urlExploded = explode('/', $context['current_page']);
+        if (isset($urlExploded[0]) && $urlExploded[0] === $page) {
             return ' active ';
         }
-        return '';
+        return 'nope';
     }
 }
