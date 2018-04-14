@@ -8,3 +8,6 @@
 /*****************************************************************************************************************/
 
     $router->get('', "Default#home");
+    $router->get('posts', "Post#list");
+    $router->get('contact', "Contact#contact");
+    $router->get('login', "User#login");

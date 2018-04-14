@@ -14,7 +14,7 @@ class PostController extends AbstractController
 {
     public function list()
     {
-        echo "Le listing des posts fonctionne !";
+        return $this->render('posts.html.twig');
     }
 
     public function show($id)
