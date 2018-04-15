@@ -21,7 +21,7 @@ class AbstractManager
     {
         $config = $this->loadDatabaseConfiguration();
         try {
-            $dsn = "mysql:dbname=".$config['dbname']."; host=".$config['host'].":".$config['port']."";
+            $dsn = "mysql:hostname=".$config['host'].";dbname=".$config['dbname'];
             $this->db = new DatabaseConnector(
                 $dsn,
                 $config['user'],
