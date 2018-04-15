@@ -24,8 +24,8 @@ class AbstractManager
             $dsn = "mysql:dbname=".$config['dbname']."; host=".$config['host'].":".$config['port']."";
             $this->db = new DatabaseConnector(
                 $dsn,
-                $config['database']['user'],
-                $config['database']['password']
+                $config['user'],
+                $config['password']
             );
         } catch (\PDOException $e) {
             die("An error has occurred : " . $e->getMessage());

@@ -1,5 +1,8 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    Page des posts !
+    Page des posts !<br/>
+    {% for post in posts %}
+        {{ post.title }}<br/>
+    {% endfor %}
 {% endblock %}

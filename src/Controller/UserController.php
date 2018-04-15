@@ -16,4 +16,9 @@ class UserController extends AbstractController
     {
         return $this->render('login.html.twig');
     }
+
+    public function register()
+    {
+        $token = md5(uniqid(mt_rand(), true));
+    }
 }
