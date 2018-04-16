@@ -7,7 +7,8 @@
 //    $router->post('/posts/:id', function ($id){ echo 'Afficher l\'article '.$id.' la valeur '.$_POST['name'];});
 /*****************************************************************************************************************/
 
-    $router->get('', "Default#home");
-    $router->get('posts', "Post#list");
-    $router->get('contact', "Contact#contact");
-    $router->get('login', "User#login");
+$router->get('', "Default#home");
+$router->get('posts', "Post#list");
+$router->post('contact', "Contact#contact");
+$router->get('contact', "Contact#contact");
+$router->get('login', "User#login");

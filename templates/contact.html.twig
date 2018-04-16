@@ -1,5 +1,84 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    Page de contact !
+    <header class="container-fluid">
+        <div class="row text-center" id="headContact">
+            <div class="col-sm-12 align-self-center">
+                <h3>Formulaire de contact</h3>
+            </div>
+        </div>
+    </header>
+    <section class="container" id="formContact">
+        {% if _flashbag is not empty %}
+            <div class="alert alert-{{ _flashbag.type }} alert-dismissible fade show" data-dismiss="alert" role="alert">
+                <strong>{{ _flashbag.message }}</strong>
+                <small><i class="text-muted">- Cliquer pour faire disparaître</i></small>
+            </div>
+        {% endif %}
+        <form class="needs-validation" method="post" novalidate>
+            <div class="form-row">
+                <div class="col-sm-6 mb-3 mt-2">
+                    <label for="name">Votre nom</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Nom" required>
+                    <div class="invalid-feedback">
+                        Veuillez renseigner votre nom !
+                    </div>
+                </div>
+                <div class="col-sm-6 mb-3 mt-2">
+                    <label for="firstname">Votre prénom</label>
+                    <input type="text" name="firstname" class="form-control" id="firstname" placeholder="Prénom" required>
+                    <div class="invalid-feedback">
+                        Veuillez renseigner votre prénom !
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Votre adresse email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+                <div class="invalid-feedback">
+                    Veuillez entrer un format valide !
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="subject">Votre sujet</label>
+                <input type="text" name="subject" class="form-control" id="subject" placeholder="Sujet" required>
+                <div class="invalid-feedback">
+                    Veuillez renseigner votre un sujet !
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="content">Votre contenu</label>
+                <textarea class="form-control" name="content" id="content" rows="5" required></textarea>
+                <div class="invalid-feedback">
+                    Veuillez compléter votre message !
+                </div>
+            </div>
+            <div class="g-recaptcha mb-3 mt-3" data-sitekey="6Lc0YlMUAAAAALWfhBc7ozK_DaFX9L4BUUAFV8WB"></div>
+            <button class="btn btn-primary mb-3" type="submit">Envoyer</button>
+        </form>
+    </section>
+{% endblock %}
+
+{% block javascript %}
+{% verbatim %}
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        const validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+{% endverbatim %}
 {% endblock %}

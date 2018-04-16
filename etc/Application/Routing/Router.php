@@ -45,6 +45,7 @@ class Router
 
     public function run()
     {
+
         try {
             if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
                 throw new RouterException('REQUEST_METHOD does not exist !');
@@ -58,7 +59,7 @@ class Router
             }
             throw new RouterException('No matching routes !');
         } catch (RouterException $e) {
-            die("An error has occurred : " . $e->getMessage());
+            die("An error has occurred in Router.php->run: " . $e->getMessage());
         }
     }
 
@@ -70,7 +71,7 @@ class Router
             }
             return $this->namedRoutes[$name]->getUrl($params);
         } catch (RouterException $e) {
-            die("An error has occurred : " . $e->getMessage());
+            die("An error has occurred in Router.php->url(): " . $e->getMessage());
         }
     }
 }

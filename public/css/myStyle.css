@@ -12,6 +12,18 @@ blockquote {
     position: absolute;
 }
 
+/********** CONTACT **********/
+#headContact {
+    background: #007bff;
+    color: white;
+    height: 70px;
+}
+
+#formContact {
+    margin-bottom: 20px;
+    background: rgba(0,123,255,0.3);
+}
+
 /********** FOOTER **********/
 footer {
     background: #EBE9E7;

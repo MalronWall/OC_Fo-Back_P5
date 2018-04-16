@@ -27,10 +27,15 @@ class ContactController extends AbstractController
 
         if ($requestMethod == 'POST') {
             $post = $_POST;
-            $this->contactHelper->processContactForm($post);
-            $this->addFlash('success', 'Message envoyé');
+            if ($this->contactHelper->processContactForm($post) === true) {
+                $this->addFlash('success', 'Message envoyé !');
+            } else {
+                $this->addFlash('danger', 'Problème robotique !');
+            }
         }
 
-        return $this->render('contact.html.twig');
+        return $this->render('contact.html.twig', [
+
+        ]);
     }
 }
