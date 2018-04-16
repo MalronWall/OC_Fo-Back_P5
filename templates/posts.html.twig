@@ -1,8 +1,16 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    Page des posts !<br/>
-    {% for post in posts %}
-        {{ post.title }}<br/>
-    {% endfor %}
+        Page des posts !<br/>
+        {% for post in posts %}
+            {% if loop.index0 is divisible by(3) %}
+                <div class="row">
+            {% endif %}
+                    <div class="col-4">
+                        {{ post.title }}<br/>
+                    </div>
+            {% if loop.index is divisible by(3) %}
+                </div>
+            {% endif %}
+        {% endfor %}
 {% endblock %}

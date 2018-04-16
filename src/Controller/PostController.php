@@ -24,8 +24,6 @@ class PostController extends AbstractController
     public function list()
     {
         $posts = $this->postManager->getPosts();
-        var_dump($posts);
-        exit();
         return $this->render('posts.html.twig', [
             'posts' => $posts
         ]);

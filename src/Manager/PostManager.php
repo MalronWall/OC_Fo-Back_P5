@@ -16,23 +16,6 @@ class PostManager extends AbstractManager
     public function getPosts()
     {
         $results = [];
-/*
-        try {
-            $bdd = new \PDO(
-                "mysql:hostname=localhost;dbname=oc_back_p5",
-                'root',
-                ''
-            );
-            $bdd->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $bdd->setAttribute(\PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES 'utf8'");
-        } catch (\PDOException $e) {
-            die("Erreur : " . $e->getMessage());
-        }
-
-        $req = $bdd->prepare("SELECT * FROM post ORDER BY id");
-
-        $req -> execute();
-*/
         $req = $this->db->requestDb('SELECT * FROM post ORDER BY id');
 
         $results = $req->fetchAll();

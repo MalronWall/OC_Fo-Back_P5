@@ -20,12 +20,15 @@ class AbstractManager
     public function loadDatabase()
     {
         $config = $this->loadDatabaseConfiguration();
+
         try {
-            $dsn = "mysql:hostname=".$config['host'].";dbname=".$config['dbname'];
+            $options[\PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
+            $dsn = "mysql:dbname=".$config['dbname']."; host=".$config['host'].':'.$config['port'];
             $this->db = new DatabaseConnector(
                 $dsn,
                 $config['user'],
-                $config['password']
+                $config['password'],
+                $options
             );
         } catch (\PDOException $e) {
             die("An error has occurred : " . $e->getMessage());
