@@ -18,11 +18,30 @@ class PostManager extends AbstractManager
     {
         $results = [];
         $req = $this->db->requestDb('
-                                    SELECT p.id, title, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "Le %e/%m/%y à %Hh%m") lastUpdate, pseudo
-                                    FROM post p JOIN user u ON p.id_User = u.id
+                                    SELECT p.id, title, slug, chapo, content,
+                                    DATE_FORMAT(lastUpdate, "Le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
+                                    FROM post p JOIN user u on p.id_User = u.id LEFT JOIN image i on p.id = i.id_Post
                                     ORDER BY id
-                                    ');
+        ');
+
+        foreach ($req->fetchAll() as $datas) {
+            $results[] = Hydrator::hydrate(Post::class, serialize(array_values($datas)));
+        }
+
+        return $results;
+    }
+
+    public function getPost($slug)
+    {
+        $results = [];
+        $req = $this->db->requestDb('
+                                    SELECT p.id, title, slug, chapo, content,
+                                    DATE_FORMAT(lastUpdate, "Le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
+                                    FROM post p JOIN user u on p.id_User = u.id LEFT JOIN image i on p.id = i.id_Post
+                                    WHERE slug = :slug
+                                    ', [
+                                        'slug' => $slug
+        ]);
 
         foreach ($req->fetchAll() as $datas) {
             $results[] = Hydrator::hydrate(Post::class, serialize(array_values($datas)));

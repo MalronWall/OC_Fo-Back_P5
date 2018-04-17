@@ -1,0 +1,32 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ post.slug }}{% endblock %}
+
+{% block content %}
+    {% for post in post %}
+    <header class="container-fluid">
+        <div class="row text-center" id="headTitle">
+            <div class="col-sm-12 align-self-center">
+                <h3>{{ post.title }}</h3>
+            </div>
+        </div>
+    </header>
+
+    <section class="container img-thumbnail">
+        <div class="row justify-content-center">
+            <div class="col-sm-12">
+                {% if post.image is not empty %}
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.jpg" class="img-thumbnail img-fluid" alt="{{ post.label }}">
+                {% else %}
+                    <img src="{{ path }}images/database/post/default.jpg" class="img-thumbnail img-fluid">
+                {% endif %}
+                <i class="h6">{{ post.chapo }}</i><br/><br/>
+                <p>
+                    {{ post.content }}
+                </p>
+                <small class="float-right">{{ post.lastUpdate }} par {{ post.user }}</small>
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+{% endblock %}

@@ -11,52 +11,59 @@
 
     <section class="container">
         <div class="row">
-        {% if pagination.nbTotal > 0 %}
+            {% if pagination.nbTotal > 0 %}
             {% for post in pagination.datas %}
             <div class="col-sm-6 mb-3">
-                {% if post.image is empty %}
+                <a href="{{ path }}posts/{{ post.slug }}">
+                    {% if post.image is not empty %}
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.jpg" class="img-thumbnail img-fluid" alt="{{ post.label }}">
+                    {% else %}
                     <img src="{{ path }}images/database/post/default.jpg" class="img-thumbnail img-fluid">
-                {% endif %}
+                    {% endif %}
+                </a>
             </div>
             <div class="col-sm-6 mb-3">
-                <h3>{{ post.title }}</h3>
+                <h3><a href="{{ path }}posts/{{ post.slug }}">{{ post.title }}</a></h3>
                 <i class="h6">{{ post.chapo }}</i><br/><br/>
                 <p>
                     {{ post.content|length > 300 ? post.content|slice(0, 300) ~ '[...]' : post.content  }}
                 </p>
-                <small>{{ post.lastUpdate }} par {{ post.user }}</small>
+                <small class="float-right">{{ post.lastUpdate }} par {{ post.user }}</small>
             </div>
             {% endfor %}
 
-        <!-- NAVBAR -->
-        {% if pagination.nbTotal > pagination.nbPerPage %}
-        </div>
-        <div class="row justify-content-center">
-            <nav aria-label="Navigation des articles">
-                <ul class="pagination">
-                    <!-- PREVIOUS -->
-                    <li class="page-item {{ pagination.previous }}"><span class="page-link"><</span></li>
-                    {% for page in 1..pagination.totalPaging  %}
-                    {% if page == pagination.currentPage %}
-                    <li class="page-item active">
-                    {% else %}
-                    <li class="page-item">
-                    {% endif %}
-                        <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }}</a>
-                    </li>
-                    {% endfor %}
-                    <!-- NEXT -->
-                    <li class="page-item {{ pagination.next }}"><a class="page-link" href="#5">></a></li>
-                </ul>
-            </nav>
-        {% endif %}
-            {% else %}
-            <div class="alert alert-info col-sm-12 text-center mb-0" role="alert">
-                <strong>Aucun article n'existe pour le moment !</strong>
+            <!-- PAGINATION -->
+            {% if pagination.nbTotal > pagination.nbPerPage %}
             </div>
-            <img src="{{ path }}images/posts/noPost.jpg" alt="Un carnet vierge" class="img-fluid">
+            <div class="row justify-content-center">
+                <nav aria-label="Navigation des articles">
+                    <ul class="pagination">
+                        <!-- PREVIOUS -->
+                        <li class="page-item {{ pagination.previous }}"><span class="page-link"><</span></li>
+                        {% for page in 1..pagination.totalPaging  %}
+                        {% if page == pagination.currentPage %}
+                        <li class="page-item active">
+                        {% else %}
+                        <li class="page-item">
+                        {% endif %}
+                            <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }}</a>
+                        </li>
+                        {% endfor %}
+                        <!-- NEXT -->
+                        <li class="page-item {{ pagination.next }}"><a class="page-link" href="#5">></a></li>
+                    </ul>
+                </nav>
+            {% endif %}
+            {% else %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-info col-sm-12 text-center mb-0" role="alert">
+                        <strong>Aucun article n'existe pour le moment !</strong>
+                    </div>
+                    <img src="{{ path }}images/posts/noPost.jpg" alt="Un carnet vierge" class="img-fluid">
+                </div>
+            </div>
             {% endif %}
         </div>
     </section>
-
 {% endblock %}

@@ -39,8 +39,12 @@ class PostController extends AbstractController
         ]);
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        echo "Le détail du post $id fonctionne !";
+        $post = $this->postManager->getPost($slug);
+        return $this->render('posts-show.html.twig', [
+            'title' => 'Article',
+            'post' => $post
+        ]);
     }
 }
