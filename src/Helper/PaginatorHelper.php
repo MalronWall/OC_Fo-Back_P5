@@ -30,11 +30,6 @@ class PaginatorHelper
         $this->totalPaging = $this->totalPaging();
     }
 
-    public function totalPaging()
-    {
-        return ceil($this->getNbTotal()/$this->getNbPerPage());
-    }
-
     public function getPaging()
     {
         return [
@@ -48,17 +43,33 @@ class PaginatorHelper
         ];
     }
 
-    public function previous()
+    private function totalPaging()
     {
-        return $this->getCurrentPage()>1 ? '' : 'disabled';
+        return ceil($this->getNbTotal()/$this->getNbPerPage());
     }
 
-    public function next()
+    private function previous()
     {
-        return $this->getCurrentPage()<$this->getTotalPaging() ? '' : 'disabled';
+        $currentPage = $this->getCurrentPage();
+
+        return [
+            'display' => $currentPage>1 ? '' : 'disabled',
+            'href' => $currentPage-1>0 ? $currentPage-1 : $currentPage
+        ];
     }
 
-    public function limitDatas()
+    private function next()
+    {
+        $currentPage = $this->getCurrentPage();
+        $totalPaging = $this->getTotalPaging();
+
+        return [
+            'display' => $currentPage<$totalPaging ? '' : 'disabled',
+            'href' => $currentPage<$totalPaging ? $currentPage+1 : $currentPage
+        ];
+    }
+
+    private function limitDatas()
     {
         return array_slice(
             $this->getDatas(),
@@ -70,7 +81,7 @@ class PaginatorHelper
     /**
      * @return mixed
      */
-    public function getNbTotal()
+    private function getNbTotal()
     {
         return $this->nbTotal;
     }
@@ -78,7 +89,7 @@ class PaginatorHelper
     /**
      * @param mixed $nbTotal
      */
-    public function setNbTotal($nbTotal)
+    private function setNbTotal($nbTotal)
     {
         $this->nbTotal = $nbTotal;
     }
@@ -86,7 +97,7 @@ class PaginatorHelper
     /**
      * @return mixed
      */
-    public function getNbPerPage()
+    private function getNbPerPage()
     {
         return $this->nbPerPage;
     }
@@ -94,7 +105,7 @@ class PaginatorHelper
     /**
      * @param mixed $nbPerPage
      */
-    public function setNbPerPage($nbPerPage)
+    private function setNbPerPage($nbPerPage)
     {
         $this->nbPerPage = $nbPerPage;
     }
@@ -102,7 +113,7 @@ class PaginatorHelper
     /**
      * @return mixed
      */
-    public function getCurrentPage()
+    private function getCurrentPage()
     {
         return $this->currentPage;
     }
@@ -110,7 +121,7 @@ class PaginatorHelper
     /**
      * @param mixed $currentPage
      */
-    public function setCurrentPage($currentPage)
+    private function setCurrentPage($currentPage)
     {
         $this->currentPage = $currentPage;
     }
@@ -118,7 +129,7 @@ class PaginatorHelper
     /**
      * @return float
      */
-    public function getTotalPaging(): float
+    private function getTotalPaging(): float
     {
         return $this->totalPaging;
     }
@@ -126,7 +137,7 @@ class PaginatorHelper
     /**
      * @param float $total
      */
-    public function setTotal(float $total)
+    private function setTotal(float $total)
     {
         $this->totalPaging = $total;
     }
@@ -134,7 +145,7 @@ class PaginatorHelper
     /**
      * @return array
      */
-    public function getDatas(): array
+    private function getDatas(): array
     {
         return $this->datas;
     }
@@ -142,7 +153,7 @@ class PaginatorHelper
     /**
      * @param array $datas
      */
-    public function setDatas(array $datas)
+    private function setDatas(array $datas)
     {
         $this->datas = $datas;
     }
