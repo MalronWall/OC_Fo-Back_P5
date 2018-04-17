@@ -16,6 +16,7 @@ class ErrorController extends AbstractController
     {
         $domain = $_SERVER['SERVER_NAME'];
         return $this->render('404.html.twig', [
+            'title' => '404',
             'domain' => $domain
         ]);
     }

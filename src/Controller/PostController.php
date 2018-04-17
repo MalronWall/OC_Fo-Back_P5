@@ -34,6 +34,7 @@ class PostController extends AbstractController
         $pagination = $paginationObject->getPaging();
 
         return $this->render('posts.html.twig', [
+            'title' => 'Articles',
             'pagination' => $pagination
         ]);
     }
@@ -41,10 +42,5 @@ class PostController extends AbstractController
     public function show($id)
     {
         echo "Le détail du post $id fonctionne !";
-    }
-
-    public function showSlug($slug, $id)
-    {
-        echo "Le détail du post $slug / $id fonctionne !";
     }
 }

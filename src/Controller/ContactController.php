@@ -35,7 +35,7 @@ class ContactController extends AbstractController
         }
 
         return $this->render('contact.html.twig', [
-
+            'title' => 'Contact'
         ]);
     }
 }
