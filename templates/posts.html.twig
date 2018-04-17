@@ -11,11 +11,11 @@
 
     <section class="container">
         <div class="row">
-        {% if nbPosts > 0 %}
-            {% for post in posts %}
+        {% if pagination.nbTotal > 0 %}
+            {% for post in pagination.datas %}
             <div class="col-sm-6 mb-3">
                 {% if post.image is empty %}
-                    <img src="../public/images/database/post/default.jpg" class="img-thumbnail img-fluid">
+                    <img src="{{ path }}images/database/post/default.jpg" class="img-thumbnail img-fluid">
                 {% endif %}
             </div>
             <div class="col-sm-6 mb-3">
@@ -24,24 +24,29 @@
                 <p>
                     {{ post.content|length > 300 ? post.content|slice(0, 300) ~ '[...]' : post.content  }}
                 </p>
+                <small>{{ post.lastUpdate }} par {{ post.user }}</small>
             </div>
             {% endfor %}
 
         <!-- NAVBAR -->
-        {% if nbPosts > 4 %}
+        {% if pagination.nbTotal > pagination.nbPerPage %}
         </div>
         <div class="row justify-content-center">
             <nav aria-label="Navigation des articles">
                 <ul class="pagination">
                     <!-- PREVIOUS -->
-                    <li class="page-item disabled"><span class="page-link">Précédent</span></li>
-                    <!-- FIRST -->
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><span class="page-link">2<span class="sr-only">(current)</span></span></li>
-                    <li class="page-item"><a class="page-link" href="#4">3</a></li>
-                    <!-- LAST -->
+                    <li class="page-item {{ pagination.previous }}"><span class="page-link"><</span></li>
+                    {% for page in 1..pagination.totalPaging  %}
+                    {% if page == pagination.currentPage %}
+                    <li class="page-item active">
+                    {% else %}
+                    <li class="page-item">
+                    {% endif %}
+                        <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }}</a>
+                    </li>
+                    {% endfor %}
                     <!-- NEXT -->
-                    <li class="page-item"><a class="page-link" href="#5">Suivant</a></li>
+                    <li class="page-item {{ pagination.next }}"><a class="page-link" href="#5">></a></li>
                 </ul>
             </nav>
         {% endif %}
@@ -49,7 +54,7 @@
             <div class="alert alert-info col-sm-12 text-center mb-0" role="alert">
                 <strong>Aucun article n'existe pour le moment !</strong>
             </div>
-            <img src="../public/images/posts/noPost.jpg" alt="Un carnet vierge" class="img-fluid">
+            <img src="{{ path }}images/posts/noPost.jpg" alt="Un carnet vierge" class="img-fluid">
             {% endif %}
         </div>
     </section>

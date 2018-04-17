@@ -8,6 +8,7 @@
 
 namespace Blog\Controller;
 
+use Blog\Helper\PaginatorHelper;
 use Core\Application\Controller\AbstractController;
 use Blog\Manager\PostManager;
 
@@ -34,7 +35,13 @@ class PostController extends AbstractController
 
     public function listPage($id)
     {
+        $posts = $this->postManager->getPosts();
+        $paginationObject = new PaginatorHelper($posts, $id);
+        $pagination = $paginationObject->getPaging();
 
+        return $this->render('posts.html.twig', [
+            'pagination' => $pagination
+        ]);
     }
 
     public function show($id)

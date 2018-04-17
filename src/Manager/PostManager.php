@@ -17,10 +17,12 @@ class PostManager extends AbstractManager
     public function getPosts()
     {
         $results = [];
-        $req = $this->db->requestDb('SELECT * FROM post ORDER BY id LIMIT :nbPost OFFSET :aPartirDu', [
-            'nbPost' => 5,
-            'aPartirDu' => 0
-        ]);
+        $req = $this->db->requestDb('
+                                    SELECT p.id, title, chapo, content,
+                                    DATE_FORMAT(lastUpdate, "Le %e/%m/%y à %Hh%m") lastUpdate, pseudo
+                                    FROM post p JOIN user u ON p.id_User = u.id
+                                    ORDER BY id
+                                    ');
 
         foreach ($req->fetchAll() as $datas) {
             $results[] = Hydrator::hydrate(Post::class, serialize(array_values($datas)));

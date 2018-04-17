@@ -15,7 +15,7 @@ class Post implements \Serializable
     protected $chapo;
     protected $content;
     protected $lastUpdate;
-    protected $idUser;
+    protected $user;
 
     /**
      * @return mixed
@@ -100,17 +100,17 @@ class Post implements \Serializable
     /**
      * @return mixed
      */
-    public function getIdUser()
+    public function getUser()
     {
-        return $this->idUser;
+        return $this->user;
     }
 
     /**
-     * @param mixed $idUser
+     * @param mixed $user
      */
-    public function setIdUser($idUser)
+    public function setUser($user)
     {
-        $this->idUser = $idUser;
+        $this->user = $user;
     }
 
 
@@ -123,7 +123,7 @@ class Post implements \Serializable
             $this->chapo,
             $this->content,
             $this->lastUpdate,
-            $this->idUser
+            $this->user
         ];
     }
 
@@ -135,7 +135,7 @@ class Post implements \Serializable
             $this->chapo,
             $this->content,
             $this->lastUpdate,
-            $this->idUser
+            $this->user
             ) = unserialize($serialized);
 
         return $this;
