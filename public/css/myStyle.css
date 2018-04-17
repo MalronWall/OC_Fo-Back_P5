@@ -2,6 +2,13 @@ body {
     background: #D4D4D4;
 }
 
+/********** ENTETE TOUS **********/
+#headTitle {
+    background: #007bff;
+    color: white;
+    height: 70px;
+}
+
 /********** HOME **********/
 blockquote {
     background: #EBE9E7;
@@ -12,16 +19,18 @@ blockquote {
     position: absolute;
 }
 
+/********** POSTS **********/
+
+
 /********** CONTACT **********/
-#headContact {
-    background: #007bff;
-    color: white;
-    height: 70px;
+#alertSend {
+
 }
 
 #formContact {
     margin-bottom: 20px;
     background: rgba(0,123,255,0.3);
+    border-radius: 20px 20px 20px 20px;
 }
 
 /********** FOOTER **********/

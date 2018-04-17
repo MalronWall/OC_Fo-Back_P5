@@ -38,7 +38,7 @@
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="../public/">
+            <a class="navbar-brand" href="{{ path }}">
                 <h3><i class="fas fa-laptop"></i> Thibaut Tourte</h3>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,22 +48,22 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item {{ activePage('') }}">
-                        <a class="nav-link" href="../public/">
+                        <a class="nav-link" href="{{ path }}">
                             <i class="fas fa-home"></i> Accueil {{ currentPage('') |raw }}
                         </a>
                     </li>
                     <li class="nav-item {{ activePage('posts') }}">
-                        <a class="nav-link" href="../public/posts">
+                        <a class="nav-link" href="{{ path }}posts">
                             <i class="far fa-newspaper"></i> Articles {{ currentPage('posts') |raw }}
                         </a>
                     </li>
                     <li class="nav-item {{ activePage('contact') }}">
-                        <a class="nav-link" href="../public/contact">
+                        <a class="nav-link" href="{{ path }}contact">
                             <i class="far fa-envelope"></i> Contact {{ currentPage('contact') |raw }}
                         </a>
                     </li>
                     <li class="nav-item {{ activePage('login') }}">
-                        <a class="nav-link" href="../public/login">
+                        <a class="nav-link" href="{{ path }}login">
                             <i class="fas fa-power-off"></i> Connexion {{ currentPage('login') |raw }}
                         </a>
                     </li>

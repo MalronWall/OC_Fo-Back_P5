@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Blog\Manager;
 
+use Blog\Model\Post;
 use Core\Application\Database\AbstractManager;
 use Core\Application\Database\Hydrator;
 
@@ -16,14 +17,15 @@ class PostManager extends AbstractManager
     public function getPosts()
     {
         $results = [];
-        $req = $this->db->requestDb('SELECT * FROM post ORDER BY id');
+        $req = $this->db->requestDb('SELECT * FROM post ORDER BY id LIMIT :nbPost OFFSET :aPartirDu', [
+            'nbPost' => 5,
+            'aPartirDu' => 0
+        ]);
 
-        $results = $req->fetchAll();
-
-        return $results;
-        /*
         foreach ($req->fetchAll() as $datas) {
             $results[] = Hydrator::hydrate(Post::class, serialize(array_values($datas)));
-        }*/
+        }
+
+        return $results;
     }
 }

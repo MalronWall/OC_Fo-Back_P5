@@ -1,16 +1,57 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-        Page des posts !<br/>
-        {% for post in posts %}
-            {% if loop.index0 is divisible by(3) %}
-                <div class="row">
+    <header class="container-fluid">
+        <div class="row text-center" id="headTitle">
+            <div class="col-sm-12 align-self-center">
+                <h3>Liste des articles</h3>
+            </div>
+        </div>
+    </header>
+
+    <section class="container">
+        <div class="row">
+        {% if nbPosts > 0 %}
+            {% for post in posts %}
+            <div class="col-sm-6 mb-3">
+                {% if post.image is empty %}
+                    <img src="../public/images/database/post/default.jpg" class="img-thumbnail img-fluid">
+                {% endif %}
+            </div>
+            <div class="col-sm-6 mb-3">
+                <h3>{{ post.title }}</h3>
+                <i class="h6">{{ post.chapo }}</i><br/><br/>
+                <p>
+                    {{ post.content|length > 300 ? post.content|slice(0, 300) ~ '[...]' : post.content  }}
+                </p>
+            </div>
+            {% endfor %}
+
+        <!-- NAVBAR -->
+        {% if nbPosts > 4 %}
+        </div>
+        <div class="row justify-content-center">
+            <nav aria-label="Navigation des articles">
+                <ul class="pagination">
+                    <!-- PREVIOUS -->
+                    <li class="page-item disabled"><span class="page-link">Précédent</span></li>
+                    <!-- FIRST -->
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active"><span class="page-link">2<span class="sr-only">(current)</span></span></li>
+                    <li class="page-item"><a class="page-link" href="#4">3</a></li>
+                    <!-- LAST -->
+                    <!-- NEXT -->
+                    <li class="page-item"><a class="page-link" href="#5">Suivant</a></li>
+                </ul>
+            </nav>
+        {% endif %}
+            {% else %}
+            <div class="alert alert-info col-sm-12 text-center mb-0" role="alert">
+                <strong>Aucun article n'existe pour le moment !</strong>
+            </div>
+            <img src="../public/images/posts/noPost.jpg" alt="Un carnet vierge" class="img-fluid">
             {% endif %}
-                    <div class="col-4">
-                        {{ post.title }}<br/>
-                    </div>
-            {% if loop.index is divisible by(3) %}
-                </div>
-            {% endif %}
-        {% endfor %}
+        </div>
+    </section>
+
 {% endblock %}
