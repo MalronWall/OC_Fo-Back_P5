@@ -19,7 +19,7 @@ class PostManager extends AbstractManager
         $results = [];
         $req = $this->db->requestDb('
                                     SELECT p.id, title, slug, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "Le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
+                                    DATE_FORMAT(lastUpdate, "le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
                                     FROM post p JOIN user u on p.id_User = u.id LEFT JOIN image i on p.id = i.id_Post
                                     ORDER BY id
         ');
@@ -36,7 +36,7 @@ class PostManager extends AbstractManager
         $results = [];
         $req = $this->db->requestDb('
                                     SELECT p.id, title, slug, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "Le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
+                                    DATE_FORMAT(lastUpdate, "le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
                                     FROM post p JOIN user u on p.id_User = u.id LEFT JOIN image i on p.id = i.id_Post
                                     WHERE slug = :slug
                                     ', [
