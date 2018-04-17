@@ -24,13 +24,7 @@ class PostController extends AbstractController
 
     public function list()
     {
-        $posts = $this->postManager->getPosts();
-
-        $nbPosts = count($posts);
-        return $this->render('posts.html.twig', [
-            'nbPosts' => $nbPosts,
-            'posts' => $posts
-        ]);
+        return $this->listPage(1);
     }
 
     public function listPage($id)
