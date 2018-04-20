@@ -13,5 +13,5 @@ require_once "../etc/config/routing/routes.php";
 try {
     echo $router->run();
 } catch (\Exception $e) {
-    die("An error has occurred : " . $e->getMessage());
+    die("An error has occurred in index.php->run() : " . $e->getMessage());
 }

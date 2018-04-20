@@ -43,6 +43,8 @@ trait CoreTrait
                 'path',
                 $config['pathLocal']
             );
+        } else {
+            $twig->addGlobal('path', '/');
         }
 
         return $twig;

@@ -3,8 +3,14 @@ body {
 }
 
 /********** ENTETE TOUS **********/
-#headTitle {
+.headTitle {
     background: #007bff;
+    color: white;
+    height: 70px;
+}
+
+.headTitle2 {
+    background: rgba(19,177,0,0.71);
     color: white;
     height: 70px;
 }
@@ -19,13 +25,9 @@ blockquote {
     position: absolute;
 }
 
-/********** POSTS **********/
+/********** POSTS-SHOW **********/
 
 
-/********** CONTACT **********/
-#alertSend {
-
-}
 
 #formContact {
     margin-bottom: 20px;

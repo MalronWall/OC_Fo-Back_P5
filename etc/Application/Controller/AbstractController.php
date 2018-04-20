@@ -24,7 +24,7 @@ abstract class AbstractController
         try {
             return $this->getTwig()->render($filename, $params);
         } catch (\Twig_Error $e) {
-            die("An error has occurred : " . $e->getMessage());
+            die("An error has occurred in AbstractController.php->render() : " . $e->getMessage());
         }
     }
 

@@ -8,41 +8,45 @@ declare(strict_types=1);
 
 namespace Blog\Manager;
 
-use Blog\Model\Post;
 use Core\Application\Database\AbstractManager;
+use Blog\Model\Post;
 use Core\Application\Database\Hydrator;
 
 class PostManager extends AbstractManager
 {
     public function getPosts()
     {
-        $results = [];
         $req = $this->db->requestDb('
-                                    SELECT p.id, title, slug, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
-                                    FROM post p JOIN user u on p.id_User = u.id LEFT JOIN image i on p.id = i.id_Post
+                                    SELECT id, title, slug, chapo, content,
+                                    DATE_FORMAT(lastUpdate, "%e/%m/%y à %Hh%m") lastUpdate, id_User
+                                    FROM post
                                     ORDER BY id
         ');
 
-        foreach ($req->fetchAll() as $datas) {
-            $results[] = Hydrator::hydrate(Post::class, serialize(array_values($datas)));
-        }
+        $results = $this->fetchAllResults($req);
 
         return $results;
     }
 
     public function getPost($slug)
     {
-        $results = [];
         $req = $this->db->requestDb('
-                                    SELECT p.id, title, slug, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "le %e/%m/%y à %Hh%m") lastUpdate, pseudo, label, image
-                                    FROM post p JOIN user u on p.id_User = u.id LEFT JOIN image i on p.id = i.id_Post
+                                    SELECT id, title, slug, chapo, content,
+                                    DATE_FORMAT(lastUpdate, "%e/%m/%y à %Hh%m") lastUpdate, id_User
+                                    FROM post
                                     WHERE slug = :slug
                                     ', [
                                         'slug' => $slug
         ]);
 
+        $results = $this->fetchAllResults($req);
+
+        return $results;
+    }
+
+    private function fetchAllResults($req)
+    {
+        $results = [];
         foreach ($req->fetchAll() as $datas) {
             $results[] = Hydrator::hydrate(Post::class, serialize(array_values($datas)));
         }

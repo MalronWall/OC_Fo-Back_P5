@@ -5,7 +5,7 @@
 {% block content %}
     {% for post in post %}
     <header class="container-fluid">
-        <div class="row text-center" id="headTitle">
+        <div class="row text-center headTitle">
             <div class="col-sm-12 align-self-center">
                 <h3>{{ post.title }}</h3>
             </div>
@@ -28,18 +28,63 @@
             </div>
         </div>
     </section>
-    {% endfor %}
+
+    {{ dump(post) }}
+    {{ dump(pagination) }}
+
+    {% if pagination.nbTotal > 0 %}
+    <!-- COMMENTS -->
+    <br/>
     <section class="container">
+        <div class="row text-center justify-content-center headTitle2">
+            <div class="col-sm-10 align-self-center">
+                <h3>Commentaires</h3>
+            </div>
+        </div>
         <div class="row justify-content-center">
             <div class="col-sm-10 img-thumbnail">
-                <img src="{{ path }}images/database/user/default.png" class="float-left" height="200">
-
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus ante ut turpis porta, quis hendrerit leo pretium. Duis varius lacus ac gravida pharetra. Nulla interdum, nisi sit amet mollis varius, massa massa tincidunt justo, ut commodo eros ipsum id libero. Vivamus ullamcorper tempus lacus, ac euismod sapien placerat a. Praesent quis ultrices arcu, et vulputate mauris. Cras arcu augue, dignissim et aliquet vitae, gravida ut diam. Pellentesque varius ante neque, ut pharetra mi ultrices vitae. Etiam convallis dignissim magna. Quisque venenatis ipsum tempus ipsum molestie eleifend. Aliquam eu purus ornare, mattis leo pretium, ultrices tellus. Curabitur et posuere nisl. Curabitur at erat risus. Nunc eget velit lobortis, hendrerit nunc ac, faucibus erat. Praesent volutpat, quam sed efficitur dictum, purus dui cursus augue, id pellentesque sem lectus nec erat.
-
-                Donec non nibh vitae enim ornare vestibulum eget a nunc. Maecenas sagittis tincidunt est, vel ultricies lectus volutpat eget. Sed vitae dolor eleifend, tincidunt sapien nec, tempor lacus. Duis id purus sit amet dolor faucibus tempus. Aenean venenatis nulla ac est semper, ut dictum lacus dignissim. Cras sollicitudin, dolor eget tristique suscipit, quam justo mollis risus, tristique vehicula sapien felis a leo. Etiam finibus pretium eros at suscipit. Pellentesque ex ex, ultrices et pellentesque sit amet, fermentum a sem. In varius velit at tempus cursus. Fusce sit amet ex sapien.
+                <div class="float-left text-center">
+                {% if post.image is not empty %}
+                    <img src="{{ path }}images/database/user/{{ post.slug }}.jpg" class="float-left" height="200px" alt="{{ post.label }}"><br/>
+                {% else %}
+                    <img src="{{ path }}images/database/user/default.png" class="float-left" height="200px" alt="Image par défaut d'un utilisateur"><br/>
+                    <strong>{{ comment.user }}</strong>
+                {% endif %}
+                </div>
+                <p>
+                {{ comment.content }}
+                </p>
+                <small class="float-right">Publié le {{ comment.published }}</small>
             </div>
         </div>
     </section>
+    <div class="row justify-content-center">
+        <nav aria-label="Navigation des articles">
+            <ul class="pagination">
+                <!-- PREVIOUS -->
+                <li class="page-item {{ pagination.previous.display }}">
+                    <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.previous.href }}"><</a>
+                </li>
+                {% for page in 1..pagination.totalPaging  %}
+                    {% if page == pagination.currentPage %}
+                        <li class="page-item active">
+                            <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <!-- NEXT -->
+                <li class="page-item {{ pagination.next.display }}">
+                    <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.next.href }}">></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+    {% endfor %}
 {% endblock %}
 
 {% block javascript %}

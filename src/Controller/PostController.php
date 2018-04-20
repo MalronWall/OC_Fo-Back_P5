@@ -9,6 +9,8 @@
 namespace Blog\Controller;
 
 use Blog\Helper\PaginatorHelper;
+use Blog\Manager\CommentManager;
+use Blog\Manager\UserManager;
 use Core\Application\Controller\AbstractController;
 use Blog\Manager\PostManager;
 
@@ -30,8 +32,20 @@ class PostController extends AbstractController
     public function listPage($id)
     {
         $posts = $this->postManager->getPosts();
-        $paginationObject = new PaginatorHelper($posts, $id);
-        $pagination = $paginationObject->getPaging();
+
+        $userManager = new UserManager();
+        //var_dump($posts);
+        /*foreach ($posts as $post) {
+            foreach ($post as $field => $value) {
+                echo $field . " => " . $value . "<br/>";
+                if ($field == "id_User") {
+                    $posts["pseudoUser"] = $userManager->getUser($value);
+                }
+            }
+        }*/
+        //exit();
+        $paginatorHelper = new PaginatorHelper($posts, $id, 5);
+        $pagination = $paginatorHelper->getPaging();
 
         return $this->render('posts.html.twig', [
             'title' => 'Articles',
@@ -39,12 +53,25 @@ class PostController extends AbstractController
         ]);
     }
 
-    public function show($slug)
+    public function show($slugPost)
     {
-        $post = $this->postManager->getPost($slug);
+        return $this->showPage($slugPost, 1);
+    }
+
+    public function showPage($slugPost, $id)
+    {
+        $post = $this->postManager->getPost($slugPost);
+
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getComments($slugPost);
+
+        $paginatorHelper = new PaginatorHelper($comments, $id, 10);
+        $pagination = $paginatorHelper->getPaging();
+
         return $this->render('posts-show.html.twig', [
             'title' => 'Article',
-            'post' => $post
+            'post' => $post,
+            'pagination' => $pagination
         ]);
     }
 }

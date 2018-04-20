@@ -17,7 +17,7 @@ class AbstractManager
         $this->loadDatabase();
     }
 
-    public function loadDatabase()
+    protected function loadDatabase()
     {
         $config = $this->loadDatabaseConfiguration();
 
@@ -31,7 +31,7 @@ class AbstractManager
                 $options
             );
         } catch (\PDOException $e) {
-            die("An error has occurred : " . $e->getMessage());
+            die("An error has occurred in AbstractManager.php->loadDatabase() : " . $e->getMessage());
         }
     }
 

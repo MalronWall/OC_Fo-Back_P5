@@ -8,14 +8,13 @@ declare(strict_types=1);
 
 namespace Blog\Model;
 
-class Post implements \Serializable
+class Comment implements \Serializable
 {
     protected $id;
-    protected $title;
-    protected $slug;
-    protected $chapo;
     protected $content;
-    protected $lastUpdate;
+    protected $published;
+    protected $valid;
+    protected $id_Post;
     protected $id_User;
 
     /**
@@ -37,54 +36,6 @@ class Post implements \Serializable
     /**
      * @return mixed
      */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * @param mixed $slug
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChapo()
-    {
-        return $this->chapo;
-    }
-
-    /**
-     * @param mixed $chapo
-     */
-    public function setChapo($chapo)
-    {
-        $this->chapo = $chapo;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getContent()
     {
         return $this->content;
@@ -101,17 +52,49 @@ class Post implements \Serializable
     /**
      * @return mixed
      */
-    public function getLastUpdate()
+    public function getPublished()
     {
-        return $this->lastUpdate;
+        return $this->published;
     }
 
     /**
-     * @param mixed $lastUpdate
+     * @param mixed $published
      */
-    public function setLastUpdate($lastUpdate)
+    public function setPublished($published)
     {
-        $this->lastUpdate = $lastUpdate;
+        $this->published = $published;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValid()
+    {
+        return $this->valid;
+    }
+
+    /**
+     * @param mixed $valid
+     */
+    public function setValid($valid)
+    {
+        $this->valid = $valid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdPost()
+    {
+        return $this->id_Post;
+    }
+
+    /**
+     * @param mixed $slugPost
+     */
+    public function setIdPost($id_Post)
+    {
+        $this->id_Post = $id_Post;
     }
 
     /**
@@ -123,7 +106,7 @@ class Post implements \Serializable
     }
 
     /**
-     * @param mixed $user
+     * @param mixed $pseudoUser
      */
     public function setIdUser($id_User)
     {
@@ -134,11 +117,10 @@ class Post implements \Serializable
     {
         return [
             $this->id,
-            $this->title,
-            $this->slug,
-            $this->chapo,
             $this->content,
-            $this->lastUpdate,
+            $this->published,
+            $this->valid,
+            $this->id_Post,
             $this->id_User
         ];
     }
@@ -147,11 +129,10 @@ class Post implements \Serializable
     {
         list(
             $this->id,
-            $this->title,
-            $this->slug,
-            $this->chapo,
             $this->content,
-            $this->lastUpdate,
+            $this->published,
+            $this->valid,
+            $this->id_Post,
             $this->id_User
             ) = unserialize($serialized);
 
