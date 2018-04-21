@@ -10,6 +10,7 @@ namespace Core\Application\Database;
 
 class AbstractManager
 {
+    /** @var DatabaseConnector */
     protected $db;
 
     public function __construct()

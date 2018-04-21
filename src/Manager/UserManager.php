@@ -14,6 +14,17 @@ use Core\Application\Database\Hydrator;
 
 class UserManager extends AbstractManager
 {
+    public function fetchAllPostsWithUser(array $posts)
+    {
+        foreach ($posts as $post) {
+            $user = $this->getUser($post->getIdUser());
+            $post->setIdUser($user);
+
+        }
+
+        return $posts;
+    }
+
     public function getUser($idUser)
     {
         $req = $this->db->requestDb('
@@ -24,9 +35,7 @@ class UserManager extends AbstractManager
             'idUser' => $idUser
         ]);
 
-        $results = $this->fetchAllResults($req);
-
-        return $results;
+        return Hydrator::hydrate(User::class, serialize(array_values($req->fetch())));
     }
 
     private function fetchAllResults($req)

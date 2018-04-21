@@ -28,7 +28,7 @@
                 <p>
                     {{ post.content|length > 300 ? post.content|slice(0, 300) ~ '[...]' : post.content  }}
                 </p>
-                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par {{ post.user }}</small>
+                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par {{ post.idUser.firstname ~ ' ' ~ post.idUser.name }}</small>
             </div>
             {% endfor %}
 

@@ -11,6 +11,8 @@ namespace Blog\Controller;
 use Blog\Helper\PaginatorHelper;
 use Blog\Manager\CommentManager;
 use Blog\Manager\UserManager;
+use Blog\Model\Post;
+use Blog\Model\User;
 use Core\Application\Controller\AbstractController;
 use Blog\Manager\PostManager;
 
@@ -18,10 +20,14 @@ class PostController extends AbstractController
 {
     private $postManager;
 
+    /** @var UserManager */
+    private $userManager;
+
     public function __construct()
     {
         parent::__construct();
         $this->postManager = new PostManager();
+        $this->userManager = new UserManager();
     }
 
     public function list()
@@ -32,24 +38,14 @@ class PostController extends AbstractController
     public function listPage($id)
     {
         $posts = $this->postManager->getPosts();
+        $this->userManager->fetchAllPostsWithUser($posts);
 
-        $userManager = new UserManager();
-        //var_dump($posts);
-        /*foreach ($posts as $post) {
-            foreach ($post as $field => $value) {
-                echo $field . " => " . $value . "<br/>";
-                if ($field == "id_User") {
-                    $posts["pseudoUser"] = $userManager->getUser($value);
-                }
-            }
-        }*/
-        //exit();
         $paginatorHelper = new PaginatorHelper($posts, $id, 5);
         $pagination = $paginatorHelper->getPaging();
 
         return $this->render('posts.html.twig', [
             'title' => 'Articles',
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ]);
     }
 
@@ -71,7 +67,7 @@ class PostController extends AbstractController
         return $this->render('posts-show.html.twig', [
             'title' => 'Article',
             'post' => $post,
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ]);
     }
 }

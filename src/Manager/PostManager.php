@@ -14,18 +14,35 @@ use Core\Application\Database\Hydrator;
 
 class PostManager extends AbstractManager
 {
+    /** @var UserManager */
+    private $userManager;
+
+    public function __construct()
+    {
+        $this->userManager = new UserManager();
+        parent::__construct();
+    }
+
     public function getPosts()
     {
         $req = $this->db->requestDb('
                                     SELECT id, title, slug, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "%e/%m/%y à %Hh%m") lastUpdate, id_User
+                                    DATE_FORMAT(last_update, "%e/%m/%y à %Hh%m") last_update, id_user
                                     FROM post
                                     ORDER BY id
         ');
-
         $results = $this->fetchAllResults($req);
 
-        return $results;
+        $datas = [];
+
+        /** @var Post $post */
+        foreach ($results as $post) {
+            $user = $this->userManager->getUser($post->getIdUser());
+            $post->setIdUser($user);
+            $datas[] = $post;
+        }
+
+        return $datas;
     }
 
     public function getPost($slug)
@@ -36,12 +53,15 @@ class PostManager extends AbstractManager
                                     FROM post
                                     WHERE slug = :slug
                                     ', [
-                                        'slug' => $slug
+                                        'slug' => $slug,
         ]);
 
-        $results = $this->fetchAllResults($req);
+//        $results = $this->fetchAllResults($req);
+        $datas = $req->fetch();
+        $datas['id_user'] = $this->userManager->getUser($datas['id_user']);
 
-        return $results;
+        return Hydrator::hydrate(Post::class, serialize(array_values($datas)));
+//        return $results;
     }
 
     private function fetchAllResults($req)
