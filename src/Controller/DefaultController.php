@@ -14,9 +14,7 @@ class DefaultController extends AbstractController
 {
     public function home()
     {
-        $test = "bla";
         return $this->render('home.html.twig', [
-            'test' => $test
         ]);
     }
 }
