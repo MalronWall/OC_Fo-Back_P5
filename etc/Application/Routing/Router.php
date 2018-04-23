@@ -7,6 +7,8 @@
  */
 namespace Core\Application\Routing;
 
+use Blog\Controller\ErrorController;
+use Core\Application\Exception\NotFoundHttpException;
 use Core\Application\Exception\RouterException;
 
 class Router
@@ -57,9 +59,12 @@ class Router
                     return $route->call();
                 }
             }
-            throw new RouterException('No matching routes !');
+            throw new NotFoundHttpException('No matching routes !');
         } catch (RouterException $e) {
             die("An error has occurred in Router.php->run: " . $e->getMessage());
+        } catch (NotFoundHttpException $e) {
+            $error = new ErrorController();
+            return $error->notFound();
         }
     }
 

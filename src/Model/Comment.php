@@ -14,8 +14,8 @@ class Comment implements \Serializable
     protected $content;
     protected $published;
     protected $valid;
-    protected $id_Post;
-    protected $id_User;
+    protected $Post;
+    protected $User;
 
     /**
      * @return mixed
@@ -84,33 +84,33 @@ class Comment implements \Serializable
     /**
      * @return mixed
      */
-    public function getIdPost()
+    public function getPost()
     {
-        return $this->id_Post;
+        return $this->Post;
     }
 
     /**
      * @param mixed $slugPost
      */
-    public function setIdPost($id_Post)
+    public function setPost($Post)
     {
-        $this->id_Post = $id_Post;
+        $this->Post = $Post;
     }
 
     /**
      * @return mixed
      */
-    public function getIdUser()
+    public function getUser()
     {
-        return $this->id_User;
+        return $this->User;
     }
 
     /**
      * @param mixed $pseudoUser
      */
-    public function setIdUser($id_User)
+    public function setUser($User)
     {
-        $this->id_User = $id_User;
+        $this->User = $User;
     }
 
     public function serialize()
@@ -120,8 +120,8 @@ class Comment implements \Serializable
             $this->content,
             $this->published,
             $this->valid,
-            $this->id_Post,
-            $this->id_User
+            $this->Post,
+            $this->User
         ];
     }
 
@@ -132,8 +132,8 @@ class Comment implements \Serializable
             $this->content,
             $this->published,
             $this->valid,
-            $this->id_Post,
-            $this->id_User
+            $this->Post,
+            $this->User
             ) = unserialize($serialized);
 
         return $this;

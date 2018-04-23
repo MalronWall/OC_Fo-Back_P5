@@ -13,8 +13,8 @@ class Image implements \Serializable
     protected $id;
     protected $label;
     protected $image;
-    protected $id_Post;
-    protected $id_user;
+    protected $Post;
+    protected $User;
 
     /**
      * @return mixed
@@ -67,33 +67,33 @@ class Image implements \Serializable
     /**
      * @return mixed
      */
-    public function getIdPost()
+    public function getPost()
     {
-        return $this->id_Post;
+        return $this->Post;
     }
 
     /**
-     * @param mixed $id_Post
+     * @param mixed $Post
      */
-    public function setIdPost($id_Post)
+    public function setPost($Post)
     {
-        $this->id_Post = $id_Post;
+        $this->Post = $Post;
     }
 
     /**
      * @return mixed
      */
-    public function getIdUser()
+    public function getUser()
     {
-        return $this->id_user;
+        return $this->User;
     }
 
     /**
-     * @param mixed $id_user
+     * @param mixed $User
      */
-    public function setIdUser($id_user)
+    public function setUser($User)
     {
-        $this->id_user = $id_user;
+        $this->User = $User;
     }
 
     public function serialize()
@@ -102,8 +102,8 @@ class Image implements \Serializable
             $this->id,
             $this->label,
             $this->image,
-            $this->id_Post,
-            $this->id_user
+            $this->Post,
+            $this->User
         ];
     }
 
@@ -113,8 +113,8 @@ class Image implements \Serializable
             $this->id,
             $this->label,
             $this->image,
-            $this->id_Post,
-            $this->id_user
+            $this->Post,
+            $this->User
             ) = unserialize($serialized);
 
         return $this;

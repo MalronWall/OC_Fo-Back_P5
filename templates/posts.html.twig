@@ -16,9 +16,9 @@
             <div class="col-sm-6 mb-3">
                 <a href="{{ path }}posts/{{ post.slug }}">
                     {% if post.image is not empty %}
-                    <img src="{{ path }}images/database/post/{{ post.slug }}.jpg" class="img-thumbnail img-user-comment" alt="{{ post.label }}">
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-user-comment" alt="Image pour l'article : {{ post.label }}">
                     {% else %}
-                    <img src="{{ path }}images/database/post/default.jpg" class="img-thumbnail img-user-comment" alt="Image par défaut d'un commentaire">
+                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-user-comment" alt="Image par défaut d'un article">
                     {% endif %}
                 </a>
             </div>
@@ -28,12 +28,12 @@
                 <p>
                     {{ post.content|length > 300 ? post.content|slice(0, 300) ~ '[...]' : post.content  }}
                 </p>
-                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par {{ post.idUser.firstname ~ ' ' ~ post.idUser.name }}</small>
+                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par {{ post.User.pseudo }}</small>
             </div>
             {% endfor %}
 
-            <!-- PAGINATION -->
-            {% if pagination.nbTotal > pagination.nbPerPage %}
+            {# PAGINATION #}
+            {% if pagination.totalPaging > 1 %}
             </div>
             <div class="row justify-content-center">
                 <nav aria-label="Navigation des articles">
@@ -66,7 +66,7 @@
                     <div class="alert alert-info col-sm-12 text-center mb-0" role="alert">
                         <strong>Aucun article n'existe pour le moment !</strong>
                     </div>
-                    <img src="{{ path }}images/posts/noPost.jpg" alt="Un carnet vierge" class="img-fluid">
+                    <img src="{{ path }}images/posts/noPost.png" alt="Un carnet vierge" class="img-fluid">
                 </div>
             </div>
             {% endif %}

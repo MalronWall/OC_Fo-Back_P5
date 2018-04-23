@@ -20,4 +20,4 @@ $router->get('contact', "Contact#contact");
 /****** LOGIN *****/
 $router->get('login', "User#login");
 /****** 404 *****/
-$router->get(':everything', "Error#notFound")->with('everything', '([^\s]+)');
+//$router->get(':everything', "Error#notFound")->with('everything', '([^\s]+)');

@@ -18,8 +18,8 @@ class User implements \Serializable
     protected $password;
     protected $blocked;
     protected $token;
-    protected $id_Image;
-    protected $id_Role;
+    protected $Image;
+    protected $Role;
 
     /**
      * @return mixed
@@ -152,33 +152,33 @@ class User implements \Serializable
     /**
      * @return mixed
      */
-    public function getIdImage()
+    public function getImage()
     {
-        return $this->id_Image;
+        return $this->Image;
     }
 
     /**
-     * @param mixed $id_Image
+     * @param mixed $Image
      */
-    public function setIdImage($id_Image)
+    public function setImage($Image)
     {
-        $this->id_Image = $id_Image;
+        $this->Image = $Image;
     }
 
     /**
      * @return mixed
      */
-    public function getIdRole()
+    public function getRole()
     {
-        return $this->id_Role;
+        return $this->Role;
     }
 
     /**
-     * @param mixed $id_Role
+     * @param mixed $Role
      */
-    public function setIdRole($id_Role)
+    public function setRole($Role)
     {
-        $this->id_Role = $id_Role;
+        $this->Role = $Role;
     }
 
     public function serialize()
@@ -192,8 +192,8 @@ class User implements \Serializable
             $this->password,
             $this->blocked,
             $this->token,
-            $this->id_Image,
-            $this->id_Role
+            $this->Image,
+            $this->Role
         ];
     }
 
@@ -208,8 +208,8 @@ class User implements \Serializable
             $this->password,
             $this->blocked,
             $this->token,
-            $this->id_Image,
-            $this->id_Role
+            $this->Image,
+            $this->Role
             ) = unserialize($serialized);
 
         return $this;

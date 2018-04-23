@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Blog\Helper;
 
+use Blog\Controller\ErrorController;
+use Core\Application\Exception\NotFoundHttpException;
+
 class PaginatorHelper
 {
     // Données à traiter
@@ -115,7 +118,19 @@ class PaginatorHelper
      */
     private function getCurrentPage()
     {
-        return $this->currentPage;
+        try {
+            if (($this->getTotalPaging() < $this->currentPage)&&($this->getTotalPaging()!=0)) {
+                throw new NotFoundHttpException('No page found for this id !');
+            }
+
+            if ($this->currentPage == 0) {
+                return 1;
+            }
+            return $this->currentPage;
+        } catch (NotFoundHttpException $e) {
+            $error = new ErrorController();
+            return $error->notFound();
+        }
     }
 
     /**

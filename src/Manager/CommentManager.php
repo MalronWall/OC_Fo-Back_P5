@@ -21,7 +21,7 @@ class CommentManager extends AbstractManager
                                     id_Post, id_User
                                     FROM comment
                                     WHERE id_Post = :idPost
-                                    ORDER BY c.id DESC
+                                    ORDER BY id DESC
                                     ', [
                                     'idPost' => $idPost
         ]);

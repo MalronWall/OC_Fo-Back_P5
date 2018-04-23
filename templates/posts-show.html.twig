@@ -3,7 +3,7 @@
 {% block title %}{{ post.slug }}{% endblock %}
 
 {% block content %}
-    {% for post in post %}
+
     <header class="container-fluid">
         <div class="row text-center headTitle">
             <div class="col-sm-12 align-self-center">
@@ -16,39 +16,46 @@
         <div class="row justify-content-center">
             <div class="col-sm-12">
                 {% if post.image is not empty %}
-                    <img src="{{ path }}images/database/post/{{ post.slug }}.jpg" class="img-thumbnail img-fluid" alt="{{ post.label }}">
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-fluid" alt="Image pour l'article : {{ post.label }}">
                 {% else %}
-                    <img src="{{ path }}images/database/post/default.jpg" class="img-thumbnail img-fluid">
+                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-fluid" alt="Image par défaut d'un article">
                 {% endif %}
                 <i class="h6">{{ post.chapo }}</i><br/><br/>
                 <p>
                     {{ post.content }}
                 </p>
-                <small class="float-right">Mis à jour {{ post.lastUpdate }} par {{ post.user }}</small>
+                <div class="float-left text-center">
+                    {% if post.User.Image is not empty %}
+                        <img src="{{ path }}images/database/user/{{ post.slug }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
+                    {% else %}
+                        <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
+                        <strong>{{ comment.user }}</strong>
+                    {% endif %}
+                    <strong>{{ post.User.pseudo }}</strong>
+                </div>
+                <small class="float-right">Mis à jour {{ post.lastUpdate }} par </small>
             </div>
         </div>
     </section>
-
-    {{ dump(post) }}
-    {{ dump(pagination) }}
+    <br/>
 
     {% if pagination.nbTotal > 0 %}
     <!-- COMMENTS -->
-    <br/>
     <section class="container">
         <div class="row text-center justify-content-center headTitle2">
             <div class="col-sm-10 align-self-center">
                 <h3>Commentaires</h3>
             </div>
         </div>
+        {% for comment in pagination.datas %}
         <div class="row justify-content-center">
             <div class="col-sm-10 img-thumbnail">
                 <div class="float-left text-center">
-                {% if post.image is not empty %}
-                    <img src="{{ path }}images/database/user/{{ post.slug }}.jpg" class="float-left" height="200px" alt="{{ post.label }}"><br/>
+                {% if comment.User.Image is not empty %}
+                    <img src="{{ path }}images/database/user/{{ comment.User.pseudo }}.png" height="200px" alt="Image de : {{ comment.User.pseudo }}"><br/>
                 {% else %}
-                    <img src="{{ path }}images/database/user/default.png" class="float-left" height="200px" alt="Image par défaut d'un utilisateur"><br/>
-                    <strong>{{ comment.user }}</strong>
+                    <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
+                    <strong>{{ comment.User.pseudo }}</strong>
                 {% endif %}
                 </div>
                 <p>
@@ -57,7 +64,12 @@
                 <small class="float-right">Publié le {{ comment.published }}</small>
             </div>
         </div>
+        <hr>
+        {% endfor %}
     </section>
+
+    {# PAGINATION #}
+    {% if pagination.totalPaging > 1 %}
     <div class="row justify-content-center">
         <nav aria-label="Navigation des articles">
             <ul class="pagination">
@@ -83,8 +95,8 @@
             </ul>
         </nav>
     </div>
+    {% endif %} }}
     {% endif %}
-    {% endfor %}
 {% endblock %}
 
 {% block javascript %}

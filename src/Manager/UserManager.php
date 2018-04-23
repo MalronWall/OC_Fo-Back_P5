@@ -14,17 +14,6 @@ use Core\Application\Database\Hydrator;
 
 class UserManager extends AbstractManager
 {
-    public function fetchAllPostsWithUser(array $posts)
-    {
-        foreach ($posts as $post) {
-            $user = $this->getUser($post->getIdUser());
-            $post->setIdUser($user);
-
-        }
-
-        return $posts;
-    }
-
     public function getUser($idUser)
     {
         $req = $this->db->requestDb('
@@ -32,19 +21,27 @@ class UserManager extends AbstractManager
                                     FROM user
                                     WHERE id = :idUser
                                     ', [
-            'idUser' => $idUser
+                                    'idUser' => $idUser
         ]);
 
         return Hydrator::hydrate(User::class, serialize(array_values($req->fetch())));
     }
 
-    private function fetchAllResults($req)
+    public function replaceIdsByUsers(array $objects)
     {
-        $results = [];
-        foreach ($req->fetchAll() as $datas) {
-            $results[] = Hydrator::hydrate(User::class, serialize(array_values($datas)));
+        foreach ($objects as $object) {
+            $user = $this->getUser($object->getUser());
+            $object->setUser($user);
         }
-
-        return $results;
+        return $objects;
     }
+
+    public function replaceIdByUser($object)
+    {
+        $user = $this->getUser($object->getUser());
+        $object->setUser($user);
+        return $object;
+    }
+
+
 }

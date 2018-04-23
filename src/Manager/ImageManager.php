@@ -29,6 +29,21 @@ class ImageManager extends AbstractManager
         return $results;
     }
 
+    public function getImageUser($idUser)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT *
+                                    FROM image
+                                    WHERE id_User = :idUser
+                                    ', [
+            'idUser' => $idUser
+        ]);
+
+        $results = $this->fetchAllResults($req);
+
+        return $results;
+    }
+
     private function fetchAllResults($req)
     {
         $results = [];
@@ -37,5 +52,21 @@ class ImageManager extends AbstractManager
         }
 
         return $results;
+    }
+
+    public function replaceIdsByImages(array $objects)
+    {
+        foreach ($objects as $object) {
+            $image = $this->getImageUser($object->getId());
+            $object->setImage($image);
+        }
+        return $objects;
+    }
+
+    public function replaceIdByImage($object)
+    {
+        $image = $this->getImageUser($object->getId());
+        $object->setImage($image);
+        return $object;
     }
 }

@@ -10,17 +10,17 @@ namespace Blog\Controller;
 
 use Blog\Helper\PaginatorHelper;
 use Blog\Manager\CommentManager;
+use Blog\Manager\ImageManager;
 use Blog\Manager\UserManager;
 use Blog\Model\Post;
 use Blog\Model\User;
 use Core\Application\Controller\AbstractController;
 use Blog\Manager\PostManager;
+use Core\Application\Exception\NotFoundHttpException;
 
 class PostController extends AbstractController
 {
     private $postManager;
-
-    /** @var UserManager */
     private $userManager;
 
     public function __construct()
@@ -37,8 +37,10 @@ class PostController extends AbstractController
 
     public function listPage($id)
     {
+        // Récup des posts
         $posts = $this->postManager->getPosts();
-        $this->userManager->fetchAllPostsWithUser($posts);
+        // Remplacement de l'idUser par User
+        $this->userManager->replaceIdsByUsers($posts);
 
         $paginatorHelper = new PaginatorHelper($posts, $id, 5);
         $pagination = $paginatorHelper->getPaging();
@@ -56,10 +58,28 @@ class PostController extends AbstractController
 
     public function showPage($slugPost, $id)
     {
-        $post = $this->postManager->getPost($slugPost);
+        try {
+            // Récup du post avec le slug
+            $post = $this->postManager->getPost($slugPost);
+        } catch (NotFoundHttpException $e) {
+            $error = new ErrorController();
+            return $error->notFound();
+        }
+        // Remplacement de l'idUser par User dans Post
+        $this->userManager->replaceIdByUser($post);
+        $imageManager = new ImageManager();
+        // Remplacement de l'idImage par Image dans User
+        $imageManager->replaceIdByImage($post->getUser());
 
+        // Récup des commentaires
         $commentManager = new CommentManager();
-        $comments = $commentManager->getComments($slugPost);
+        $comments = $commentManager->getComments($post->getId());
+        // Remplacement de l'idUser par User dans Comment
+        $this->userManager->replaceIdsByUsers($comments);
+        // Remplacement de l'idImage par Image dans User
+        foreach ($comments as $comment) {
+            $imageManager->replaceIdByImage($comment->getUser());
+        }
 
         $paginatorHelper = new PaginatorHelper($comments, $id, 10);
         $pagination = $paginatorHelper->getPaging();

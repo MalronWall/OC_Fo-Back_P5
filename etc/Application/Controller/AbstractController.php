@@ -14,7 +14,7 @@ abstract class AbstractController
 {
     use CoreTrait;
 
-    public function render($filename, $params = [])
+    protected function render($filename, $params = [])
     {
         if (isset($_SESSION['flashbag'])) {
             $params['_flashbag'] = $_SESSION['flashbag'];
@@ -30,7 +30,7 @@ abstract class AbstractController
 
     protected function redirect(string $uri)
     {
-        header('HTTP/1.1 Moved Permanently', false, 301);
+        //header('HTTP/1.1 Moved Permanently', false, 301);
         header('Location: '.$uri);
         exit;
     }
