@@ -54,7 +54,23 @@ class ImageManager extends AbstractManager
         return $results;
     }
 
-    public function replaceIdsByImages(array $objects)
+    public function replaceIdsPostByImages(array $objects)
+    {
+        foreach ($objects as $object) {
+            $image = $this->getImagePost($object->getId());
+            $object->setImage($image);
+        }
+        return $objects;
+    }
+
+    public function replaceIdPostByImage($object)
+    {
+        $image = $this->getImagePost($object->getId());
+        $object->setImage($image);
+        return $object;
+    }
+
+    public function replaceIdsUserByImages(array $objects)
     {
         foreach ($objects as $object) {
             $image = $this->getImageUser($object->getId());
@@ -63,7 +79,7 @@ class ImageManager extends AbstractManager
         return $objects;
     }
 
-    public function replaceIdByImage($object)
+    public function replaceIdUserByImage($object)
     {
         $image = $this->getImageUser($object->getId());
         $object->setImage($image);

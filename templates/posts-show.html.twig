@@ -21,19 +21,19 @@
                     <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-fluid" alt="Image par défaut d'un article">
                 {% endif %}
                 <i class="h6">{{ post.chapo }}</i><br/><br/>
-                <p>
+                <p class="text-justify">
                     {{ post.content }}
                 </p>
                 <div class="float-left text-center">
                     {% if post.User.Image is not empty %}
-                        <img src="{{ path }}images/database/user/{{ post.slug }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
+                        <img src="{{ path }}images/database/user/{{ post.User.pseudo }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
                     {% else %}
                         <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
                         <strong>{{ comment.user }}</strong>
                     {% endif %}
                     <strong>{{ post.User.pseudo }}</strong>
                 </div>
-                <small class="float-right">Mis à jour {{ post.lastUpdate }} par </small>
+                <small class="float-right">Mis à jour le {{ post.lastUpdate }}</small>
             </div>
         </div>
     </section>
@@ -50,18 +50,23 @@
         {% for comment in pagination.datas %}
         <div class="row justify-content-center">
             <div class="col-sm-10 img-thumbnail">
-                <div class="float-left text-center">
-                {% if comment.User.Image is not empty %}
-                    <img src="{{ path }}images/database/user/{{ comment.User.pseudo }}.png" height="200px" alt="Image de : {{ comment.User.pseudo }}"><br/>
-                {% else %}
-                    <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
-                    <strong>{{ comment.User.pseudo }}</strong>
-                {% endif %}
+                <div class="row">
+                    <div class="col-sm-3 text-center">
+                        {% if comment.User.Image is not empty %}
+                            <img src="{{ path }}images/database/user/{{ comment.User.pseudo }}.png" class="img-fluid" alt="Image de : {{ comment.User.pseudo }}">
+                        {% else %}
+                            <img src="{{ path }}images/database/user/default.png" class="img-fluid" alt="Image par défaut d'un utilisateur">
+                        {% endif %}
+                        <br/>
+                        <strong>{{ comment.User.pseudo }}</strong>
+                        </div>
+                    <div class="col-sm-9">
+                        <p>
+                        {{ comment.content }}
+                        </p>
+                        <small class="float-right">Publié le {{ comment.published }}</small>
+                    </div>
                 </div>
-                <p>
-                {{ comment.content }}
-                </p>
-                <small class="float-right">Publié le {{ comment.published }}</small>
             </div>
         </div>
         <hr>

@@ -17,6 +17,7 @@ class Post implements \Serializable
     protected $content;
     protected $lastUpdate;
     protected $User;
+    protected $Image;
 
     /**
      * @return mixed
@@ -130,6 +131,22 @@ class Post implements \Serializable
         $this->User = $User;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->Image;
+    }
+
+    /**
+     * @param mixed $Image
+     */
+    public function setImage($Image)
+    {
+        $this->Image = $Image;
+    }
+
     public function serialize()
     {
         return [
@@ -139,7 +156,8 @@ class Post implements \Serializable
             $this->chapo,
             $this->content,
             $this->lastUpdate,
-            $this->User
+            $this->User,
+            $this->Image
         ];
     }
 
@@ -152,7 +170,8 @@ class Post implements \Serializable
             $this->chapo,
             $this->content,
             $this->lastUpdate,
-            $this->User
+            $this->User,
+            $this->Image
             ) = unserialize($serialized);
 
         return $this;

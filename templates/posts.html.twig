@@ -25,8 +25,8 @@
             <div class="col-sm-6 mb-3">
                 <h3><a href="{{ path }}posts/{{ post.slug }}">{{ post.title }}</a></h3>
                 <i class="h6">{{ post.chapo }}</i><br/><br/>
-                <p>
-                    {{ post.content|length > 300 ? post.content|slice(0, 300) ~ '[...]' : post.content  }}
+                <p class="text-justify">
+                    {{ post.content|length > 300 ? post.content|slice(0, 300) ~ ' [...]' : post.content  }}
                 </p>
                 <small class="float-right">Mis à jour le {{ post.lastUpdate }} par {{ post.User.pseudo }}</small>
             </div>

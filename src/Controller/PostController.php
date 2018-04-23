@@ -22,12 +22,14 @@ class PostController extends AbstractController
 {
     private $postManager;
     private $userManager;
+    private $imageManager;
 
     public function __construct()
     {
         parent::__construct();
         $this->postManager = new PostManager();
         $this->userManager = new UserManager();
+        $this->imageManager = new ImageManager();
     }
 
     public function list()
@@ -41,6 +43,8 @@ class PostController extends AbstractController
         $posts = $this->postManager->getPosts();
         // Remplacement de l'idUser par User
         $this->userManager->replaceIdsByUsers($posts);
+        // Remplacement de l'idImage par Image
+        $this->imageManager->replaceIdsPostByImages($posts);
 
         $paginatorHelper = new PaginatorHelper($posts, $id, 5);
         $pagination = $paginatorHelper->getPaging();
@@ -67,9 +71,8 @@ class PostController extends AbstractController
         }
         // Remplacement de l'idUser par User dans Post
         $this->userManager->replaceIdByUser($post);
-        $imageManager = new ImageManager();
         // Remplacement de l'idImage par Image dans User
-        $imageManager->replaceIdByImage($post->getUser());
+        $this->imageManager->replaceIdUserByImage($post->getUser());
 
         // Récup des commentaires
         $commentManager = new CommentManager();
@@ -78,7 +81,7 @@ class PostController extends AbstractController
         $this->userManager->replaceIdsByUsers($comments);
         // Remplacement de l'idImage par Image dans User
         foreach ($comments as $comment) {
-            $imageManager->replaceIdByImage($comment->getUser());
+            $this->imageManager->replaceIdUserByImage($comment->getUser());
         }
 
         $paginatorHelper = new PaginatorHelper($comments, $id, 10);
