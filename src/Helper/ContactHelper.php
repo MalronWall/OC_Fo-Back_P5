@@ -45,11 +45,20 @@ class ContactHelper
             ini_set('sendmail_from', 'thibaut.tourte@sfr.fr');
         }
 
-        $content = "Message envoyé à partir du formulaire de votre blog :
-Message de ".$post['firstname']." ".$post['firstname']." <".$post['email'].
+        $content =
+            '-----------------------------------------------------
+            <h2>Message envoyé à partir du formulaire de votre blog :</h2>
+            <h3>Message de <strong>'.$post['firstname'].' '.$post['lastname'].'</strong> '.
+            htmlspecialchars('<').$post['email'].htmlspecialchars('>').'<br/>
+            -----------------------------------------------------<br/><br/>
+            <h3>'.$post['subject'].'</h3><br/>'.
+            nl2br($post['content']);
 
-$post['content'];
-        if (mail("thibaut.tourte17@gmail.com", $post['subject'], $content) === true) {
+        $headers =
+            'Content-type: text/html' ."\r\n".
+            'From: ' . $post['email'] . "\r\n" .
+            'Reply-To: ' . $post['email'];
+        if (mail("thibaut.tourte17@gmail.com", $post['subject'], $content, $headers) === true) {
             return true;
         }
         return false;

@@ -13,24 +13,17 @@ use Blog\Helper\ContactHelper;
 
 class ContactController extends AbstractController
 {
-    private $contactHelper;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->contactHelper = new ContactHelper();
-    }
-
     public function contact()
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
         if ($requestMethod == 'POST') {
+            $contactHelper = new ContactHelper();
             $post = $_POST;
-            if ($this->contactHelper->processContactForm($post) === true) {
+            if ($contactHelper->processContactForm($post) === true) {
                 $this->addFlash('success', 'Message envoyé !');
             } else {
-                $this->addFlash('danger', 'Problème robotique !');
+                $this->addFlash('danger', 'Un problème est survenu, veuillez réessayer !');
             }
         }
 

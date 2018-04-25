@@ -61,11 +61,118 @@
                         <a class="nav-link" href="{{ path }}contact">
                             <i class="far fa-envelope"></i> Contact {{ currentPage('contact') |raw }}
                         </a>
-                    </li>
+                    </li><!--
                     <li class="nav-item {{ activePage('login') }}">
                         <a class="nav-link" href="{{ path }}login">
                             <i class="fas fa-power-off"></i> Connexion {{ currentPage('login') |raw }}
                         </a>
+                    </li>-->
+                    <li class="nav-item ml-lg-2">
+                        <!-- DEBUT MODAL -->
+                        <button class="btn btn-light" data-toggle="modal" data-target="#modalConnection" data-whatever="">
+                            <i class="fas fa-power-off"></i> Connexion
+                        </button>
+                        <!-- CONTENU MODAL -->
+                        <div class="modal fade" id="modalConnection" tabindex="-1" role="dialog" aria-labelledby="modalConnectionLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content modalBack">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalConnectionLabel">Interface de connexion</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-toggle="tab" href="#login" role="tab"
+                                                   aria-controls="login" aria-selected="true">Se connecter</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#logon" role="tab"
+                                                   aria-controls="logon" aria-selected="false">S'inscrire</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="login" role="tabpanel"
+                                                 aria-labelledby="login-tab">
+                                                <form class="needs-validation" method="post" novalidate>
+                                                    <div class="form-group mb-0">
+                                                        <label for="login-email-pseudo" class="col-form-label">Email ou pseudo :</label>
+                                                        <input type="text" class="form-control" name="emailPseudo" id="login-email-pseudo">
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <label for="login-password" class="col-form-label">Mot de passe :</label>
+                                                        <div class="input-group" id="show_hide_password">
+                                                            <input type="password" class="form-control" name="password" id="login-password">
+                                                            <div class="input-group-append">
+                                                                <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3 align-self-center mt-3 mb-2">
+                                                            <button class="btn btn-primary" name="login" type="submit">Connexion</button>
+                                                        </div>
+                                                        <div class="col-sm-9 align-self-center text-right mt-3 mb-2">
+                                                            <a href="{{ path }}login/reset-password">Mot de passe oublié ?</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="tab-pane fade" id="logon" role="tabpanel"
+                                                 aria-labelledby="logon-tab">
+                                                <form class="needs-validation" method="post" novalidate>
+                                                    <div class="form-group mb-0">
+                                                        <label for="logon-pseudo" class="col-form-label">Pseudo :</label>
+                                                        <input type="text" class="form-control" id="logon-pseudo">
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <label for="logon-name" class="col-form-label">Nom :</label>
+                                                        <input type="text" class="form-control" id="logon-name">
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <label for="logon-firstname" class="col-form-label">Prénom :</label>
+                                                        <input type="text" class="form-control" id="logon-firstname">
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <label for="logon-email" class="col-form-label">Email :</label>
+                                                        <input type="email" class="form-control" id="logon-email">
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <label for="logon-password" class="col-form-label">Mot de passe :</label>
+                                                        <div class="input-group" id="show_hide_password">
+                                                            <input type="password" class="form-control" id="logon-password">
+                                                            <div class="input-group-append">
+                                                                <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <label for="logon-confPassword" class="col-form-label">Confirmation du mot de passe :</label>
+                                                        <div class="input-group" id="show_hide_password">
+                                                            <input type="password" class="form-control" id="logon-confPassword">
+                                                            <div class="input-group-append">
+                                                                <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3 align-self-center mt-3 mb-2">
+                                                            <button class="btn btn-success" name="login" type="submit">Inscription</button>
+                                                        </div>
+                                                        <div class="col-sm-9 align-self-center text-right mt-3 mb-2">
+                                                            <small>Les champs <strong>Nom</strong> et <strong>Prénom</strong> resteront confidentiels !</small>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FIN MODAL -->
                     </li>
                 </ul>
             </div>
@@ -97,8 +204,24 @@
 </footer>
 {% endblock %}
 
+<script>
+    $(document).ready(function() {
+        $("#show_hide_password a").on('click', function(event) {
+            event.preventDefault();
+            if($('#show_hide_password input').attr("type") == "text"){
+                $('#show_hide_password input').attr('type', 'password');
+                $('#show_hide_password i').addClass( "fa-eye-slash" );
+                $('#show_hide_password i').removeClass( "fa-eye" );
+            }else if($('#show_hide_password input').attr("type") == "password"){
+                $('#show_hide_password input').attr('type', 'text');
+                $('#show_hide_password i').removeClass( "fa-eye-slash" );
+                $('#show_hide_password i').addClass( "fa-eye" );
+            }
+        });
+    });
 {% block javascript %}
 {% endblock %}
+</script>
 
 </body>
 </html>

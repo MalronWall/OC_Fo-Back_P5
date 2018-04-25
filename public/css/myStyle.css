@@ -25,14 +25,28 @@ blockquote {
     position: absolute;
 }
 
-/********** POSTS-SHOW **********/
+/********** MODAL CONNECTION **********/
+.modalBack {
+    color: white;
+    background: #343A40;
+    border-radius: 20px 20px 20px 20px;
+}
+.modalBack .active {
+    color: white !important;
+    padding: 10px 15px 10px 15px;
+    /* 343A40 */
+    background-color: #22282e !important;
+}
 
-
-
-#formContact {
+/********** FORMULAIRES **********/
+.myForm {
     margin-bottom: 20px;
     background: rgba(0,123,255,0.3);
     border-radius: 20px 20px 20px 20px;
+}
+.input-group-text:hover {
+    color: #000 !important;
+    text-decoration: none;
 }
 
 /********** FOOTER **********/

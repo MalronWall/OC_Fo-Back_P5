@@ -8,18 +8,20 @@
             </div>
         </div>
     </header>
-    <section class="container" id="formContact">
+    <section class="container myForm">
         {% if _flashbag is not empty %}
-            <div class="alert alert-{{ _flashbag.type }} alert-dismissible fade show" data-dismiss="alert" role="alert">
-                <strong>{{ _flashbag.message }}</strong>
-                <small><i class="text-muted">- Cliquer pour faire disparaître</i></small>
+            <div class="row">
+                <div class="col-sm-12 alert alert-{{ _flashbag.type }} alert-dismissible fade show mb-0 mt-2" data-dismiss="alert" role="alert">
+                    <strong>{{ _flashbag.message }}</strong>
+                    <small><i class="text-muted">- Cliquer pour faire disparaître</i></small>
+                </div>
             </div>
         {% endif %}
         <form class="needs-validation" method="post" novalidate>
             <div class="form-row">
                 <div class="col-sm-6 mb-3 mt-2">
-                    <label for="name">Votre nom</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Nom" required>
+                    <label for="lastname">Votre nom</label>
+                    <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Nom" required>
                     <div class="invalid-feedback">
                         Veuillez renseigner votre nom !
                     </div>
@@ -53,15 +55,23 @@
                     Veuillez compléter votre message !
                 </div>
             </div>
-            <div class="g-recaptcha mb-3 mt-3" data-sitekey="6Lc0YlMUAAAAALWfhBc7ozK_DaFX9L4BUUAFV8WB"></div>
-            <button class="btn btn-primary mb-3" type="submit">Envoyer</button>
+            {% if server_name != 'localhost' %}
+            <div class="form-group">
+                <div class="g-recaptcha mt-3" data-sitekey="6Lc0YlMUAAAAALWfhBc7ozK_DaFX9L4BUUAFV8WB" data-callback="onUserSubmit" data-expired-callback="expiredRecaptchaCallback"></div>
+                <input type="checkbox" class="form-control captcha-custom-checker d-none" required title="checkboxForRecaptacha">
+                <div class="help-block with-errors"></div>
+                <div class="invalid-feedback">
+                    Veuillez cocher le reCAPTCHA !
+                </div>
+            </div>
+            {% endif %}
+            <button class="btn btn-primary mt-1 mb-3" type="submit">Envoyer</button>
         </form>
     </section>
+    {{ dump() }}
 {% endblock %}
 
 {% block javascript %}
-{% verbatim %}
-<script>
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function() {
     'use strict';
@@ -80,6 +90,9 @@
         });
     }, false);
 })();
-</script>
-{% endverbatim %}
+// fonction pour valider le captcha (la fonction, data-callback="verifyRecaptchaCallback", intégrée à Bootstrap n'a pas l'air de fonctionner)
+const input = document.querySelector(".captcha-custom-checker");
+function onUserSubmit(response) {
+    input.checked = true;
+}
 {% endblock %}

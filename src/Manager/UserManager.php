@@ -42,6 +42,4 @@ class UserManager extends AbstractManager
         $object->setUser($user);
         return $object;
     }
-
-
 }

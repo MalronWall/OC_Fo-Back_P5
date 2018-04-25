@@ -38,6 +38,7 @@ trait CoreTrait
         $url = isset($_GET['url']) ?  $url = $_GET['url'] : '/';
         $twig->addGlobal('current_page', $url);
         $twig->addGlobal('session', $_SESSION);
+        $twig->addGlobal('server_name', $_SERVER['SERVER_NAME']);
         if ($_SERVER['SERVER_NAME']=='localhost') {
             $config = require __DIR__ . '/../../config/localhost/config.php';
             $twig->addGlobal(
