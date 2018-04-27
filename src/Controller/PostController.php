@@ -8,22 +8,89 @@
 
 namespace Blog\Controller;
 
+use Blog\Helper\PaginatorHelper;
+use Blog\Manager\CommentManager;
+use Blog\Manager\ImageManager;
+use Blog\Manager\UserManager;
+use Blog\Model\Post;
+use Blog\Model\User;
 use Core\Application\Controller\AbstractController;
+use Blog\Manager\PostManager;
+use Core\Application\Exception\NotFoundHttpException;
 
 class PostController extends AbstractController
 {
+    private $postManager;
+    private $userManager;
+    private $imageManager;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->postManager = new PostManager();
+        $this->userManager = new UserManager();
+        $this->imageManager = new ImageManager();
+    }
+
     public function list()
     {
-        echo "Le listing des posts fonctionne !";
+        return $this->listPage(1);
     }
 
-    public function show($id)
+    public function listPage($id)
     {
-        echo "Le détail du post $id fonctionne !";
+        // Récup des posts
+        $posts = $this->postManager->getPosts();
+        // Remplacement de l'idUser par User
+        $this->userManager->replaceIdsByUsers($posts);
+        // Remplacement de l'idImage par Image
+        $this->imageManager->replaceIdsPostByImages($posts);
+
+        $paginatorHelper = new PaginatorHelper($posts, $id, 5);
+        $pagination = $paginatorHelper->getPaging();
+
+        return $this->render('posts.html.twig', [
+            'title' => 'Articles',
+            'pagination' => $pagination,
+        ]);
     }
 
-    public function showSlug($slug, $id)
+    public function show($slugPost)
     {
-        echo "Le détail du post $slug / $id fonctionne !";
+        return $this->showPage($slugPost, 1);
+    }
+
+    public function showPage($slugPost, $id)
+    {
+        try {
+            // Récup du post avec le slug
+            $post = $this->postManager->getPost($slugPost);
+        } catch (NotFoundHttpException $e) {
+            $error = new ErrorController();
+            return $error->notFound();
+        }
+        // Remplacement de l'idUser par User dans Post
+        $this->userManager->replaceIdByUser($post);
+        // Remplacement de l'idImage par Image dans User
+        $this->imageManager->replaceIdUserByImage($post->getUser());
+
+        // Récup des commentaires
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getComments($post->getId());
+        // Remplacement de l'idUser par User dans Comment
+        $this->userManager->replaceIdsByUsers($comments);
+        // Remplacement de l'idImage par Image dans User
+        foreach ($comments as $comment) {
+            $this->imageManager->replaceIdUserByImage($comment->getUser());
+        }
+
+        $paginatorHelper = new PaginatorHelper($comments, $id, 10);
+        $pagination = $paginatorHelper->getPaging();
+
+        return $this->render('posts-show.html.twig', [
+            'title' => 'Article',
+            'post' => $post,
+            'pagination' => $pagination,
+        ]);
     }
 }

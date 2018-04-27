@@ -1,0 +1,75 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <header class="container-fluid">
+        <div class="row text-center headTitle">
+            <div class="col-sm-12 align-self-center">
+                <h3>Liste des articles</h3>
+            </div>
+        </div>
+    </header>
+
+    <section class="container">
+        <div class="row">
+            {% if pagination.nbTotal > 0 %}
+            {% for post in pagination.datas %}
+            <div class="col-sm-6 mb-3">
+                <a href="{{ path }}posts/{{ post.slug }}">
+                    {% if post.image is not empty %}
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-user-comment" alt="Image pour l'article : {{ post.label }}">
+                    {% else %}
+                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-user-comment" alt="Image par défaut d'un article">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <h3><a href="{{ path }}posts/{{ post.slug }}">{{ post.title }}</a></h3>
+                <i class="h6">{{ post.chapo }}</i><br/><br/>
+                <p class="text-justify">
+                    {{ post.content|length > 300 ? post.content|slice(0, 300) ~ ' [...]' : post.content  }}
+                </p>
+                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par {{ post.User.pseudo }}</small>
+            </div>
+            {% endfor %}
+
+            {# PAGINATION #}
+            {% if pagination.totalPaging > 1 %}
+            </div>
+            <div class="row justify-content-center">
+                <nav aria-label="Navigation des articles">
+                    <ul class="pagination">
+                        <!-- PREVIOUS -->
+                        <li class="page-item {{ pagination.previous.display }}">
+                            <a class="page-link" href="{{ path }}posts/{{ pagination.previous.href }}"><</a>
+                        </li>
+                        {% for page in 1..pagination.totalPaging  %}
+                        {% if page == pagination.currentPage %}
+                        <li class="page-item active">
+                            <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        <!-- NEXT -->
+                        <li class="page-item {{ pagination.next.display }}">
+                            <a class="page-link" href="{{ path }}posts/{{ pagination.next.href }}">></a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+            {% else %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-info col-sm-12 text-center mb-0" role="alert">
+                        <strong>Aucun article n'existe pour le moment !</strong>
+                    </div>
+                    <img src="{{ path }}images/posts/noPost.png" alt="Un carnet vierge" class="img-fluid">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

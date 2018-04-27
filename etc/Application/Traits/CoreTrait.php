@@ -35,8 +35,19 @@ trait CoreTrait
 
         $twig->addExtension(new \Twig_Extension_Debug());
         $twig->addExtension(new MyExtension());
-        $twig->addGlobal('current_page', $_GET['url']);
+        $url = isset($_GET['url']) ?  $url = $_GET['url'] : '/';
+        $twig->addGlobal('current_page', $url);
         $twig->addGlobal('session', $_SESSION);
+        $twig->addGlobal('server_name', $_SERVER['SERVER_NAME']);
+        if ($_SERVER['SERVER_NAME']=='localhost') {
+            $config = require __DIR__ . '/../../config/localhost/config.php';
+            $twig->addGlobal(
+                'path',
+                $config['pathLocal']
+            );
+        } else {
+            $twig->addGlobal('path', '/');
+        }
 
         return $twig;
     }

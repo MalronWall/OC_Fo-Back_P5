@@ -1,0 +1,90 @@
+body {
+    background: #D4D4D4;
+}
+
+/********** ENTETE TOUS **********/
+.headTitle {
+    background: #007bff;
+    color: white;
+    height: 70px;
+}
+
+.headTitle2 {
+    background: rgba(19,177,0,0.71);
+    color: white;
+    height: 70px;
+}
+
+/********** LAYOUT **********/
+.imgProfil {
+    margin-top: -7px;
+}
+
+/********** HOME **********/
+blockquote {
+    background: #EBE9E7;
+    border-radius: 15px;
+}
+
+#headHome {
+    position: absolute;
+}
+
+/********** MODAL CONNECTION **********/
+.modalBack {
+    color: white;
+    background: #343A40;
+    border-radius: 20px 20px 20px 20px;
+}
+.modalBack .active {
+    color: white !important;
+    padding: 10px 15px 10px 15px;
+    /* 343A40 */
+    background-color: #22282e !important;
+}
+
+/********** FORMULAIRES **********/
+.myForm {
+    margin-bottom: 20px;
+    background: rgba(0,123,255,0.3);
+    border-radius: 20px 20px 20px 20px;
+}
+.input-group-text:hover {
+    color: #000 !important;
+    text-decoration: none;
+}
+
+/********** FOOTER **********/
+footer {
+    background: #EBE9E7;
+}
+
+footer .reseauSocial {
+    color: black;
+}
+
+#fb:hover {
+    color: #4267B2;
+}
+
+#tw:hover {
+    color: #1DA1F2;
+}
+
+#li:hover {
+    color: #0077B5;
+}
+
+#go:hover {
+    color: #DC4A38;
+}
+
+#nomCopyright {
+    color: black;
+    font-weight: bold;
+}
+
+#nomCopyright:hover {
+    color: #33a816;
+    font-size: 1.1em;
+}

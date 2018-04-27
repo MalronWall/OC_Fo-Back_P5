@@ -19,7 +19,7 @@ class Hydrator
 
             return $object->unserialize($datas);
         } catch (\ReflectionException $e) {
-            die("An error has occurred : " . $e->getMessage());
+            die("An error has occurred in Hydrator.php->hydrate() : " . $e->getMessage());
         }
     }
 }
