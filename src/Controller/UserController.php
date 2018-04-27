@@ -53,12 +53,7 @@ class UserController extends AbstractController
             }
         }
 
-        //header("location: ' . __DIR__ . '\..\..\public");
-        if ($_SERVER['SERVER_NAME'] == 'localhost') {
-            $this->redirect('\..\..\public');
-        } else {
-            $this->redirect('\\');
-        }
+        $this->redirect('');
     }
 
     public function logon()
@@ -105,12 +100,7 @@ class UserController extends AbstractController
             }
         }
 
-        //header("location: ' . __DIR__ . '\..\..\public");
-        if ($_SERVER['SERVER_NAME'] == 'localhost') {
-            $this->redirect('\..\..\public');
-        } else {
-            $this->redirect('\\');
-        }
+        $this->redirect('');
     }
 
     public function logout()
@@ -118,12 +108,8 @@ class UserController extends AbstractController
         session_destroy();
         session_start();
         $this->addFlash("info", "A bientôt ! :)");
-        //header("location: ' . __DIR__ . '\..\..\public");
-        if ($_SERVER['SERVER_NAME'] == 'localhost') {
-            $this->redirect('\..\..\public');
-        } else {
-            $this->redirect('\\');
-        }
+
+        $this->redirect('');
     }
 
     public function confirmEmail($token)
