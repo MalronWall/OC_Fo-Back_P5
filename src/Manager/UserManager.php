@@ -42,4 +42,106 @@ class UserManager extends AbstractManager
         $object->setUser($user);
         return $object;
     }
+    
+    public function checkEmailPseudo($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE pseudo = :pseudo OR email = :email
+                                    ', [
+            'pseudo' => $post['emailPseudo'],
+            'email' => $post['emailPseudo']
+        ]);
+
+        return $req->fetch();
+    }
+
+    public function checkEmail($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE email = :email
+                                    ', [
+            'email' => $post['email']
+        ]);
+
+        return $req->fetch();
+    }
+
+    public function checkPseudo($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE pseudo = :pseudo
+                                    ', [
+            'pseudo' => $post['pseudo']
+        ]);
+
+        return $req->fetch();
+    }
+    
+    public function checkUser($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT *
+                                    FROM user
+                                    WHERE (pseudo = :pseudo OR email = :email) AND password = :pwd
+                                    ', [
+            'pseudo' => $post['emailPseudo'],
+            'email' => $post['emailPseudo'],
+            'pwd' => md5($post['password'])
+        ]);
+
+        $arrayFetch = $req->fetch();
+        if ($arrayFetch != false) {
+            return Hydrator::hydrate(User::class, serialize(array_values($arrayFetch)));
+        }
+        return false;
+    }
+
+    public function createUser($post, $token)
+    {
+        $req = $this->db->requestDb('
+                                    INSERT INTO user (pseudo, name, firstname, email, password, token) 
+                                    VALUES (:pseudo, :lastname, :firstname, :email, :pwd, :token)
+                                    ', [
+            'pseudo' => $post['pseudo'],
+            'lastname' => $post['lastname'],
+            'firstname' => $post['firstname'],
+            'email' => $post['email'],
+            'pwd' => md5($post['password']),
+            'token' => $token
+        ]);
+
+        return true;
+    }
+
+    public function checkToken($token)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE token = :token
+                                    ', [
+            'token' => $token
+        ]);
+
+        return $req->fetch();
+    }
+
+    public function deleteToken($token)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET token = null
+                                    WHERE token = :token
+                                    ', [
+            'token' => $token
+        ]);
+
+        return true;
+    }
 }

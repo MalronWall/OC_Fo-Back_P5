@@ -18,9 +18,11 @@ $router->get('/posts/:slug/:id', "Post#showPage")->with('slug', '([a-z\-0-9]+)')
 $router->post('contact', "Contact#contact");
 $router->get('contact', "Contact#contact");
 /****** LOGIN *****/
-$router->get('login', "User#connection");
-$router->post('login', "User#connection");
+$router->post('login', "User#login");
+$router->post('logon', "User#logon");
 $router->get('login/reset-password', "User#resetPassword");
+$router->get('logout', "User#logout");
+$router->get('confirm-email/:token', "User#confirmEmail");
 
 /****** 404 *****/
 //$router->get(':everything', "Error#notFound")->with('everything', '([^\s]+)');

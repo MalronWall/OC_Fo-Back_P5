@@ -40,6 +40,10 @@ class DatabaseConnector extends \PDO
             }
             $statement->bindValue($name, $param, $bindType);
         }
+
+        // Afficher la requête
+        // var_dump($statement);exit;
+
         $statement->execute();
 
         return $statement;

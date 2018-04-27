@@ -26,15 +26,11 @@ class ContactHelper
             $decode = json_decode(file_get_contents($api_url), true);
 
             if ($decode['success'] == true) {
-                if ($this->sendMail($post) === true) {
-                    $valide = true;
-                }
+                $valide = $this->sendMail($post);
             }
             return $valide;
         }
-        if ($this->sendMail($post) === true) {
-            $valide = true;
-        }
+        $valide = $this->sendMail($post);
         return $valide;
     }
 

@@ -15,6 +15,11 @@ body {
     height: 70px;
 }
 
+/********** LAYOUT **********/
+.imgProfil {
+    margin-top: -7px;
+}
+
 /********** HOME **********/
 blockquote {
     background: #EBE9E7;

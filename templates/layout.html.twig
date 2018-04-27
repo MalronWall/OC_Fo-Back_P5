@@ -67,6 +67,7 @@
                             <i class="fas fa-power-off"></i> Connexion {{ currentPage('login') |raw }}
                         </a>
                     </li>-->
+                    {% if session.user is empty %}
                     <li class="nav-item ml-lg-2">
                         <!-- DEBUT MODAL -->
                         <button class="btn btn-light" data-toggle="modal" data-target="#modalConnection" data-whatever="">
@@ -96,17 +97,24 @@
                                         <div class="tab-content">
                                             <div class="tab-pane fade show active" id="login" role="tabpanel"
                                                  aria-labelledby="login-tab">
-                                                <form class="needs-validation" method="post" novalidate>
+                                                <!-- Formulaire de connexion -->
+                                                <form class="needs-validation" method="post" action="{{ path }}login" novalidate>
                                                     <div class="form-group mb-0">
                                                         <label for="login-email-pseudo" class="col-form-label">Email ou pseudo :</label>
-                                                        <input type="text" class="form-control" name="emailPseudo" id="login-email-pseudo">
+                                                        <input type="text" class="form-control" name="emailPseudo" placeholder="Votre email ou pseudo" id="login-email-pseudo" required>
+                                                        <div class="invalid-feedback">
+                                                            Veuillez renseigner ce champ !
+                                                        </div>
                                                     </div>
                                                     <div class="form-group mb-0">
                                                         <label for="login-password" class="col-form-label">Mot de passe :</label>
                                                         <div class="input-group" id="show_hide_password">
-                                                            <input type="password" class="form-control" name="password" id="login-password">
+                                                            <input type="password" class="form-control" name="password" placeholder="Votre mot de passe" id="login-password" required>
                                                             <div class="input-group-append">
                                                                 <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                                            </div>
+                                                            <div class="invalid-feedback">
+                                                                Veuillez renseigner ce champ !
                                                             </div>
                                                         </div>
                                                     </div>
@@ -122,38 +130,57 @@
                                             </div>
                                             <div class="tab-pane fade" id="logon" role="tabpanel"
                                                  aria-labelledby="logon-tab">
-                                                <form class="needs-validation" method="post" novalidate>
+                                                <!-- Formulaire d'inscription -->
+                                                <form class="needs-validation" method="post" action="{{ path }}logon" novalidate>
                                                     <div class="form-group mb-0">
                                                         <label for="logon-pseudo" class="col-form-label">Pseudo :</label>
-                                                        <input type="text" class="form-control" id="logon-pseudo">
+                                                        <input type="text" class="form-control" name="pseudo" placeholder="Votre pseudo" id="logon-pseudo" required>
+                                                        <div class="invalid-feedback">
+                                                            Veuillez renseigner ce champ !
+                                                        </div>
                                                     </div>
                                                     <div class="form-group mb-0">
                                                         <label for="logon-name" class="col-form-label">Nom :</label>
-                                                        <input type="text" class="form-control" id="logon-name">
+                                                        <input type="text" class="form-control" name="lastname" placeholder="Votre nom" id="logon-name" required>
+                                                        <div class="invalid-feedback">
+                                                            Veuillez renseigner ce champ !
+                                                        </div>
                                                     </div>
                                                     <div class="form-group mb-0">
                                                         <label for="logon-firstname" class="col-form-label">Prénom :</label>
-                                                        <input type="text" class="form-control" id="logon-firstname">
+                                                        <input type="text" class="form-control" name="firstname" placeholder="Votre prénom" id="logon-firstname" required>
+                                                        <div class="invalid-feedback">
+                                                            Veuillez renseigner ce champ !
+                                                        </div>
                                                     </div>
                                                     <div class="form-group mb-0">
                                                         <label for="logon-email" class="col-form-label">Email :</label>
-                                                        <input type="email" class="form-control" id="logon-email">
+                                                        <input type="email" class="form-control" name="email" placeholder="Votre email" id="logon-email" required>
+                                                        <div class="invalid-feedback">
+                                                            Veuillez entrer un format valide !
+                                                        </div>
                                                     </div>
                                                     <div class="form-group mb-0">
                                                         <label for="logon-password" class="col-form-label">Mot de passe :</label>
                                                         <div class="input-group" id="show_hide_password">
-                                                            <input type="password" class="form-control" id="logon-password">
+                                                            <input type="password" class="form-control" name="password"  placeholder="Votre mot de passe" id="logon-password" required>
                                                             <div class="input-group-append">
                                                                 <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                                            </div>
+                                                            <div class="invalid-feedback">
+                                                                Veuillez renseigner ce champ !
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group mb-0">
                                                         <label for="logon-confPassword" class="col-form-label">Confirmation du mot de passe :</label>
                                                         <div class="input-group" id="show_hide_password">
-                                                            <input type="password" class="form-control" id="logon-confPassword">
+                                                            <input type="password" class="form-control" name="confPassword"  placeholder="Le même mot de passe" id="logon-confPassword" required>
                                                             <div class="input-group-append">
                                                                 <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                                            </div>
+                                                            <div class="invalid-feedback">
+                                                                Veuillez renseigner ce champ !
                                                             </div>
                                                         </div>
                                                     </div>
@@ -172,14 +199,46 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- FIN MODAL -->
                     </li>
+                        <!-- FIN MODAL -->
+                    {% else %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profil" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if session.user.8.0 is not empty %}
+                                <img src="{{ path }}images/database/user/{{ session.user.1 }}.png" class="rounded-circle float-left imgProfil" height="45px" alt="Image de : {{ session.user.1 }}">
+                            {% else %}
+                                <img src="{{ path }}images/database/user/default.png" class="rounded-circle float-left imgProfil" height="45px" alt="Image par défaut d'un utilisateur">
+                            {% endif %}
+                            &nbsp;{{ session.user.1 }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="profil">
+                            <a class="dropdown-item" href="{{ path }}members/">Mon profil</a>
+                            <a class="dropdown-item" href="{{ path }}logout"><i class="fas fa-power-off"></i> Se déconnecter</a>
+                        </div>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 {% endblock %}
 
+{% if _flashbag is not empty %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 text-center alert alert-{{ _flashbag.type }} alert-dismissible fade show mb-0" data-dismiss="alert" role="alert">
+                <div class="row justify-content-end">
+                    <div class="col-sm-8">
+                        <strong>{{ _flashbag.message }}</strong>
+                    </div>
+                    <div class="col-sm-2">
+                        <small class="float-right"><i class="text-muted">~ Cliquer pour faire disparaître</i></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
 
 {% block head %}{% endblock %}
 
@@ -205,6 +264,7 @@
 {% endblock %}
 
 <script>
+    // Show or hide password
     $(document).ready(function() {
         $("#show_hide_password a").on('click', function(event) {
             event.preventDefault();
@@ -219,6 +279,25 @@
             }
         });
     });
+
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            const validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 {% block javascript %}
 {% endblock %}
 </script>

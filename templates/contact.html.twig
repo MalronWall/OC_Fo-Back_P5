@@ -9,15 +9,7 @@
         </div>
     </header>
     <section class="container myForm">
-        {% if _flashbag is not empty %}
-            <div class="row">
-                <div class="col-sm-12 alert alert-{{ _flashbag.type }} alert-dismissible fade show mb-0 mt-2" data-dismiss="alert" role="alert">
-                    <strong>{{ _flashbag.message }}</strong>
-                    <small><i class="text-muted">- Cliquer pour faire disparaître</i></small>
-                </div>
-            </div>
-        {% endif %}
-        <form class="needs-validation" method="post" novalidate>
+        <form class="needs-validation" method="post" action="{{ path }}contact" novalidate>
             <div class="form-row">
                 <div class="col-sm-6 mb-3 mt-2">
                     <label for="lastname">Votre nom</label>
@@ -68,28 +60,9 @@
             <button class="btn btn-primary mt-1 mb-3" type="submit">Envoyer</button>
         </form>
     </section>
-    {{ dump() }}
 {% endblock %}
 
 {% block javascript %}
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.getElementsByClassName('needs-validation');
-        // Loop over them and prevent submission
-        const validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    }, false);
-})();
 // fonction pour valider le captcha (la fonction, data-callback="verifyRecaptchaCallback", intégrée à Bootstrap n'a pas l'air de fonctionner)
 const input = document.querySelector(".captcha-custom-checker");
 function onUserSubmit(response) {

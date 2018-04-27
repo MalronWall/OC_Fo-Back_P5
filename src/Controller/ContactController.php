@@ -15,13 +15,16 @@ class ContactController extends AbstractController
 {
     public function contact()
     {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-
-        if ($requestMethod == 'POST') {
-            $contactHelper = new ContactHelper();
-            $post = $_POST;
-            if ($contactHelper->processContactForm($post) === true) {
-                $this->addFlash('success', 'Message envoyé !');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ((!empty($_POST['firstname']) && !empty($_POST['lastname']) && !empty($_POST['email'])
+                && !empty($_POST['subject']) && !empty($_POST['content']))) {
+                $contactHelper = new ContactHelper();
+                $post = $_POST;
+                if ($contactHelper->processContactForm($post) === true) {
+                    $this->addFlash('success', 'Message envoyé !');
+                } else {
+                    $this->addFlash('danger', 'Un problème est survenu, veuillez réessayer !');
+                }
             } else {
                 $this->addFlash('danger', 'Un problème est survenu, veuillez réessayer !');
             }

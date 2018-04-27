@@ -31,7 +31,11 @@ abstract class AbstractController
     protected function redirect(string $uri)
     {
         //header('HTTP/1.1 Moved Permanently', false, 301);
-        header('Location: '.$uri);
+        if ($_SERVER['SERVER_NAME'] == 'localhost') {
+            header("Location: '.__DIR__.'$uri");
+        } else {
+            header("Location: $uri");
+        }
         exit;
     }
 
