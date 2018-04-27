@@ -11,6 +11,7 @@ namespace Blog\Controller;
 use Blog\Helper\MailHelper;
 use Blog\Helper\SecurityHelper;
 use Blog\Manager\ImageManager;
+use Blog\Manager\RoleManager;
 use Blog\Manager\UserManager;
 use Core\Application\Controller\AbstractController;
 
@@ -34,6 +35,9 @@ class UserController extends AbstractController
             if ($checkEmail[0] == 1) {
                 $user = $this->userManager->checkUser($post);
                 if ($user != false) {
+                    $roleManager = new RoleManager();
+                    $roleManager->replaceIdByRole($user);
+                    $user->setRole($user->getRole()->serialize());
                     $imageManager = new ImageManager();
                     $imageManager->replaceIdUserByImage($user);
                     if (!empty($user->getImage())) {
