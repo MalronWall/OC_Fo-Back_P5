@@ -36,7 +36,9 @@ class UserController extends AbstractController
                 if ($user != false) {
                     $imageManager = new ImageManager();
                     $imageManager->replaceIdUserByImage($user);
-                    $user->setImage($user->getImage()[0]->serialize());
+                    if (!empty($user->getImage())) {
+                        $user->setImage($user->getImage()[0]->serialize());
+                    }
                     $_SESSION['user'] = $user->serialize();
                     $this->addFlash("success", "
                     Vous êtes maintenant connecté ! :)
