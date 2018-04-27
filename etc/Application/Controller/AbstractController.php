@@ -28,14 +28,13 @@ abstract class AbstractController
         }
     }
 
-    protected function redirect(string $uri)
+    protected function redirect(string $page)
     {
-        //header('HTTP/1.1 Moved Permanently', false, 301);
-        if ($_SERVER['SERVER_NAME'] == 'localhost') {
-            header("Location: '.__DIR__.'$uri");
-        } else {
-            header("Location: $uri");
-        }
+        $host  = $_SERVER['HTTP_HOST'];
+        $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+
+        header('HTTP/1.1 Moved Permanently', false, 301);
+        header("Location: http://$host$uri/$page");
         exit;
     }
 

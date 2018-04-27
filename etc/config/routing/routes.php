@@ -9,6 +9,7 @@
 
 /****** HOME DEFAULT *****/
 $router->get('', "Default#home");
+$router->get('home', "Default#home");
 /****** POSTS *****/
 $router->get('posts', "Post#list");
 $router->get('/posts/:id', "Post#listPage")->with('id', '[0-9]+');

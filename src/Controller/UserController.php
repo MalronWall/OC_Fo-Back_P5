@@ -135,17 +135,9 @@ class UserController extends AbstractController
                 Félicitations ! Votre adresse mail vient d'être validée et vous pouvez désormais vous connecter ! :)
                 ");
         } else {
-            if ($_SERVER['SERVER_NAME'] == 'localhost') {
-                $this->redirect('\..\..\..\public\404');
-            } else {
-                $this->redirect('\404');
-            }
+            $this->redirect('404');
         }
 
-        if ($_SERVER['SERVER_NAME'] == 'localhost') {
-            $this->redirect('..\..\..\public');
-        } else {
-            $this->redirect('\\');
-        }
+        $this->redirect('');
     }
 }
