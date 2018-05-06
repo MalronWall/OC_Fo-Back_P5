@@ -38,7 +38,7 @@ class Comment implements \Serializable
      */
     public function getContent()
     {
-        return $this->content;
+        return htmlspecialchars($this->content);
     }
 
     /**

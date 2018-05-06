@@ -35,7 +35,6 @@ abstract class AbstractController
 
         header('HTTP/1.1 Moved Permanently', false, 301);
         header("Location: http://$host$uri/$page");
-        exit;
     }
 
     protected function addFlash(string $type, string $message)

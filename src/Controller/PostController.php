@@ -76,7 +76,7 @@ class PostController extends AbstractController
 
         // Récup des commentaires
         $commentManager = new CommentManager();
-        $comments = $commentManager->getComments($post->getId());
+        $comments = $commentManager->getValidComments($post->getId());
         // Remplacement de l'idUser par User dans Comment
         $this->userManager->replaceIdsByUsers($comments);
         // Remplacement de l'idImage par Image dans User
@@ -86,6 +86,26 @@ class PostController extends AbstractController
 
         $paginatorHelper = new PaginatorHelper($comments, $id, 10);
         $pagination = $paginatorHelper->getPaging();
+
+        // CREATION D'UN NOUVEAU COMMENTAIRE
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (!empty($_SESSION['user']) && !empty($_POST['commentContent'])) {
+                $commentManager = new CommentManager();
+                if ($commentManager->createComment(
+                    $_POST['commentContent'],
+                    $post->getId(),
+                    $post->getUser()->getId()
+                )) {
+                    $this->addFlash("success", "
+                    Votre commentaire à bien été envoyé ! Il sera visible lorsqu'un administrateur l'aura confirmé ! :)
+                    ");
+                } else {
+                    $this->addFlash("danger", "
+                    Une erreur s'est produite lors de la création de votre commentaire, veuillez réessayer ! :/
+                    ");
+                }
+            }
+        }
 
         return $this->render('posts-show.html.twig', [
             'title' => 'Article',

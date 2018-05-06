@@ -14,6 +14,7 @@ $router->get('home', "Default#home");
 $router->get('posts', "Post#list");
 $router->get('/posts/:id', "Post#listPage")->with('id', '[0-9]+');
 $router->get('/posts/:slug', "Post#show")->with('slug', '([a-z\-0-9]+)');
+$router->post('/posts/:slug', "Post#show")->with('slug', '([a-z\-0-9]+)');
 $router->get('/posts/:slug/:id', "Post#showPage")->with('slug', '([a-z\-0-9]+)')->with('id', '[0-9]+');
 /****** CONTACT *****/
 $router->post('contact', "Contact#contact");

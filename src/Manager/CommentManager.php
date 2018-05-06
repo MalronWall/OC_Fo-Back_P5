@@ -14,13 +14,13 @@ use Core\Application\Database\Hydrator;
 
 class CommentManager extends AbstractManager
 {
-    public function getComments($idPost)
+    public function getValidComments($idPost)
     {
         $req = $this->db->requestDb('
                                     SELECT id, content, DATE_FORMAT(published, "%e/%m/%y à %Hh%m") published, valid,
                                     id_Post, id_User
                                     FROM comment
-                                    WHERE id_Post = :idPost
+                                    WHERE id_Post = :idPost AND valid = 1
                                     ORDER BY id DESC
                                     ', [
                                     'idPost' => $idPost
@@ -39,5 +39,19 @@ class CommentManager extends AbstractManager
         }
 
         return $results;
+    }
+    
+    public function createComment($content, $idPost, $idUser)
+    {
+        $req = $this->db->requestDb('
+                                    INSERT INTO comment (content, id_Post, id_User)
+                                    VALUES (:content, :idPost, :idUser)
+                                    ', [
+            'content' => $content,
+            'idPost' => $idPost,
+            'idUser' => $idUser
+        ]);
+
+        return true;
     }
 }

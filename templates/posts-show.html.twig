@@ -39,6 +39,35 @@
     </section>
     <br/>
 
+    {% if session.user is not empty %}
+
+    <section class="container">
+        <div class="row text-center justify-content-center headTitle2">
+            <div class="col-sm-10 align-self-center">
+                <h3>Nouveau commentaire</h3>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-10 img-thumbnail">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="needs-validation" method="post" action="{{ path }}posts/{{ post.slug }}" novalidate>
+                            <div class="form-group mb-2">
+                                <textarea class="form-control" placeholder="Ecrivez votre commentaire ici !" rows="3" title="commentContent" name="commentContent" required></textarea>
+                                <div class="invalid-feedback">
+                                    Avant d'envoyer votre commentaire il faudrait déjà l'écrire ! ;)
+                                </div>
+                            </div>
+                            <button class="btn btn-success mb-1" type="submit">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br/>
+    {% endif %}
+
     {% if pagination.nbTotal > 0 %}
     <!-- COMMENTS -->
     <section class="container">
@@ -100,7 +129,7 @@
             </ul>
         </nav>
     </div>
-    {% endif %} }}
+    {% endif %}
     {% endif %}
 {% endblock %}
 
