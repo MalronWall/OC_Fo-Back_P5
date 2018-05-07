@@ -1,0 +1,175 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <header class="container-fluid">
+        <div class="row text-center headTitle">
+            <div class="col-sm-12 align-self-center">
+                <h3>Profil de {{ profile.pseudo }}</h3>
+            </div>
+        </div>
+    </header>
+    <section class="container bg-white rounded text-center">
+        {# SI ON VISITE LE PROFIL DE QUELQU'UN #}
+        {% if session.user.0 != profile.id %}
+            <div class="row">
+                <div class="col-sm-12 mt-2">
+                    {% if profile.image is not empty %}
+                        <img src="{{ path }}images/database/user/{{ profile.pseudo }}.png" class="rounded-circle" height="400px" width="400px" alt="Image du profil">
+                    {% else %}
+                        <img src="{{ path }}images/database/user/default.png" class="rounded-circle" height="400px" width="400px" alt="Image du profil">
+                    {% endif %}
+                </div>
+            </div>
+            <br/>
+            <div class="row justify-content-center mt-2">
+                <div class="col-sm-12">
+                    <h4><strong class="text-primary">{{ profile.pseudo }}</strong> est actuellement <strong class="text-danger">{{ profile.role.role }}</strong> du site</h4>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-2">
+                <div class="col-sm-12">
+                    <h5>Adresse mail de contact : <a href="mailto:{{ profile.email }}">{{ profile.email }}</a></h5>
+                </div>
+            </div>
+        {# SI ON EST SUR SON PROFIL #}
+        {% else %}
+            <form class="needs-validation" method="post" action="{{ path }}members/{{ profile.pseudo }}" enctype="multipart/form-data" novalidate>
+                <div class="row text-center">
+                    <div class="col-sm-12 mt-2">
+                        {% if profile.image is not empty %}
+                            <img src="{{ path }}images/database/user/{{ profile.pseudo }}.png" class="rounded-circle" height="400px" width="400px" alt="Image du profil">
+                        {% else %}
+                            <img src="{{ path }}images/database/user/default.png" class="rounded-circle" height="400px" width="400px" alt="Image du profil">
+                        {% endif %}
+                        <div class="form-group justify-content-center mt-2">
+                            <label type="button" for="uploadImage" class="btn btn-success">
+                                <i class="fas fa-upload"></i> <span>Télécharger une image</span>
+                            </label>
+                            <input type="file" id="uploadImage" class="upload" name="uploadImage" accept="image/*" hidden>
+                        </div>
+                        <h4><strong class="text-primary">Vous</strong> êtes actuellement <strong class="text-danger">{{ profile.role.role }}</strong> du site</h4>
+                        <br/>
+                        <h4>Modifications des données personnelles</h4>
+                        {# NOM --- PRENOM #}
+                        <div class="form-row">
+                            <div class="col-sm-6">
+                                <label class="sr-only" for="lastname">Votre nom</label>
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text font-weight-bold">Nom</div>
+                                    </div>
+                                    <input type="text" name="lastname" class="form-control text-primary" id="lastname" placeholder="Nom" value="{{ profile.name }}" required>
+                                    <div class="invalid-feedback">
+                                        Veuillez renseigner votre nom !
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="sr-only" for="firstname">Votre prénom</label>
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text font-weight-bold">Prénom</div>
+                                    </div>
+                                    <input type="text" name="firstname" class="form-control text-primary" id="firstname" placeholder="Nom" value="{{ profile.firstname }}" required>
+                                    <div class="invalid-feedback">
+                                        Veuillez renseigner votre prénom !
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        {# PSEUDO --- EMAIL #}
+                        <div class="form-row">
+                            <div class="col-sm-6">
+                                <label class="sr-only" for="pseudo">Votre pseudo</label>
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text font-weight-bold">Pseudo</div>
+                                    </div>
+                                    <input type="text" name="pseudo" class="form-control text-primary" id="pseudo" placeholder="Nom" value="{{ profile.pseudo }}" required>
+                                    <div class="invalid-feedback">
+                                        Veuillez renseigner votre pseudo !
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="sr-only" for="email">Votre email</label>
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text font-weight-bold">Email</div>
+                                    </div>
+                                    <input type="email" name="email" class="form-control text-primary" id="email" placeholder="Email" value="{{ profile.email }}" required>
+                                    <div class="invalid-feedback">
+                                        Veuillez entrer un format valide !
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4>Modification du mot de passe</h4>
+                        {# MOT DE PASSE #}
+                        <div class="form-row">
+                            <div class="col-sm-6">
+                                <label class="sr-only" for="password">Mot de passe</label>
+                                <div class="input-group mb-2 mr-sm-2" id="show_hide_password">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text font-weight-bold">Mot de passe</div>
+                                    </div>
+                                    <input type="password" name="password" class="form-control" id="password" placeholder="Votre mot de passe">
+                                    <div class="input-group-append">
+                                        <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="sr-only" for="confPassword">Confirmation du mot de passe</label>
+                                <div class="input-group mb-2 mr-sm-2" id="show_hide_password">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text font-weight-bold">Confirmation</div>
+                                    </div>
+                                    <input type="password" name="confPassword" class="form-control" id="confPassword" placeholder="Confirmation du mot de passe">
+                                    <div class="input-group-append">
+                                        <a href="" class="input-group-text"><i class="fas fa-eye-slash" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary mt-1 mb-3" type="submit">Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascript %}
+'use strict';
+
+( function ( document, window, index )
+{
+    const inputs = document.querySelectorAll('.upload');
+    Array.prototype.forEach.call( inputs, function( input )
+    {
+        const label	 = input.previousElementSibling,
+            labelVal = label.innerHTML;
+
+        input.addEventListener( 'change', function( e )
+        {
+            let fileName = '';
+            if( this.files && this.files.length > 1 )
+                fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+            else
+                fileName = e.target.value.split( '\\' ).pop();
+
+            if( fileName )
+                label.querySelector( 'span' ).innerHTML = fileName;
+            else
+                label.innerHTML = labelVal;
+        });
+
+        // Firefox bug fix
+        input.addEventListener( 'focus', function(){ input.classList.add( 'has-focus' ); });
+        input.addEventListener( 'blur', function(){ input.classList.remove( 'has-focus' ); });
+    });
+}( document, window, 0 ));
+{% endblock %}

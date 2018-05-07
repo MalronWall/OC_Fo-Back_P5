@@ -42,7 +42,7 @@ class User implements \Serializable
      */
     public function getPseudo()
     {
-        return $this->pseudo;
+        return htmlspecialchars($this->pseudo);
     }
 
     /**
@@ -58,7 +58,7 @@ class User implements \Serializable
      */
     public function getName()
     {
-        return $this->name;
+        return htmlspecialchars($this->name);
     }
 
     /**
@@ -74,7 +74,7 @@ class User implements \Serializable
      */
     public function getFirstname()
     {
-        return $this->firstname;
+        return htmlspecialchars($this->firstname);
     }
 
     /**
@@ -90,7 +90,7 @@ class User implements \Serializable
      */
     public function getEmail()
     {
-        return $this->email;
+        return htmlspecialchars($this->email);
     }
 
     /**

@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}{{ title }}{% endblock %}</title>
 
@@ -37,7 +38,7 @@
 </head>
 <body>
 
-{{  dump()  }}
+{{  dump(session)  }}
 
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -257,14 +258,14 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-dark dropdown-toggle align-middle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% if session.user.8.0 is not empty %}
-                        <img src="{{ path }}images/database/user/{{ session.user.1 }}.png" class="rounded-circle float-left" height="45px" alt="Image de : {{ session.user.1 }}">
+                        <img src="{{ path }}images/database/user/{{ session.user.1 }}.png" class="rounded-circle float-left" height="45px" width="45px" alt="Img">
                     {% else %}
-                        <img src="{{ path }}images/database/user/default.png" class="rounded-circle float-left" height="45px" alt="Image par défaut d'un utilisateur">
+                        <img src="{{ path }}images/database/user/default.png" class="rounded-circle float-left" height="45px" width="45px" alt="Img">
                     {% endif %}
                     &nbsp;{{ session.user.1 }}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profil">
-                    <a class="dropdown-item" href="{{ path }}members/">Mon profil</a>
+                    <a class="dropdown-item" href="{{ path }}members/{{ session.user.1 }}">Mon profil</a>
                     <a class="dropdown-item" href="{{ path }}logout"><i class="fas fa-power-off"></i> Se déconnecter</a>
                 </div>
             </div>

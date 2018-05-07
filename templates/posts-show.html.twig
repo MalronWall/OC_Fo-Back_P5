@@ -1,7 +1,5 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{ post.slug }}{% endblock %}
-
 {% block content %}
 
     <header class="container-fluid">
@@ -25,13 +23,15 @@
                     {{ post.content }}
                 </p>
                 <div class="float-left text-center">
-                    {% if post.User.Image is not empty %}
-                        <img src="{{ path }}images/database/user/{{ post.User.pseudo }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
-                    {% else %}
-                        <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
-                        <strong>{{ comment.user }}</strong>
-                    {% endif %}
-                    <strong>{{ post.User.pseudo }}</strong>
+                    <a href="{{ path }}members/{{ post.User.pseudo }}">
+                        {% if post.User.Image is not empty %}
+                            <img src="{{ path }}images/database/user/{{ post.User.pseudo }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
+                        {% else %}
+                            <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
+                            <strong>{{ comment.user }}</strong>
+                        {% endif %}
+                        <strong>{{ post.User.pseudo }}</strong>
+                    </a>
                 </div>
                 <small class="float-right">Mis à jour le {{ post.lastUpdate }}</small>
             </div>
@@ -81,14 +81,16 @@
             <div class="col-sm-10 img-thumbnail">
                 <div class="row">
                     <div class="col-sm-3 text-center">
-                        {% if comment.User.Image is not empty %}
-                            <img src="{{ path }}images/database/user/{{ comment.User.pseudo }}.png" class="img-fluid" alt="Image de : {{ comment.User.pseudo }}">
-                        {% else %}
-                            <img src="{{ path }}images/database/user/default.png" class="img-fluid" alt="Image par défaut d'un utilisateur">
-                        {% endif %}
-                        <br/>
-                        <strong>{{ comment.User.pseudo }}</strong>
-                        </div>
+                        <a href="{{ path }}members/{{ post.User.pseudo }}">
+                            {% if comment.User.Image is not empty %}
+                                <img src="{{ path }}images/database/user/{{ comment.User.pseudo }}.png" class="img-fluid" alt="Image de : {{ comment.User.pseudo }}">
+                            {% else %}
+                                <img src="{{ path }}images/database/user/default.png" class="img-fluid" alt="Image par défaut d'un utilisateur">
+                            {% endif %}
+                            <br/>
+                            <strong>{{ comment.User.pseudo }}</strong>
+                        </a>
+                    </div>
                     <div class="col-sm-9">
                         <p>
                         {{ comment.content }}

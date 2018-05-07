@@ -34,22 +34,6 @@ class Image implements \Serializable
     /**
      * @return mixed
      */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param mixed $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getPost()
     {
         return $this->Post;
@@ -83,7 +67,6 @@ class Image implements \Serializable
     {
         return [
             $this->id,
-            $this->label,
             $this->Post,
             $this->User
         ];
@@ -93,7 +76,6 @@ class Image implements \Serializable
     {
         list(
             $this->id,
-            $this->label,
             $this->Post,
             $this->User
             ) = unserialize($serialized);

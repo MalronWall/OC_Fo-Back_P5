@@ -28,7 +28,7 @@
                 <p class="text-justify">
                     {{ post.content|length > 300 ? post.content|slice(0, 300) ~ ' [...]' : post.content  }}
                 </p>
-                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par {{ post.User.pseudo }}</small>
+                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par <a href="{{ path }}members/{{ post.User.pseudo }}">{{ post.User.pseudo }}</a></small>
             </div>
             {% endfor %}
 

@@ -34,7 +34,10 @@ abstract class AbstractController
         $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 
         header('HTTP/1.1 Moved Permanently', false, 301);
+        header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
         header("Location: http://$host$uri/$page");
+        exit();
     }
 
     protected function addFlash(string $type, string $message)

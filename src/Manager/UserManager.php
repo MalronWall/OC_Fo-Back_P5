@@ -27,6 +27,24 @@ class UserManager extends AbstractManager
         return Hydrator::hydrate(User::class, serialize(array_values($req->fetch())));
     }
 
+    public function getProfile($pseudo)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT *
+                                    FROM user
+                                    WHERE pseudo = :pseudo
+                                    ', [
+            'pseudo' => $pseudo
+        ]);
+
+        $fetchReq = $req->fetch();
+
+        if ($fetchReq == false) {
+            return false;
+        }
+        return Hydrator::hydrate(User::class, serialize(array_values($fetchReq)));
+    }
+
     public function replaceIdsByUsers(array $objects)
     {
         foreach ($objects as $object) {
@@ -140,6 +158,37 @@ class UserManager extends AbstractManager
                                     WHERE token = :token
                                     ', [
             'token' => $token
+        ]);
+
+        return true;
+    }
+
+    public function updateDatas($post, $idUser)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET name = :lastname, firstname = :firstname, pseudo = :pseudo, email = :email 
+                                    WHERE id = :idUser
+                                    ', [
+            'lastname' => $post['lastname'],
+            'firstname' => $post['firstname'],
+            'pseudo' => $post['pseudo'],
+            'email' => $post['email'],
+            'idUser' => $idUser
+        ]);
+
+        return true;
+    }
+
+    public function updatePassword($password, $idUser)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET password = :pwd
+                                    WHERE id = :idUser
+                                    ', [
+            'pwd' => md5($password),
+            'idUser' => $idUser
         ]);
 
         return true;
