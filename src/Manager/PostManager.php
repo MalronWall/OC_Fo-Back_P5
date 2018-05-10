@@ -27,7 +27,7 @@ class PostManager extends AbstractManager
     {
         $req = $this->db->requestDb('
                                     SELECT id, title, slug, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "%e/%m/%y à %Hh%m") lastUpdate, id_user, id_Image
+                                    DATE_FORMAT(lastUpdate, "%d/%m/%y à %Hh%m") lastUpdate, id_user, id_Image
                                     FROM post
                                     ORDER BY id
         ');
@@ -36,11 +36,11 @@ class PostManager extends AbstractManager
         return $results;
     }
 
-    public function getPost($slug)
+    public function getPostBySlug($slug)
     {
         $req = $this->db->requestDb('
                                     SELECT id, title, slug, chapo, content,
-                                    DATE_FORMAT(lastUpdate, "%e/%m/%y à %Hh%m") lastUpdate, id_User, id_Image
+                                    DATE_FORMAT(lastUpdate, "%d/%m/%y à %Hh%m") lastUpdate, id_User, id_Image
                                     FROM post
                                     WHERE slug = :slug
                                     ', [
@@ -50,10 +50,35 @@ class PostManager extends AbstractManager
         $datas = $req->fetch();
 
         if ($datas == false) {
-            throw new NotFoundHttpException('No post found for this slug !');
+            return false;
         }
 
         return Hydrator::hydrate(Post::class, serialize(array_values($datas)));
+    }
+
+    public function getPostById($id)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT id, title, slug, chapo, content,
+                                    DATE_FORMAT(lastUpdate, "%d/%m/%y à %Hh%m") lastUpdate, id_User, id_Image
+                                    FROM post
+                                    WHERE id = :id
+                                    ', [
+            'id' => $id,
+        ]);
+
+        $datas = $req->fetch();
+
+        return Hydrator::hydrate(Post::class, serialize(array_values($datas)));
+    }
+
+    public function replaceIdsByPost(array $objects)
+    {
+        foreach ($objects as $object) {
+            $post = $this->getPostById($object->getPost());
+            $object->setPost($post);
+        }
+        return $objects;
     }
 
     private function fetchAllResults($req)

@@ -33,4 +33,12 @@ class RoleManager extends AbstractManager
         $object->setRole($role);
         return $object;
     }
+
+    public function replaceIdsByRole(array $objects)
+    {
+        foreach ($objects as $object) {
+            $this->replaceIdByRole($object);
+        }
+        return $objects;
+    }
 }

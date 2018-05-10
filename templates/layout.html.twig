@@ -38,10 +38,10 @@
 </head>
 <body>
 
-{{  dump(session)  }}
+{{  dump(comments) }}
 
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="myNavbar">
         <div class="container">
             <a class="navbar-brand" href="{{ path }}">
                 <h3>
@@ -90,15 +90,11 @@
 {% if _flashbag is not empty %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 text-center alert alert-{{ _flashbag.type }} alert-dismissible fade show mb-0" data-dismiss="alert" role="alert">
-                <div class="row justify-content-end">
-                    <div class="col-sm-6">
-                        <strong>{{ _flashbag.message }}</strong>
-                    </div>
-                    <div class="col-sm-3">
-                        <small class="float-right"><i class="text-muted">~ Cliquer pour faire disparaître</i></small>
-                    </div>
-                </div>
+            <div class="col-sm-12 text-center alert alert-{{ _flashbag.type }} alert-dismissible fade show mb-0 " data-dismiss="alert" role="alert">
+                <strong>{{ _flashbag.message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
         </div>
     </div>
@@ -136,7 +132,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body text-left">
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" data-toggle="tab" href="#login" role="tab"
@@ -254,10 +250,9 @@
                     </div>
                 <!-- FIN MODAL -->
             {% else %}
-
             <div class="btn-group">
                 <button type="button" class="btn btn-dark dropdown-toggle align-middle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {% if session.user.8.0 is not empty %}
+                    {% if session.user.8[0] is not empty %}
                         <img src="{{ path }}images/database/user/{{ session.user.1 }}.png" class="rounded-circle float-left" height="45px" width="45px" alt="Img">
                     {% else %}
                         <img src="{{ path }}images/database/user/default.png" class="rounded-circle float-left" height="45px" width="45px" alt="Img">
@@ -266,10 +261,16 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profil">
                     <a class="dropdown-item" href="{{ path }}members/{{ session.user.1 }}">Mon profil</a>
+                    {% if session.user.9[1] in ['Administrateur', 'Super-administrateur'] %}
+                        <a class="dropdown-item" href="{{ path }}admin">Espace admin</a>
+                    {% endif %}
                     <a class="dropdown-item" href="{{ path }}logout"><i class="fas fa-power-off"></i> Se déconnecter</a>
                 </div>
             </div>
             {% endif %}
+            <a href="#myNavbar" class="btn btn-success rounded-circle">
+                <i class="fas fa-chevron-up"></i>
+            </a>
         </div>
         <div class="col-4">
             <h6><i class="far fa-copyright"></i><a href="https://thibaut-tourte.com" id="nomCopyright">Thibaut Tourte</a>, 2018 - Tous droits réservés</h6>

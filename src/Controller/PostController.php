@@ -62,12 +62,10 @@ class PostController extends AbstractController
 
     public function showPage($slugPost, $id)
     {
-        try {
-            // Récup du post avec le slug
-            $post = $this->postManager->getPost($slugPost);
-        } catch (NotFoundHttpException $e) {
-            $error = new ErrorController();
-            return $error->notFound();
+        // Récup du post avec le slug
+        $post = $this->postManager->getPostBySlug($slugPost);
+        if ($post == false) {
+            $this->redirect('404');
         }
         // Remplacement de l'idUser par User dans Post
         $this->userManager->replaceIdByUser($post);

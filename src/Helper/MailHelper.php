@@ -12,6 +12,8 @@ use Core\Application\Controller\AbstractController;
 
 class MailHelper extends AbstractController
 {
+    
+
     public function sendMailNewUser($post, $token)
     {
         if ($_SERVER['SERVER_NAME']=='localhost') {

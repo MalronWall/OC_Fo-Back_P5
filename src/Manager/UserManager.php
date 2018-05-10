@@ -27,6 +27,19 @@ class UserManager extends AbstractManager
         return Hydrator::hydrate(User::class, serialize(array_values($req->fetch())));
     }
 
+    public function getUsers()
+    {
+        $req = $this->db->requestDb('
+                                    SELECT *
+                                    FROM user
+                                    ORDER BY id_Role
+                                    ');
+
+        $results = $this->fetchAllResults($req);
+
+        return $results;
+    }
+
     public function getProfile($pseudo)
     {
         $req = $this->db->requestDb('
@@ -192,5 +205,15 @@ class UserManager extends AbstractManager
         ]);
 
         return true;
+    }
+
+    private function fetchAllResults($req)
+    {
+        $results = [];
+        foreach ($req->fetchAll() as $datas) {
+            $results[] = Hydrator::hydrate(User::class, serialize(array_values($datas)));
+        }
+
+        return $results;
     }
 }

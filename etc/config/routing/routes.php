@@ -23,11 +23,18 @@ $router->get('contact', "Contact#contact");
 $router->post('login', "User#login");
 $router->post('logon', "User#logon");
 $router->get('login/reset-password', "User#resetPassword");
+$router->get('login/reset-password/:token', "User#newPassword")->with('token', '([a-z\-0-9]+)');
 $router->get('logout', "User#logout");
 $router->get('confirm-email/:token', "User#confirmEmail");
 /****** MY PROFILE *****/
 $router->get('members/:pseudo', "User#profile")->with('pseudo', '([a-z\-0-9]+)');
 $router->post('members/:pseudo', "User#profile")->with('pseudo', '([a-z\-0-9]+)');
+/***** ADMIN *****/
+$router->get('admin', "User#admin");
+$router->post('admin', "User#admin");
+
+/***** ROUTES TESTS *****/
+$router->get('mail', "Test#mail");
 
 /****** 404 *****/
 //$router->get(':everything', "Error#notFound")->with('everything', '([^\s]+)');

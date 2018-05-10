@@ -1,0 +1,146 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<header class="container-fluid">
+    <div class="row text-center headTitle">
+        <div class="col-sm-12 align-self-center">
+            <h3>Administration</h3>
+        </div>
+    </div>
+</header>
+<section class="container mt-3">
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#members" role="tab"
+                       aria-controls="members" aria-selected="true">Gestion des membres</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#comments" role="tab"
+                       aria-controls="comments" aria-selected="false">Commentaires en attente <span class="badge badge-pill badge-danger">{{ nbComments }}</span></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                {# MEMBERS #}
+                <div class="tab-pane fade show active" id="members" role="tabpanel" aria-labelledby="members-tab">
+                    <form class="needs-validation" method="post" action="{{ path }}admin" novalidate>
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <tr class="thead-dark">
+                                    <th scope="col">Pseudo</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Compte bloqué</th>
+                                </tr>
+                                <tr class="thead-light">
+                                    <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                                </tr>
+                            </thead>
+                            {% for user in users %}
+                            <tbody>
+                                <tr>
+                                    <td class="align-middle">
+                                        <a href="{{ path }}members/{{ user.pseudo }}">
+                                            {% if user.image is not empty %}
+                                                <img src="{{ path }}images/database/user/{{ user.pseudo }}.png" class="rounded-circle" height="45px" width="45px" alt="Img">
+                                            {% else %}
+                                                <img src="{{ path }}images/database/user/default.png" class="rounded-circle" height="45px" width="45px" alt="Img">
+                                            {% endif %}
+                                            &nbsp;{{ user.pseudo }}
+                                        </a>
+                                    </td>
+                                    <td class="align-middle"><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                                    <td class="align-middle">
+                                        <label>
+                                            {{ user.role.role }}
+                                            {% if user.role.role == 'Membre' %}
+                                            <input type="checkbox" name="userRole_{{ user.id }}">
+                                            {% endif %}
+                                        </label>
+                                    </td>
+                                    <td class="align-middle">
+                                        <label>
+                                            {% if user.blocked == 0 %}
+                                            Non
+                                            {% else %}
+                                            Oui
+                                            {% endif %}
+                                            <input type="checkbox" name="userBlocked_{{ user.id }}">
+                                        </label></td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                            <tfoot class="thead-light">
+                                <tr>
+                                    <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
+                </div>
+                {# COMMENTS #}
+                <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                    <form class="needs-validation" method="post" action="{{ path }}admin" novalidate>
+                        <table class="table table-bordered text-center">
+                            <thead>
+                            <tr class="thead-dark">
+                                <th scope="col">Écrit le</th>
+                                <th scope="col">Par</th>
+                                <th scope="col">Sur l'article</th>
+                            </tr>
+                            <tr class="thead-light">
+                                <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                            </tr>
+                            </thead>
+                            {% for comment in comments %}
+                            <tbody>
+                            <tr>
+                                <td class="align-middle">Le {{ comment.published }}</td>
+                                <td class="align-middle">
+                                    <a href="{{ path }}members/{{ user.pseudo }}">
+                                        {% if comment.user.image is not empty %}
+                                            <img src="{{ path }}images/database/user/{{ comment.user.pseudo }}.png" class="rounded-circle" height="45px" width="45px" alt="Img">
+                                        {% else %}
+                                            <img src="{{ path }}images/database/user/default.png" class="rounded-circle" height="45px" width="45px" alt="Img">
+                                        {% endif %}
+                                        &nbsp;{{ comment.user.pseudo }}
+                                    </a>
+                                </td>
+                                <td class="align-middle">
+                                    <a href="{{ path }}posts/{{ comment.post.slug }}">{{ comment.post.title }}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="align-middle text-left">
+                                    <strong>Contenu : </strong>
+                                    <p>{{ comment.content }}</p>
+                                    <label class="float-right">
+                                        &nbsp;Non
+                                        <input type="radio" id="commentValid_{{ comment.id }}" name="commentInvalid_{{ comment.id }}">
+                                    </label>
+                                    <label class="float-right">
+                                        &nbsp;Oui
+                                        <input type="radio" id="commentValid_{{ comment.id }}" name="commentValid_{{ comment.id }}">
+                                    </label>
+                                    <strong class="float-right text-danger">Publier ? </strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                            {% endfor %}
+                            <tfoot class="thead-light">
+                            <tr>
+                                <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

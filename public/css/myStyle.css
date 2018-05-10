@@ -38,6 +38,10 @@ blockquote {
     background-color: #22282e !important;
 }
 
+.modalBack .close {
+    color: red !important;
+}
+
 /********** FORMULAIRES **********/
 .myForm {
     margin-bottom: 20px;

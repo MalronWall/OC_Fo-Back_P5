@@ -11,7 +11,9 @@ namespace Blog\Controller;
 use Blog\Helper\MailHelper;
 use Blog\Helper\RenameHelper;
 use Blog\Helper\SecurityHelper;
+use Blog\Manager\CommentManager;
 use Blog\Manager\ImageManager;
+use Blog\Manager\PostManager;
 use Blog\Manager\RoleManager;
 use Blog\Manager\UserManager;
 use Core\Application\Controller\AbstractController;
@@ -147,21 +149,31 @@ class UserController extends AbstractController
                     $renameHelper = new RenameHelper();
                     if (!empty($_FILES['uploadImage']['name'])) {
                         if ($_FILES['uploadImage']['error'] == 0) {
-                            if ($_FILES['uploadImage']['size'] < 700000) {
-                                if ($renameHelper->moveImageUserUploaded(
-                                    $_FILES['uploadImage']['tmp_name'],
-                                    $_POST['pseudo']
-                                )) {
-                                    $imageManager = new ImageManager();
-                                    $newImage = $imageManager->createAndLinkImageUser($_SESSION['user'][0]);
-                                    if (is_object($newImage)) {
-                                        $_SESSION['user'][8] = $newImage->serialize();
+                            $extensions = array('.png', '.jpg', '.jpeg');
+                            $extension = strrchr($_FILES['uploadImage']['name'], '.');
+                            if (in_array($extension, $extensions)) {
+                                if ($_FILES['uploadImage']['size'] < 700000) {
+                                    if ($renameHelper->moveImageUserUploaded(
+                                        $_FILES['uploadImage']['tmp_name'],
+                                        $_POST['pseudo']
+                                    )) {
+                                        $imageManager = new ImageManager();
+                                        $newImage = $imageManager->createAndLinkImageUser($_SESSION['user'][0]);
+                                        if (is_object($newImage)) {
+                                            $_SESSION['user'][8] = $newImage->serialize();
+                                        }
                                     }
+                                } else {
+                                    $this->addFlash("warning", "
+                                    Les données personnelles ont été mises à jour mais 
+                                    la taille de l'image est trop grande ! :/
+                                    ");
                                 }
                             } else {
                                 $this->addFlash("warning", "
-                            Les données personnelles ont été mises à jour mais la taille de l'image est trop grande ! :/
-                            ");
+                                    Les données personnelles ont été mises à jour mais 
+                                    le format du fichier envoyé n'est pas une image ! :/
+                                    ");
                             }
                         }
                     }
@@ -221,5 +233,53 @@ class UserController extends AbstractController
             'title' => 'Profil',
             'profile' => $profile
         ]);
+    }
+    
+    public function admin()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            var_dump($_POST);
+            foreach ($_POST as $post) {
+                $exploded[] = explode('_', $post);
+            }
+            var_dump($exploded);
+            exit();
+        }
+
+        $users = $this->userManager->getUsers();
+        $roleManager = new RoleManager();
+        $roleManager->replaceIdsByRole($users);
+        
+        $commentManager = new CommentManager();
+        $comments = $commentManager->getPendingComments();
+        $postManager = new PostManager();
+        $postManager->replaceIdsByPost($comments);
+        $this->userManager->replaceIdsByUsers($comments);
+        $nbComments = count($comments);
+        
+        return $this->render('admin.html.twig', [
+            'title' => 'Espace admin',
+            'users' => $users,
+            'comments' => $comments,
+            'nbComments' => $nbComments
+        ]);
+    }
+    
+    public function resetPassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (!empty($_POST['email'])) {
+                
+            }
+        }
+        
+        return $this->render('reset_password.html.twig', [
+            'title' => 'Réinitialiser le mot de passe'
+        ]);
+    }
+
+    public function newPassword($token)
+    {
+
     }
 }
