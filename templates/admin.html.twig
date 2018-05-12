@@ -16,7 +16,7 @@
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#members" role="tab"
-                       aria-controls="members" aria-selected="true">Gestion des membres</a>
+                       aria-controls="members" aria-selected="true">Gestion des membres <span class="badge badge-pill badge-info">{{ nbUsers }}</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#comments" role="tab"
@@ -57,19 +57,52 @@
                                         <label>
                                             {{ user.role.role }}
                                             {% if user.role.role == 'Membre' %}
-                                            <input type="checkbox" name="userRole_{{ user.id }}">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-secondary btn-sm btn-on" title="Donner le rôle d'administrateur">
+                                                    <input type="checkbox" value="2" name="userRole_{{ user.id }}" hidden>
+                                                    <i class="fas fa-level-up-alt"></i>
+                                                </label>
+                                            </div>
+                                            {% endif %}
+                                            {% if session.user.9[1] == 'Super-administrateur' %}
+                                            {% if user.role.role == 'Administrateur' %}
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-secondary btn-sm btn-on" title="Donner le rôle d'administrateur">
+                                                    <input type="checkbox" value="3" name="userRole_{{ user.id }}" hidden>
+                                                    <i class="fas fa-level-down-alt"></i>
+                                                </label>
+                                            </div>
+                                            {% endif %}
                                             {% endif %}
                                         </label>
                                     </td>
                                     <td class="align-middle">
-                                        <label>
+                                        {% if (session.user.9[0] < user.role.id) or (session.user.0 == user.id) %}
+                                        <div class="btn-group" data-toggle="buttons">
                                             {% if user.blocked == 0 %}
-                                            Non
+                                            <label class="btn btn-secondary btn-sm btn-on active">
+                                                <input type="radio" value="0" name="userBlocked_{{ user.id }}" checked="checked" hidden>Non
+                                            </label>
+                                            <label class="btn btn-secondary btn-sm btn-off">
+                                                <input type="radio" value="1" name="userBlocked_{{ user.id }}" hidden>Oui
+                                            </label>
                                             {% else %}
-                                            Oui
+                                            <label class="btn btn-secondary btn-sm btn-on">
+                                                <input type="radio" value="0" name="userBlocked_{{ user.id }}" hidden>Non
+                                            </label>
+                                            <label class="btn btn-secondary btn-sm btn-off active">
+                                                <input type="radio" value="1" name="userBlocked_{{ user.id }}" checked="checked" hidden>Oui
+                                            </label>
                                             {% endif %}
-                                            <input type="checkbox" name="userBlocked_{{ user.id }}">
-                                        </label></td>
+                                        </div>
+                                        {% else %}
+                                            {% if user.blocked == 0 %}
+                                                <strong class="text-success">Non</strong>
+                                            {% else %}
+                                                <strong class="text-danger">Oui</strong>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             </tbody>
                             {% endfor %}
@@ -117,15 +150,17 @@
                                 <td colspan="4" class="align-middle text-left">
                                     <strong>Contenu : </strong>
                                     <p>{{ comment.content }}</p>
-                                    <label class="float-right">
-                                        &nbsp;Non
-                                        <input type="radio" id="commentValid_{{ comment.id }}" name="commentInvalid_{{ comment.id }}">
-                                    </label>
-                                    <label class="float-right">
-                                        &nbsp;Oui
-                                        <input type="radio" id="commentValid_{{ comment.id }}" name="commentValid_{{ comment.id }}">
-                                    </label>
-                                    <strong class="float-right text-danger">Publier ? </strong>
+                                    <div class="btn-group float-right" data-toggle="buttons">
+                                        <label class="btn btn-secondary btn-sm btn-on">
+                                            <input type="radio" value="1" name="commentValid_{{ comment.id }}" hidden>Publier
+                                        </label>
+                                        <label class="btn btn-secondary btn-sm btn-X active">
+                                            <input type="radio" checked hidden>X
+                                        </label>
+                                        <label class="btn btn-secondary btn-sm btn-off">
+                                            <input type="radio" value="0" name="commentValid_{{ comment.id }}" hidden>Supprimer
+                                        </label>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>

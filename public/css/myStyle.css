@@ -42,6 +42,17 @@ blockquote {
     color: red !important;
 }
 
+/********** ADMIN **********/
+/* Switch button */
+.btn-on.active {
+    background-color: #5BB75B !important;
+    color: white !important;
+}
+.btn-off.active{
+    background-color: #DA4F49 !important;
+    color: white !important;
+}
+
 /********** FORMULAIRES **********/
 .myForm {
     margin-bottom: 20px;

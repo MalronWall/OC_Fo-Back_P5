@@ -45,16 +45,6 @@ class CommentManager extends AbstractManager
 
         return $results;
     }
-
-    private function fetchAllResults($req)
-    {
-        $results = [];
-        foreach ($req->fetchAll() as $datas) {
-            $results[] = Hydrator::hydrate(Comment::class, serialize(array_values($datas)));
-        }
-
-        return $results;
-    }
     
     public function createComment($content, $idPost, $idUser)
     {
@@ -68,5 +58,40 @@ class CommentManager extends AbstractManager
         ]);
 
         return true;
+    }
+
+    public function validComment($idComment)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE comment
+                                    SET valid = 1
+                                    WHERE id = :idComment
+                                    ', [
+            'idComment' => $idComment
+        ]);
+
+        return true;
+    }
+
+    public function deleteComment($idComment)
+    {
+        $req = $this->db->requestDb('
+                                    DELETE FROM comment
+                                    WHERE id = :idComment
+                                    ', [
+            'idComment' => $idComment
+        ]);
+
+        return true;
+    }
+
+    private function fetchAllResults($req)
+    {
+        $results = [];
+        foreach ($req->fetchAll() as $datas) {
+            $results[] = Hydrator::hydrate(Comment::class, serialize(array_values($datas)));
+        }
+
+        return $results;
     }
 }

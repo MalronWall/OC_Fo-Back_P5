@@ -36,23 +36,30 @@ class UserController extends AbstractController
             $post = $_POST;
             $checkEmail = array_values($this->userManager->checkEmailPseudo($post));
             if ($checkEmail[0] == 1) {
-                $user = $this->userManager->checkUser($post);
-                if ($user != false) {
-                    $roleManager = new RoleManager();
-                    $roleManager->replaceIdByRole($user);
-                    $user->setRole($user->getRole()->serialize());
-                    $imageManager = new ImageManager();
-                    $imageManager->replaceIdUserByImage($user);
-                    if (!empty($user->getImage())) {
-                        $user->setImage($user->getImage()[0]->serialize());
+                $checkBlocked = array_values($this->userManager->checkBlocked($post));
+                if ($checkBlocked[0] == 0) {
+                    $user = $this->userManager->checkUser($post);
+                    if ($user != false) {
+                        $roleManager = new RoleManager();
+                        $roleManager->replaceIdByRole($user);
+                        $user->setRole($user->getRole()->serialize());
+                        $imageManager = new ImageManager();
+                        $imageManager->replaceIdUserByImage($user);
+                        if (!empty($user->getImage())) {
+                            $user->setImage($user->getImage()[0]->serialize());
+                        }
+                        $_SESSION['user'] = $user->serialize();
+                        $this->addFlash("success", "
+                        Vous êtes maintenant connecté ! :)
+                        ");
+                    } else {
+                        $this->addFlash("danger", "
+                        Votre mot de passe semble erroné, veuillez réessayer ! :/
+                        ");
                     }
-                    $_SESSION['user'] = $user->serialize();
-                    $this->addFlash("success", "
-                    Vous êtes maintenant connecté ! :)
-                    ");
                 } else {
                     $this->addFlash("danger", "
-                    Votre mot de passe semble erroné, veuillez réessayer ! :/
+                    Connexion impossible : votre compte a été suspendu ! :(
                     ");
                 }
             } else {
@@ -238,17 +245,36 @@ class UserController extends AbstractController
     public function admin()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            var_dump($_POST);
-            foreach ($_POST as $post) {
-                $exploded[] = explode('_', $post);
+            foreach ($_POST as $key => $value) {
+                // explode the name
+                $exploded = explode('_', $key);
+                // Push the value at the end of the explode
+                array_push($exploded, $value);
+                // Redirect to the good SQL request via switch
+                switch ($exploded[0]) {
+                    case 'userBlocked':
+                        $this->userManager->updateBlocked($exploded[1], $exploded[2]);
+                        break;
+                    case 'userRole':
+                        $this->userManager->updateRole($exploded[1], $exploded[2]);
+                        break;
+                    case 'commentValid':
+                        $commentManager = new CommentManager();
+                        if ($exploded[2] == 1) {
+                            $commentManager->validComment($exploded[1]);
+                        } else {
+                            $commentManager->deleteComment($exploded[1]);
+                        }
+                }
             }
-            var_dump($exploded);
-            exit();
+            $this->addFlash("success", "Les données ont été mises à jour ! :)");
+            $this->redirect('admin');
         }
 
         $users = $this->userManager->getUsers();
         $roleManager = new RoleManager();
         $roleManager->replaceIdsByRole($users);
+        $nbUsers = count($users);
         
         $commentManager = new CommentManager();
         $comments = $commentManager->getPendingComments();
@@ -260,9 +286,35 @@ class UserController extends AbstractController
         return $this->render('admin.html.twig', [
             'title' => 'Espace admin',
             'users' => $users,
+            'nbUsers' => $nbUsers,
             'comments' => $comments,
             'nbComments' => $nbComments
         ]);
+    }
+
+    public function adminMembers()
+    {
+        foreach ($_POST as $key => $value) {
+            // explode the name
+            $exploded = explode('_', $key);
+            // Push the value at the end of the explode
+            array_push($exploded, $value);
+            // Redirect to the good SQL request via switch
+            switch ($exploded[0]) {
+                case 'userBlocked':
+                    $this->userManager->updateBlocked($exploded[1], $exploded[2]);
+                    break;
+                case 'userRole':
+                    $this->userManager->updateRole($exploded[1], $exploded[2]);
+                    break;
+            }
+        }
+        $this->redirect('admin');
+    }
+
+    public function adminComments()
+    {
+
     }
     
     public function resetPassword()

@@ -133,6 +133,20 @@ class UserManager extends AbstractManager
         return false;
     }
 
+    public function checkBlocked($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT blocked
+                                    FROM user
+                                    WHERE pseudo = :pseudo OR email = :email
+                                    ', [
+            'pseudo' => $post['emailPseudo'],
+            'email' => $post['emailPseudo']
+        ]);
+
+        return $req->fetch();
+    }
+
     public function createUser($post, $token)
     {
         $req = $this->db->requestDb('
@@ -187,6 +201,34 @@ class UserManager extends AbstractManager
             'firstname' => $post['firstname'],
             'pseudo' => $post['pseudo'],
             'email' => $post['email'],
+            'idUser' => $idUser
+        ]);
+
+        return true;
+    }
+
+    public function updateBlocked($idUser, $blocked)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET blocked = :blocked
+                                    WHERE id = :idUser
+                                    ', [
+            'blocked' => $blocked,
+            'idUser' => $idUser
+        ]);
+
+        return true;
+    }
+
+    public function updateRole($idUser, $idRole)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET id_Role = :idRole
+                                    WHERE id = :idUser
+                                    ', [
+            'idRole' => $idRole,
             'idUser' => $idUser
         ]);
 
