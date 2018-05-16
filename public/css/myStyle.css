@@ -1,19 +1,5 @@
-/* Pour éviter les superpositions */
-* {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-html {
-    height: 100%;
-}
-
 body {
     background: #D4D4D4;
-    min-height: 100%;
-    position: relative;
-    margin: 0;
-    padding: 0 0 80px 0;
 }
 
 /********** ENTETE TOUS **********/
@@ -36,7 +22,8 @@ blockquote {
 }
 
 #headHome {
-    position: absolute;
+    background: #EBE9E7 url(../images/home/laptop.jpg) top center fixed no-repeat;
+    height: 586px;
 }
 
 /********** MODAL CONNECTION **********/
@@ -83,10 +70,6 @@ blockquote {
 /********** FOOTER **********/
 footer {
     background: #EBE9E7;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }
 
 footer .reseauSocial {
