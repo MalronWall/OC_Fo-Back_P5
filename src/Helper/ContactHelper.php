@@ -10,6 +10,13 @@ namespace Blog\Helper;
 
 class ContactHelper
 {
+    private $mailHelper;
+
+    public function __construct()
+    {
+        $this->mailHelper = new MailHelper();
+    }
+
     public function processContactForm(array $post)
     {
         $valide = false;
@@ -26,11 +33,11 @@ class ContactHelper
             $decode = json_decode(file_get_contents($api_url), true);
 
             if ($decode['success'] == true) {
-                $valide = $this->sendMail($post);
+                $valide = $this->mailHelper->sendMailContact($post);
             }
             return $valide;
         }
-        $valide = $this->sendMail($post);
+        $valide = $this->mailHelper->sendMailContact($post);
         return $valide;
     }
 
