@@ -16,11 +16,18 @@
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#members" role="tab"
-                       aria-controls="members" aria-selected="true">Gestion des membres <span class="badge badge-pill badge-info">{{ nbUsers }}</span></a>
+                       aria-controls="members" aria-selected="true">Gestion des membres <span class="badge badge-pill badge-info">{{ nbUsers }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#posts" role="tab"
+                       aria-controls="members" aria-selected="true">Gestion des articles <span class="badge badge-pill badge-info">{{ nbPosts }}</span>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#comments" role="tab"
-                       aria-controls="comments" aria-selected="false">Commentaires en attente <span class="badge badge-pill badge-danger">{{ nbComments }}</span></a>
+                       aria-controls="comments" aria-selected="false">Commentaires en attente <span class="badge badge-pill badge-danger">{{ nbComments }}</span>
+                    </a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -36,13 +43,16 @@
                                     <th scope="col">Compte bloqué</th>
                                 </tr>
                                 <tr class="thead-light">
-                                    <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                                    <th colspan="4"><button type="submit" class="btn btn-primary">Valider les changements</button></th>
                                 </tr>
                             </thead>
-                            {% for user in users %}
                             <tbody>
+                            {% for user in users %}
                                 <tr>
                                     <td class="align-middle">
+                                        {% if session.user.0 == user.id %}
+                                        <i class="far fa-hand-point-right fa-lg text-success align-baseline"></i>
+                                        {% endif %}
                                         <a href="{{ path }}members/{{ user.pseudo }}">
                                             {% if user.image is not empty %}
                                                 <img src="{{ path }}images/database/user/{{ user.pseudo }}.png" class="rounded-circle" height="45px" width="45px" alt="Img">
@@ -67,7 +77,7 @@
                                             {% if session.user.9[1] == 'Super-administrateur' %}
                                             {% if user.role.role == 'Administrateur' %}
                                             <div class="btn-group" data-toggle="buttons">
-                                                <label class="btn btn-secondary btn-sm btn-on" title="Donner le rôle d'administrateur">
+                                                <label class="btn btn-secondary btn-sm btn-off" title="Donner le rôle d'administrateur">
                                                     <input type="checkbox" value="3" name="userRole_{{ user.id }}" hidden>
                                                     <i class="fas fa-level-down-alt"></i>
                                                 </label>
@@ -104,16 +114,81 @@
                                         {% endif %}
                                     </td>
                                 </tr>
-                            </tbody>
                             {% endfor %}
+                            </tbody>
                             <tfoot class="thead-light">
                                 <tr>
-                                    <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                                    <th colspan="4"><button type="submit" class="btn btn-primary">Valider les changements</button></th>
                                 </tr>
                             </tfoot>
                         </table>
                     </form>
                 </div>
+                {# POSTS #}
+                <div class="tab-pane fade" id="posts" role="tabpanel" aria-labelledby="comments-tab">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr class="thead-dark">
+                                <th scope="col">Titre</th>
+                                <th scope="col">Chapô</th>
+                                <th scope="col">A jour le</th>
+                                <th scope="col">Par</th>
+                            </tr>
+                            <tr class="thead-light">
+                                <th colspan="4"><a href="{{ path }}posts/new" class="btn btn-success">Créer un article</a></th>
+                            </tr>
+                        </thead>
+                        {% for post in posts %}
+                        <tbody>
+                            <tr>
+                                <td rowspan="2" class="align-middle">
+                                    <a href="{{ path }}posts/{{ post.slug }}">
+                                        {% if post.image is not empty %}
+                                        <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail" width="175px" alt="Img">
+                                        {% else %}
+                                        <img src="{{ path }}images/database/post/default.png" class="img-thumbnail" width="175px" alt="Img">
+                                        {% endif %}
+                                        <strong>{{ post.title }}</strong>
+                                    </a>
+                                </td>
+                                {% if post.chapo is not empty %}
+                                <td class="align-middle"><i>{{ post.chapo }}</i></td>
+                                {% else %}
+                                <td class="align-middle text-danger"><i>Aucun chapo</i></td>
+                                {% endif %}
+                                <td class="align-middle">{{ post.lastUpdate }}</td>
+                                <td class="align-middle">
+                                    <a href="{{ path }}members/{{ post.user.pseudo }}">
+                                        {% if post.user.image is not empty %}
+                                        <img src="{{ path }}images/database/user/{{ post.user.pseudo }}.png" class="rounded-circle" width="45px" height="45px" alt="Img">
+                                        {% else %}
+                                        <img src="{{ path }}images/database/user/default.png" class="rounded-circle" width="45px" height="45px" alt="Img">
+                                        {% endif %}
+                                        {{ post.user.pseudo }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="align-middle text-left">
+                                    <strong>Contenu : </strong>
+                                    <p class="text-justify">{{ post.content|raw|length > 300 ? post.content|striptags|slice(0, 300) ~ '[...]' : post.content|striptags  }}</p>
+                                    <div class="btn-group float-right">
+                                        <a href="{{ path }}posts/{{ post.slug }}/edit" class="btn btn-info"><i class="far fa-edit"></i></a>
+                                        <a href="{{ path }}posts/{{ post.slug }}/delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                        {% endfor %}
+                        <tfoot class="thead-light">
+                            <tr>
+                                <th colspan="4"><button type="submit" class="btn btn-success">Créer un article</button></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
                 {# COMMENTS #}
                 <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
                     <form class="needs-validation" method="post" action="{{ path }}admin" novalidate>
@@ -125,13 +200,13 @@
                                 <th scope="col">Sur l'article</th>
                             </tr>
                             <tr class="thead-light">
-                                <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                                <th colspan="4"><button type="submit" class="btn btn-primary">Valider les changements</button></th>
                             </tr>
                             </thead>
                             {% for comment in comments %}
                             <tbody>
                             <tr>
-                                <td class="align-middle">Le {{ comment.published }}</td>
+                                <td class="align-middle">{{ comment.published }}</td>
                                 <td class="align-middle">
                                     <a href="{{ path }}members/{{ user.pseudo }}">
                                         {% if comment.user.image is not empty %}
@@ -167,7 +242,7 @@
                             {% endfor %}
                             <tfoot class="thead-light">
                             <tr>
-                                <th colspan="4"><button type="submit" class="btn btn-success">Valider les changements</button></th>
+                                <th colspan="4"><button type="submit" class="btn btn-primary">Valider les changements</button></th>
                             </tr>
                             </tfoot>
                         </table>

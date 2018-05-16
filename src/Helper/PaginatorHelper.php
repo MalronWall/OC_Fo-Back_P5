@@ -24,17 +24,14 @@ class PaginatorHelper
     // Nombre total de pagination
     private $totalPaging;
 
-    public function __construct(array $datas, int $currentPage = 1, int $nbPerPage = 5)
+    public function getPaging(array $datas, int $currentPage = 1, int $nbPerPage = 5)
     {
         $this->datas = $datas;
         $this->nbTotal = count($datas);
         $this->currentPage = $currentPage;
         $this->nbPerPage = $nbPerPage;
         $this->totalPaging = $this->totalPaging();
-    }
-
-    public function getPaging()
-    {
+        
         return [
             'previous' => $this->previous(),
             'next' => $this->next(),

@@ -125,4 +125,46 @@ class ImageManager extends AbstractManager
         
         return true;
     }
+
+    public function createAndLinkImagePost($idPost)
+    {
+        if (empty($this->getImagePost($idPost))) {
+            if ($this->createImagePost($idPost)) {
+                $newImage = $this->getImagePost($idPost);
+                if ($newImage != false) {
+                    if ($this->linkImagePost($newImage[0]->getId(), $idPost)) {
+                        return $newImage[0];
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private function createImagePost($idUser)
+    {
+        $req = $this->db->requestDb('
+                                    INSERT INTO image (id_Post)
+                                    VALUES (:idUser)
+                                    ', [
+            'idUser' => $idUser
+        ]);
+
+        return true;
+    }
+
+    private function linkImagePost($idImage, $idPost)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE post
+                                    SET id_Image = :idImage
+                                    WHERE id = :idPost
+                                    ', [
+            'idImage' => $idImage,
+            'idPost' => $idPost
+        ]);
+
+        return true;
+    }
 }

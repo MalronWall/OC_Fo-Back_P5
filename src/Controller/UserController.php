@@ -17,17 +17,33 @@ use Blog\Manager\PostManager;
 use Blog\Manager\RoleManager;
 use Blog\Manager\UserManager;
 use Core\Application\Controller\AbstractController;
+use Core\Application\Exception\AccessDeniedException;
+use Core\Application\Exception\NotFoundHttpException;
 
 class UserController extends AbstractController
 {
-    protected $securityHelper;
     protected $userManager;
+    protected $roleManager;
+    protected $commentManager;
+    protected $imageManager;
+    protected $securityHelper;
+    protected $mailHelper;
+    protected $renameHelper;
+    protected $postManager;
+    protected $errorController;
 
     public function __construct()
     {
         parent::__construct();
         $this->securityHelper = new SecurityHelper();
         $this->userManager = new UserManager();
+        $this->roleManager = new RoleManager();
+        $this->imageManager = new ImageManager();
+        $this->mailHelper = new MailHelper();
+        $this->renameHelper = new RenameHelper();
+        $this->commentManager = new CommentManager();
+        $this->postManager = new PostManager();
+        $this->errorController = new ErrorController();
     }
 
     public function login()
@@ -40,11 +56,9 @@ class UserController extends AbstractController
                 if ($checkBlocked[0] == 0) {
                     $user = $this->userManager->checkUser($post);
                     if ($user != false) {
-                        $roleManager = new RoleManager();
-                        $roleManager->replaceIdByRole($user);
+                        $this->roleManager->replaceIdByRole($user);
                         $user->setRole($user->getRole()->serialize());
-                        $imageManager = new ImageManager();
-                        $imageManager->replaceIdUserByImage($user);
+                        $this->imageManager->replaceIdUserByImage($user);
                         if (!empty($user->getImage())) {
                             $user->setImage($user->getImage()[0]->serialize());
                         }
@@ -80,12 +94,12 @@ class UserController extends AbstractController
                 if ($post['password'] == $post['confPassword']) {
                     $checkEmail = array_values($this->userManager->checkEmail($post));
                     if ($checkEmail[0] == 0) {
+                        $post['pseudo'] = $this->renameHelper->renamePseudo($post['pseudo']);
                         $checkPseudo = array_values($this->userManager->checkPseudo($post));
                         if ($checkPseudo[0] == 0) {
                             $token = $this->securityHelper->generateToken();
                             if ($this->userManager->createUser($post, $token) == true) {
-                                $mailHelper = new MailHelper();
-                                $mailHelper->sendMailNewUser($post, $token);
+                                $this->mailHelper->sendMailNewUser($post, $token);
                                 $this->addFlash("warning", "
                                 Pour finir de vous inscrire, veuillez cliquer sur le lien reçu par mail ! :)
                                 ");
@@ -131,14 +145,18 @@ class UserController extends AbstractController
     public function confirmEmail($token)
     {
         $checkToken = array_values($this->userManager->checkToken($token));
-        if ($checkToken[0] == 1) {
-            $this->userManager->deleteToken($token);
-            $this->addFlash("success", "
-                Félicitations ! Votre adresse mail vient d'être validée et vous pouvez désormais vous connecter ! :)
-                ");
-        } else {
-            $this->redirect('404');
+        try {
+            if ($checkToken[0] == 0) {
+                throw new NotFoundHttpException();
+            }
+        } catch (NotFoundHttpException $e) {
+            return $this->errorController->notFound();
         }
+        
+        $this->userManager->deleteToken($token);
+        $this->addFlash("success", "
+            Félicitations ! Votre adresse mail vient d'être validée et vous pouvez désormais vous connecter ! :)
+            ");
 
         $this->redirect('');
     }
@@ -152,20 +170,19 @@ class UserController extends AbstractController
                 !empty($_POST['pseudo']) &&
                 !empty($_POST['email'])
             ) {
+                $_POST['pseudo'] = $this->renameHelper->renamePseudo($_POST['pseudo']);
                 if ($this->userManager->updateDatas($_POST, $_SESSION['user'][0])) {
-                    $renameHelper = new RenameHelper();
                     if (!empty($_FILES['uploadImage']['name'])) {
                         if ($_FILES['uploadImage']['error'] == 0) {
                             $extensions = array('.png', '.jpg', '.jpeg');
                             $extension = strrchr($_FILES['uploadImage']['name'], '.');
                             if (in_array($extension, $extensions)) {
                                 if ($_FILES['uploadImage']['size'] < 700000) {
-                                    if ($renameHelper->moveImageUserUploaded(
+                                    if ($this->renameHelper->moveImageUserUploaded(
                                         $_FILES['uploadImage']['tmp_name'],
                                         $_POST['pseudo']
                                     )) {
-                                        $imageManager = new ImageManager();
-                                        $newImage = $imageManager->createAndLinkImageUser($_SESSION['user'][0]);
+                                        $newImage = $this->imageManager->createAndLinkImageUser($_SESSION['user'][0]);
                                         if (is_object($newImage)) {
                                             $_SESSION['user'][8] = $newImage->serialize();
                                         }
@@ -197,12 +214,13 @@ class UserController extends AbstractController
                             }
                         } else {
                             $this->addFlash("warning", "
-                            Les données personnelles ont été mises à jour mais les deux mots de passe ne correspondaient pas ! :/
+                            Les données personnelles ont été mises à jour 
+                            mais les deux mots de passe ne correspondaient pas ! :/
                             ");
                         }
                     }
                     // Renommage de l'image par le nouveau pseudo
-                    $renameHelper->renameImageUser($_SESSION['user'][1], $_POST['pseudo']);
+                    $this->renameHelper->renameImageUser($_SESSION['user'][1], $_POST['pseudo']);
 
                     // Mise à jour des variables de la SESSION
                     $_SESSION['user'][1] = $_POST['pseudo'];
@@ -230,11 +248,15 @@ class UserController extends AbstractController
         }
 
         $profile = $this->userManager->getProfile($pseudo);
-        if ($profile == false) {
-            $this->redirect('404');
+        try {
+            if ($profile == false) {
+                throw new NotFoundHttpException();
+            }
+        } catch (NotFoundHttpException $e) {
+            return $this->errorController->notFound();
         }
-        $roleManager = new RoleManager();
-        $roleManager->replaceIdByRole($profile);
+
+        $this->roleManager->replaceIdByRole($profile);
 
         return $this->render('profile.html.twig', [
             'title' => 'Profil',
@@ -244,6 +266,14 @@ class UserController extends AbstractController
     
     public function admin()
     {
+        try {
+            if (!isset($_SESSION['user']) or $_SESSION['user'][9][0] == 3) {
+                throw new AccessDeniedException();
+            }
+        } catch (AccessDeniedException $e) {
+            return $this->errorController->accessDenied();
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             foreach ($_POST as $key => $value) {
                 // explode the name
@@ -259,11 +289,10 @@ class UserController extends AbstractController
                         $this->userManager->updateRole($exploded[1], $exploded[2]);
                         break;
                     case 'commentValid':
-                        $commentManager = new CommentManager();
                         if ($exploded[2] == 1) {
-                            $commentManager->validComment($exploded[1]);
+                            $this->commentManager->validComment($exploded[1]);
                         } else {
-                            $commentManager->deleteComment($exploded[1]);
+                            $this->commentManager->deleteComment($exploded[1]);
                         }
                 }
             }
@@ -271,15 +300,19 @@ class UserController extends AbstractController
             $this->redirect('admin');
         }
 
+        // Users
         $users = $this->userManager->getUsers();
-        $roleManager = new RoleManager();
-        $roleManager->replaceIdsByRole($users);
+        $this->roleManager->replaceIdsByRole($users);
         $nbUsers = count($users);
-        
-        $commentManager = new CommentManager();
-        $comments = $commentManager->getPendingComments();
-        $postManager = new PostManager();
-        $postManager->replaceIdsByPost($comments);
+
+        // Posts
+        $posts = $this->postManager->getPosts();
+        $this->userManager->replaceIdsByUsers($posts);
+        $nbPosts = count($posts);
+
+        // Comments
+        $comments = $this->commentManager->getPendingComments();
+        $this->postManager->replaceIdsByPost($comments);
         $this->userManager->replaceIdsByUsers($comments);
         $nbComments = count($comments);
         
@@ -287,44 +320,21 @@ class UserController extends AbstractController
             'title' => 'Espace admin',
             'users' => $users,
             'nbUsers' => $nbUsers,
+            'posts' => $posts,
+            'nbPosts' => $nbPosts,
             'comments' => $comments,
             'nbComments' => $nbComments
         ]);
-    }
-
-    public function adminMembers()
-    {
-        foreach ($_POST as $key => $value) {
-            // explode the name
-            $exploded = explode('_', $key);
-            // Push the value at the end of the explode
-            array_push($exploded, $value);
-            // Redirect to the good SQL request via switch
-            switch ($exploded[0]) {
-                case 'userBlocked':
-                    $this->userManager->updateBlocked($exploded[1], $exploded[2]);
-                    break;
-                case 'userRole':
-                    $this->userManager->updateRole($exploded[1], $exploded[2]);
-                    break;
-            }
-        }
-        $this->redirect('admin');
-    }
-
-    public function adminComments()
-    {
-
     }
     
     public function resetPassword()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!empty($_POST['email'])) {
-                
+
             }
         }
-        
+
         return $this->render('reset_password.html.twig', [
             'title' => 'Réinitialiser le mot de passe'
         ]);
@@ -332,6 +342,15 @@ class UserController extends AbstractController
 
     public function newPassword($token)
     {
+        $checkToken = array_values($this->userManager->checkToken($token));
+        try {
+            if ($checkToken[0] == 0) {
+                throw new NotFoundHttpException();
+            }
+        } catch (NotFoundHttpException $e) {
+            return $this->errorController->notFound();
+        }
 
+        return 0; //TODO newPassword()
     }
 }

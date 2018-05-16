@@ -6,9 +6,10 @@
 
 {% block content %}
     <section class="container text-center">
-        <h1>/!\ 404 NOT FOUND /!\</h1>
+        <h1>/!\ 403 ACCESS DENIED /!\</h1>
         <strong>at {{ domain }}/{{ current_page }}</strong><br/><br/>
-        <i>La page que vous demandez n'existe pas (ou plus) !</i><br/>
+        <i>Vous ne possédez pas les droits pour accéder à cette page !</i><br/>
+        <i>Veuillez vous connecter et/ou être administrateur du site !</i><br/>
         <a href="javascript:history.go(-1)"><< Revenir à la page précédente !</a><br/>
         <a href="{{ path }}"><< Revenir à l'accueil du blog !</a>
     </section>

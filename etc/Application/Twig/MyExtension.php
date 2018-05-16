@@ -12,10 +12,10 @@ class MyExtension extends \Twig_Extension
 {
     public function getFunctions()
     {
+        // RETURN ALL PUBLICS FUNCTIONS
         return [
             new \Twig_SimpleFunction('activePage', [$this, 'activePage'], ['needs_context' => true]),
-            new \Twig_SimpleFunction('currentPage', [$this, 'currentPage'], ['needs_context' => true]),
-            new \Twig_SimpleFunction('urlExploded', [$this, 'urlExploded'], ['needs_context' => true])
+            new \Twig_SimpleFunction('currentPage', [$this, 'currentPage'], ['needs_context' => true])
         ];
     }
 
@@ -38,7 +38,7 @@ class MyExtension extends \Twig_Extension
         return '';
     }
 
-    public function urlExploded(array $context)
+    private function urlExploded(array $context)
     {
         //$context contient toutes les variables globales mises dans Twig
         $urlExploded = explode('/', $context['current_page']);

@@ -16,17 +16,19 @@
             <div class="col-sm-6 mb-3">
                 <a href="{{ path }}posts/{{ post.slug }}">
                     {% if post.image is not empty %}
-                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-user-comment" alt="Image pour l'article : {{ post.label }}">
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail" alt="Image pour l'article : {{ post.title }}">
                     {% else %}
-                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-user-comment" alt="Image par défaut d'un article">
+                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail" alt="Image par défaut d'un article">
                     {% endif %}
                 </a>
             </div>
             <div class="col-sm-6 mb-3">
                 <h3><a href="{{ path }}posts/{{ post.slug }}">{{ post.title }}</a></h3>
+                {% if post.chapo is not empty %}
                 <i class="h6">{{ post.chapo }}</i><br/><br/>
+                {% endif %}
                 <p class="text-justify">
-                    {{ post.content|length > 300 ? post.content|slice(0, 300) ~ ' [...]' : post.content  }}
+                    {{ (post.content|raw|length) > 300 ? (post.content | striptags | slice(0, 300)) ~ '[...]' : post.content|striptags  }}
                 </p>
                 <small class="float-right">Mis à jour le {{ post.lastUpdate }} par <a href="{{ path }}members/{{ post.User.pseudo }}">{{ post.User.pseudo }}</a></small>
             </div>

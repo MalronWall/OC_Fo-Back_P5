@@ -14,26 +14,42 @@
         <div class="row justify-content-center">
             <div class="col-sm-12">
                 {% if post.image is not empty %}
-                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-fluid" alt="Image pour l'article : {{ post.label }}">
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-fluid mb-2" alt="Image pour l'article : {{ post.label }}">
                 {% else %}
-                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-fluid" alt="Image par défaut d'un article">
+                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-fluid mb-2" alt="Image par défaut d'un article">
                 {% endif %}
-                <i class="h6">{{ post.chapo }}</i><br/><br/>
-                <p class="text-justify">
-                    {{ post.content }}
+                {% if post.chapo is not empty %}
+                <i class="h6 mt-2">{{ post.chapo }}</i><br/><br/>
+                {% endif %}
+                <p class="text-justify mt-0">
+                    {{ post.content | raw }}
                 </p>
-                <div class="float-left text-center">
-                    <a href="{{ path }}members/{{ post.User.pseudo }}">
-                        {% if post.User.Image is not empty %}
-                            <img src="{{ path }}images/database/user/{{ post.User.pseudo }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
-                        {% else %}
-                            <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
-                            <strong>{{ comment.user }}</strong>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="float-left text-center">
+                            <a href="{{ path }}members/{{ post.User.pseudo }}">
+                                {% if post.User.Image is not empty %}
+                                    <img src="{{ path }}images/database/user/{{ post.User.pseudo }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
+                                {% else %}
+                                    <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
+                                    <strong>{{ comment.user }}</strong>
+                                {% endif %}
+                                <strong>{{ post.User.pseudo }}</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-right align-bottom">
+                        <small>Mis à jour le {{ post.lastUpdate }}</small>
+                        {% if session.user.9[0] in [1, 2] %}
+                        <br/>
+                        <div class="btn-group">
+                            <a href="{{ path }}posts/new" class="btn btn-success"><i class="fas fa-plus-circle"></i></a>
+                            <a href="{{ path }}posts/{{ post.slug }}/edit" class="btn btn-info"><i class="far fa-edit"></i></a>
+                            <a href="{{ path }}posts/{{ post.slug }}/delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                        </div>
                         {% endif %}
-                        <strong>{{ post.User.pseudo }}</strong>
-                    </a>
+                    </div>
                 </div>
-                <small class="float-right">Mis à jour le {{ post.lastUpdate }}</small>
             </div>
         </div>
     </section>
@@ -106,31 +122,33 @@
 
     {# PAGINATION #}
     {% if pagination.totalPaging > 1 %}
-    <div class="row justify-content-center">
-        <nav aria-label="Navigation des articles">
-            <ul class="pagination">
-                <!-- PREVIOUS -->
-                <li class="page-item {{ pagination.previous.display }}">
-                    <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.previous.href }}"><</a>
-                </li>
-                {% for page in 1..pagination.totalPaging  %}
-                    {% if page == pagination.currentPage %}
-                        <li class="page-item active">
-                            <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
-                        </li>
-                    {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-                <!-- NEXT -->
-                <li class="page-item {{ pagination.next.display }}">
-                    <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.next.href }}">></a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    <section class="container-fluid">
+        <div class="row justify-content-center">
+            <nav aria-label="Navigation des articles">
+                <ul class="pagination">
+                    <!-- PREVIOUS -->
+                    <li class="page-item {{ pagination.previous.display }}">
+                        <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.previous.href }}"><</a>
+                    </li>
+                    {% for page in 1..pagination.totalPaging  %}
+                        {% if page == pagination.currentPage %}
+                            <li class="page-item active">
+                                <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- NEXT -->
+                    <li class="page-item {{ pagination.next.display }}">
+                        <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.next.href }}">></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
     {% endif %}
     {% endif %}
 {% endblock %}

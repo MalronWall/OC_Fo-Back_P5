@@ -1,0 +1,106 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+
+    <header class="container-fluid">
+        <div class="row text-center headTitle">
+            <div class="col-sm-12 align-self-center">
+                <h3>{{ title }}</h3>
+            </div>
+        </div>
+    </header>
+
+    <section class="container img-thumbnail">
+        {% if current_page == 'posts/new' %}
+        <form class="needs-validation" method="post" action="{{ path }}posts/new" enctype="multipart/form-data" novalidate>
+        {% else %}
+        <form class="needs-validation" method="post" action="{{ path }}posts/{{ post.slug }}/edit" enctype="multipart/form-data" novalidate>
+        {% endif %}
+            <div class="row text-center">
+                <div class="col-sm-2">
+                    {% if current_page == 'posts/new' %}
+                    <a href="{{ path }}posts/" class="btn btn-danger float-left">Annuler</a>
+                    {% else %}
+                    <a href="{{ path }}posts/{{ post.slug }}" class="btn btn-danger float-left">Annuler</a>
+                    {% endif %}
+                </div>
+                <div class="col-sm-8">
+                    {% if post.image is not empty %}
+                        <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-fluid" width="500px" alt="Image pour l'article : {{ post.title }}">
+                    {% else %}
+                        <h5 class="mt-1">Image par défaut d'un article</h5>
+                        <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-fluid" width="500px" alt="Image par défaut d'un article">
+                    {% endif %}
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group mt-2">
+                        <label type="button" for="uploadImage" class="btn btn-success">
+                            <i class="fas fa-upload"></i> <span>Télécharger une autre image</span>
+                        </label>
+                        <input type="file" id="uploadImage" class="upload" name="uploadImage" accept="image/*" hidden>
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="title">Le titre * <small>(Min = 4 / Max = 25)</small></label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre" value="{{ post.title }}" minlength="4" maxlength="25" required>
+                        <div class="invalid-feedback">
+                            Veuillez renseigner un titre !
+                        </div>
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="chapo">Le chapo <small>(Max = 100)</small></label>
+                        <input type="text" class="form-control" name="chapo" id="chapo" placeholder="Chapo" maxlength="100" value="{{ post.chapo }}">
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="content">Le contenu * <small>(Min = 50)</small></label>
+                        <small class="text-right"><i>Vous pouvez copier/coller directement une mise en page déjà faite !</i></small>
+                        <textarea class="form-control tinymce" name="content" id="content" rows="15" minlength="50" required>{{ post.content }}</textarea>
+                        <div class="invalid-feedback">
+                            Veuillez compléter votre article !
+                        </div>
+                    </div>
+                    {% if current_page == 'posts/new' %}
+                    <button class="btn btn-primary float-left mt-1 mb-3" type="submit">Créer</button>
+                    {% else %}
+                    <button class="btn btn-primary float-left mt-1 mb-3" type="submit">Editer</button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}
+
+{% block javascript %}
+// For the download button
+'use strict';
+
+( function ( document, window, index )
+{
+    const inputs = document.querySelectorAll('.upload');
+    Array.prototype.forEach.call( inputs, function( input )
+    {
+        const label	 = input.previousElementSibling,
+            labelVal = label.innerHTML;
+
+        input.addEventListener( 'change', function( e )
+        {
+            let fileName = '';
+            if( this.files && this.files.length > 1 )
+                fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+            else
+                fileName = e.target.value.split( '\\' ).pop();
+
+            if( fileName )
+                label.querySelector( 'span' ).innerHTML = fileName;
+            else
+                label.innerHTML = labelVal;
+        });
+
+        // Firefox bug fix
+        input.addEventListener( 'focus', function(){ input.classList.add( 'has-focus' ); });
+        input.addEventListener( 'blur', function(){ input.classList.remove( 'has-focus' ); });
+    });
+}( document, window, 0 ));
+
+// TYNYMCE
+tinymce.init({ selector:'.tinymce' });
+{% endblock %}

@@ -29,7 +29,7 @@ class PostManager extends AbstractManager
                                     SELECT id, title, slug, chapo, content,
                                     DATE_FORMAT(lastUpdate, "%d/%m/%y à %Hh%m") lastUpdate, id_user, id_Image
                                     FROM post
-                                    ORDER BY id
+                                    ORDER BY id desc
         ');
         $results = $this->fetchAllResults($req);
 
@@ -79,6 +79,115 @@ class PostManager extends AbstractManager
             $object->setPost($post);
         }
         return $objects;
+    }
+
+    public function createPost($post, $slug, $idUser)
+    {
+        $req = $this->db->requestDb('
+                                    INSERT INTO post (title, slug, content, id_User)
+                                    VALUES (:title, :slug, :content, :id_User)
+                                    ', [
+            'title' => $post['title'],
+            'slug' => $slug,
+            'content' => $post['content'],
+            'id_User' => $idUser
+        ]);
+
+        return true;
+    }
+    
+    public function updateChapo($slug, $chapo)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE post
+                                    SET chapo = :chapo
+                                    WHERE slug = :slug
+                                    ', [
+            'chapo' => $chapo,
+            'slug' => $slug
+        ]);
+
+        return true;
+    }
+    
+    public function checkTitle($title)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM post
+                                    WHERE title = :title
+                                    ', [
+            'title' => $title
+        ]);
+
+        return array_values($req->fetch());
+    }
+    
+    public function checkSlug($slug)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM post
+                                    WHERE slug = :slug
+                                    ', [
+            'slug' => $slug
+        ]);
+
+        return array_values($req->fetch());
+    }
+
+    public function deletePost($slug)
+    {
+        $req = $this->db->requestDb('
+                                    DELETE FROM post
+                                    WHERE slug = :slug
+                                    ', [
+            'slug' => $slug
+        ]);
+
+        return true;
+    }
+    
+    public function updateSlugTitle($oldSlug, $slug, $title)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE post
+                                    SET slug = :slug, title = :title
+                                    WHERE slug = :oldSlug
+                                    ', [
+            'oldSlug' => $oldSlug,
+            'slug' => $slug,
+            'title' => $title
+        ]);
+
+        return true;
+    }
+
+    public function updateLastUpdate($slug)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE post
+                                    SET lastUpdate = CURRENT_TIMESTAMP
+                                    WHERE slug = :slug
+                                    ', [
+            'slug' => $slug
+        ]);
+
+        return true;
+    }
+    
+    public function updateContent($slug, $content)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE post
+                                    SET content = :content
+                                    WHERE slug = :slug
+                                    ', [
+            'content' => $content,
+            'slug' => $slug
+        ]);
+
+        return true;
     }
 
     private function fetchAllResults($req)

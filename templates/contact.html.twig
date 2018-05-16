@@ -13,14 +13,14 @@
             <div class="form-row">
                 <div class="col-sm-6 mb-3 mt-2">
                     <label for="lastname">Votre nom</label>
-                    <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Nom" required>
+                    <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Nom" value="{{ post.lastname }}" required>
                     <div class="invalid-feedback">
                         Veuillez renseigner votre nom !
                     </div>
                 </div>
                 <div class="col-sm-6 mb-3 mt-2">
                     <label for="firstname">Votre prénom</label>
-                    <input type="text" name="firstname" class="form-control" id="firstname" placeholder="Prénom" required>
+                    <input type="text" name="firstname" class="form-control" id="firstname" placeholder="Prénom" value="{{ post.firstname }}" required>
                     <div class="invalid-feedback">
                         Veuillez renseigner votre prénom !
                     </div>
@@ -28,21 +28,21 @@
             </div>
             <div class="form-group">
                 <label for="email">Votre adresse email</label>
-                <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email" value="{{ post.email }}" required>
                 <div class="invalid-feedback">
                     Veuillez entrer un format valide !
                 </div>
             </div>
             <div class="form-group">
                 <label for="subject">Votre sujet</label>
-                <input type="text" name="subject" class="form-control" id="subject" placeholder="Sujet" required>
+                <input type="text" name="subject" class="form-control" id="subject" placeholder="Sujet" value="{{ post.subject }}" required>
                 <div class="invalid-feedback">
-                    Veuillez renseigner votre un sujet !
+                    Veuillez renseigner votre sujet !
                 </div>
             </div>
             <div class="form-group">
                 <label for="content">Votre contenu</label>
-                <textarea class="form-control" name="content" id="content" rows="5" required></textarea>
+                <textarea class="form-control tinymce" name="content" id="content" rows="5" required>{{ post.content }}</textarea>
                 <div class="invalid-feedback">
                     Veuillez compléter votre message !
                 </div>
@@ -68,4 +68,7 @@ const input = document.querySelector(".captcha-custom-checker");
 function onUserSubmit(response) {
     input.checked = true;
 }
+
+// TYNYMCE
+tinymce.init({ selector:'.tinymce' });
 {% endblock %}

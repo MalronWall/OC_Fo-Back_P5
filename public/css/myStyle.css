@@ -1,5 +1,19 @@
+/* Pour éviter les superpositions */
+* {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
 body {
     background: #D4D4D4;
+    min-height: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0 0 80px 0;
 }
 
 /********** ENTETE TOUS **********/
@@ -47,10 +61,12 @@ blockquote {
 .btn-on.active {
     background-color: #5BB75B !important;
     color: white !important;
+    border: 1px solid #5BB75B !important;
 }
 .btn-off.active{
     background-color: #DA4F49 !important;
     color: white !important;
+    border: 1px solid #DA4F49 !important;
 }
 
 /********** FORMULAIRES **********/
@@ -67,6 +83,10 @@ blockquote {
 /********** FOOTER **********/
 footer {
     background: #EBE9E7;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 footer .reseauSocial {

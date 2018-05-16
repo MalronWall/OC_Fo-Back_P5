@@ -56,7 +56,7 @@ class Post implements \Serializable
      */
     public function getSlug()
     {
-        return htmlspecialchars($this->slug);
+        return $this->slug;
     }
 
     /**
@@ -72,7 +72,10 @@ class Post implements \Serializable
      */
     public function getChapo()
     {
-        return htmlspecialchars($this->chapo);
+        if (!empty($this->chapo)) {
+            return htmlspecialchars($this->chapo);
+        }
+        return '';
     }
 
     /**
@@ -88,7 +91,7 @@ class Post implements \Serializable
      */
     public function getContent()
     {
-        return htmlspecialchars($this->content);
+        return $this->content;
     }
 
     /**
