@@ -1,4 +1,2 @@
-#ignore tout
-*
-#excepté ce fichier
-!.gitignore
+connection_loc.php
+connection.php

@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}404{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+    <section class="container text-center">
+        <h1>/!\ 403 ACCESS DENIED /!\</h1>
+        <strong>at {{ domain }}/{{ current_page }}</strong><br/><br/>
+        <i>Vous ne possédez pas les droits pour accéder à cette page !</i><br/>
+        <i>Veuillez vous connecter et/ou être administrateur du site !</i><br/>
+        <a href="#" class="js-goPageBefore"><< Revenir à la page précédente !</a><br/>
+        <a href="{{ path }}"><< Revenir à l'accueil du blog !</a>
+    </section>
+{% endblock %}
+
+{% block footer %}{% endblock %}

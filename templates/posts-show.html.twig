@@ -1,0 +1,154 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+
+    <header class="container-fluid">
+        <div class="row text-center headTitle">
+            <div class="col-sm-12 align-self-center">
+                <h3>{{ post.title }}</h3>
+            </div>
+        </div>
+    </header>
+
+    <section class="container img-thumbnail">
+        <div class="row justify-content-center">
+            <div class="col-sm-12">
+                {% if post.image is not empty %}
+                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail img-fluid mb-2" alt="Image pour l'article : {{ post.label }}">
+                {% else %}
+                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail img-fluid mb-2" alt="Image par défaut d'un article">
+                {% endif %}
+                {% if post.chapo is not empty %}
+                <i class="h6 mt-2">{{ post.chapo }}</i><br/><br/>
+                {% endif %}
+                <p class="text-justify mt-0">
+                    {{ post.content | raw }}
+                </p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="float-left text-center">
+                            <a href="{{ path }}members/{{ post.User.pseudo }}">
+                                {% if post.User.Image is not empty %}
+                                    <img src="{{ path }}images/database/user/{{ post.User.pseudo }}.png" height="200px" alt="Image de l'utilisateur : {{ post.User.pseudo }}"><br/>
+                                {% else %}
+                                    <img src="{{ path }}images/database/user/default.png" height="200px" alt="Image par défaut d'un utilisateur"><br/>
+                                    <strong>{{ comment.user }}</strong>
+                                {% endif %}
+                                <strong>{{ post.User.pseudo }}</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-right align-bottom">
+                        <small>Mis à jour le {{ post.lastUpdate }}</small>
+                        {% if session.user.10[0] in [1, 2] %}
+                        <br/>
+                        <div class="btn-group">
+                            <a href="{{ path }}posts/new" class="btn btn-success"><i class="fas fa-plus-circle"></i></a>
+                            <a href="{{ path }}posts/{{ post.slug }}/edit" class="btn btn-info"><i class="far fa-edit"></i></a>
+                            <a href="{{ path }}posts/{{ post.slug }}/delete" class="btn btn-danger js-confirm"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br/>
+
+    {% if session.user is not empty %}
+
+    <section class="container">
+        <div class="row text-center justify-content-center headTitle2">
+            <div class="col-sm-10 align-self-center">
+                <h3>Nouveau commentaire</h3>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-10 img-thumbnail">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="needs-validation" method="post" action="{{ path }}posts/{{ post.slug }}" novalidate>
+                            <div class="form-group mb-2">
+                                <textarea class="form-control" placeholder="Ecrivez votre commentaire ici !" rows="3" title="commentContent" name="commentContent" required></textarea>
+                                <div class="invalid-feedback">
+                                    Avant d'envoyer votre commentaire il faudrait déjà l'écrire ! ;)
+                                </div>
+                            </div>
+                            <button class="btn btn-success mb-1" type="submit">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br/>
+    {% endif %}
+
+    {% if pagination.nbTotal > 0 %}
+    <!-- COMMENTS -->
+    <section class="container">
+        <div class="row text-center justify-content-center headTitle2">
+            <div class="col-sm-10 align-self-center">
+                <h3>Commentaires</h3>
+            </div>
+        </div>
+        {% for comment in pagination.datas %}
+        <div class="row justify-content-center">
+            <div class="col-sm-10 img-thumbnail">
+                <div class="row">
+                    <div class="col-sm-3 text-center">
+                        <a href="{{ path }}members/{{ post.User.pseudo }}">
+                            {% if comment.User.Image is not empty %}
+                                <img src="{{ path }}images/database/user/{{ comment.User.pseudo }}.png" class="img-fluid" alt="Image de : {{ comment.User.pseudo }}">
+                            {% else %}
+                                <img src="{{ path }}images/database/user/default.png" class="img-fluid" alt="Image par défaut d'un utilisateur">
+                            {% endif %}
+                            <br/>
+                            <strong>{{ comment.User.pseudo }}</strong>
+                        </a>
+                    </div>
+                    <div class="col-sm-9">
+                        <p>
+                        {{ comment.content }}
+                        </p>
+                        <small class="float-right">Publié le {{ comment.published }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+    </section>
+
+    {# PAGINATION #}
+    {% if pagination.totalPaging > 1 %}
+    <section class="container-fluid">
+        <div class="row justify-content-center">
+            <nav aria-label="Navigation des articles">
+                <ul class="pagination">
+                    <!-- PREVIOUS -->
+                    <li class="page-item {{ pagination.previous.display }}">
+                        <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.previous.href }}"><</a>
+                    </li>
+                    {% for page in 1..pagination.totalPaging  %}
+                        {% if page == pagination.currentPage %}
+                            <li class="page-item active">
+                                <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ page }}">{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- NEXT -->
+                    <li class="page-item {{ pagination.next.display }}">
+                        <a class="page-link" href="{{ path }}posts/{{ post.slug }}/{{ pagination.next.href }}">></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+    {% endif %}
+    {% endif %}
+{% endblock %}

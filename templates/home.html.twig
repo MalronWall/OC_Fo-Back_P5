@@ -1,11 +1,44 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{% endblock %}
-
-{% block stylesheets %}{% endblock %}
-
-{% block body %}
-
+{% block head %}
+<header class="container-fluid">
+    <div class="row mb-3" id="headHome">
+        <div class="col-sm-12 d-flex justify-content-center align-items-center p-0">
+            <blockquote class="col-sm-6">
+                <h3 class="mb-0 text-center"><strong>
+                        "Le développement c'est facile ! C'est juste un enchaînement de choses simples qui fait quelque chose de complexe !"
+                </strong></h3>
+                <span class="blockquote-footer text-right">Aurélien Morvan, <cite title="Source Title">mon Mentor</cite></span>
+            </blockquote>
+        </div>
+    </div>
+</header>
 {% endblock %}
 
-{% block javascripts %}{% endblock %}
+{% block content %}
+<section class="container">
+    <div class="row justify-content-around">
+        <div class="col-sm-8 col-md-6 col-lg-4">
+            <img class="card-img-top rounded-circle" src="{{ path }}images/home/frontend.png" alt="Frontend">
+            <div class="card-body">
+                <h5 class="card-title text-center">Frontend</h5>
+                <p class="card-text">Pour rendre vos sites plus beaux, soignés et réactifs !</p>
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-6 col-lg-4">
+            <img class="card-img-top rounded-circle" src="{{ path }}images/home/backend.png" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title text-center">Backend</h5>
+                <p class="card-text">Pour permettre de faire des calculs complexes et développer des conditions évenementielles !</p>
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-6 col-lg-4">
+            <img class="card-img-top rounded-circle" src="{{ path }}images/home/sql.png" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title text-center text-justify">SQL</h5>
+                <p class="card-text">Pour sauvegarder vos données et effectuer des échanges avec votre base !</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
