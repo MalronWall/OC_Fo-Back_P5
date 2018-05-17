@@ -78,3 +78,12 @@ $(document).ready(function() {
     });
 }( document, window, 0 ));
 
+// CLASS TO CONFIRM A DANGEROUS ACTION
+$(function() {
+    $('.js-confirm').click(function(e) {
+        e.preventDefault();
+        if (window.confirm("Etes-vous sûr d'effectuer cette action ? Les données supprimées ne pourront être récupérées !")) {
+            location.href = this.href;
+        }
+    });
+});
