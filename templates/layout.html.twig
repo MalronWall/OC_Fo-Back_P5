@@ -10,7 +10,7 @@
     <!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="{{ path }}images/favicon.ico" /><![endif]-->
     <script src="https://www.google.com/recaptcha/api.js"></script>
     <!-- Ligne à commenter une fois développé -->
-    <link rel="stylesheet" href="{{ path }}css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="{{ path }}css/bootstrap.min.css"-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
           crossorigin="anonymous">
@@ -27,7 +27,7 @@
     </script>
     <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=b4tpr3u5rzqh58sg99vmmi45zswzdicshnnsc2rv8oyop1fm"></script>
     <!-- Ligne à commenter une fois développé -->
-    <link rel="stylesheet" href="{{ path }}js/bootstrap.min.js">
+    <!--link rel="stylesheet" href="{{ path }}js/bootstrap.min.js"-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
             integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
             crossorigin="anonymous">
@@ -274,44 +274,7 @@
 </footer>
 {% endblock %}
 
-<script>
-    // Show or hide password
-    $(document).ready(function() {
-        $("#show_hide_password a").on('click', function(event) {
-            event.preventDefault();
-            if($('#show_hide_password input').attr("type") == "text"){
-                $('#show_hide_password input').attr('type', 'password');
-                $('#show_hide_password i').removeClass( "fa-eye" );
-                $('#show_hide_password i').addClass( "fa-eye-slash" );
-            }else if($('#show_hide_password input').attr("type") == "password"){
-                $('#show_hide_password input').attr('type', 'text');
-                $('#show_hide_password i').removeClass( "fa-eye-slash" );
-                $('#show_hide_password i').addClass( "fa-eye" );
-            }
-        });
-    });
-
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            const forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            const validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
-{% block javascript %}
-{% endblock %}
-</script>
+<script src="{{ path }}js/myJS.js"></script>
 
 </body>
 </html>

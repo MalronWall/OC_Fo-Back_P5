@@ -61,14 +61,3 @@
         </form>
     </section>
 {% endblock %}
-
-{% block javascript %}
-// fonction pour valider le captcha (la fonction, data-callback="verifyRecaptchaCallback", intégrée à Bootstrap n'a pas l'air de fonctionner)
-const input = document.querySelector(".captcha-custom-checker");
-function onUserSubmit(response) {
-    input.checked = true;
-}
-
-// TYNYMCE
-tinymce.init({ selector:'.tinymce' });
-{% endblock %}
