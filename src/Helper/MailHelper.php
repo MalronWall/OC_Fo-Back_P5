@@ -14,67 +14,67 @@ class MailHelper extends AbstractController
 {
     public function sendMailContact(array $post)
     {
-        if ($_SERVER['SERVER_NAME']=='localhost') {
-            ini_set('SMTP', 'smtp.sfr.fr');
-            ini_set('sendmail_from', 'thibaut.tourte@sfr.fr');
-        }
-
         $preheader = 'Formulaire de contact envoyé de votre blog !';
+        $image = 'contact.jpg';
 
         $title = $post['firstname'].' '.$post['lastname'];
         $email = $post['email'];
 
-        $image = 'contact.jpg';
-
         $subject = $post['subject'];
         $message = $post['content'];
+        
+        $link = '';
 
-        $content = $this->render('/mails/content.html.twig', [
+        $content = $this->render('/mails/contact.html.twig', [
             'preheader' => $preheader,
             'title' => $title,
             'email' => $email,
             'image' => $image,
             'subject' => $subject,
             'content' => $message,
-            'link' => ''
+            'link' => $link
         ]);
 
         $headers =
-            'Content-type: text/html' ."\r\n".
-            'From: Blog de Thibaut Tourte <contact@thibaut-tourte.com>' ."\r\n" .
+            'Content-type: text/html'."\r\n".
+            'Content-Transfer-Encoding: 8bit'."\r\n".
+            'From: Blog de Thibaut Tourte <contact@thibaut-tourte.com>'."\r\n".
             'Reply-To: ' . $email;
 
-        if (mail("thibaut.tourte17@gmail.com", $post['subject'], $content, $headers) === true) {
+        if (mail("thibaut.tourte17@gmail.com", $subject, $content, $headers) === true) {
             return true;
         }
         return false;
     }
 
-    public function sendMailNewUser($post, $token)
+    public function sendMailConfirmationLogon($post, $token)
     {
-        if ($_SERVER['SERVER_NAME']=='localhost') {
-            ini_set('SMTP', 'smtp.sfr.fr');
-            ini_set('sendmail_from', 'thibaut.tourte@sfr.fr');
-        }
+        $preheader = 'Plus qu\'une étape pour finaliser l\'inscription !';
+        $image = 'inscription.jpg';
 
-        $subject = 'Validation de la création du compte !';
+        $subject = 'Confirmation d\'inscription';
+        $prenomNom = $post['firstname'].' '.$post['lastname'];
+        $pseudo = $post['pseudo'];
+        $email = $post['email'];
+        
+        $link = 'confirm-email/'.$token;
 
-        $content =
-            '-----------------------------------------------------
-            <h2>Message automatique envoyé de blog.thibaut-tourte.com</h2>
-            <h3>Merci de ne pas y répondre</h3><br/>
-            -----------------------------------------------------<br/><br/>
-            <h3>'.$subject.'</h3><br/>'.
-            $post['firstname'].' '.$post['lastname'].',<br/><br/>
-            
-            Afin de valider la création de votre compte, veuillez cliquer sur le lien suivant :<br/>
-            blog.thibaut-tourte.com/confirm-email/'.$token.'<br/>
-            ';
+        $content = $this->render('/mails/confirmLogon.html.twig', [
+            'preheader' => $preheader,
+            'subject' => $subject,
+            'prenomNom' => $prenomNom,
+            'pseudo' => $pseudo,
+            'image' => $image,
+            'link' => $link
+        ]);
 
         $headers =
-            'Content-type: text/html' ."\r\n".
-            'From: blog.thibaut-tourte.com\r\n';
-        if (mail($post['email'], $subject, $content, $headers) === true) {
+            'Content-type: text/html'."\r\n".
+            'Content-Transfer-Encoding: 8bit'."\r\n".
+            'From: Blog de Thibaut Tourte <contact@thibaut-tourte.com>'."\r\n".
+            'Reply-To: ' . $email;
+
+        if (mail("thibaut.tourte17@gmail.com", $subject, $content, $headers) === true) {
             return true;
         }
         return false;

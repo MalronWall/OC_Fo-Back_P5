@@ -52,29 +52,37 @@ class UserController extends AbstractController
             $post = $_POST;
             $checkEmail = array_values($this->userManager->checkEmailPseudo($post));
             if ($checkEmail[0] == 1) {
-                $checkBlocked = array_values($this->userManager->checkBlocked($post));
-                if ($checkBlocked[0] == 0) {
-                    $user = $this->userManager->checkUser($post);
-                    if ($user != false) {
-                        $this->roleManager->replaceIdByRole($user);
-                        $user->setRole($user->getRole()->serialize());
-                        $this->imageManager->replaceIdUserByImage($user);
-                        if (!empty($user->getImage())) {
-                            $user->setImage($user->getImage()[0]->serialize());
+                $checkTokenLogon = array_values($this->userManager->checkTokenLogonByUser($post));
+                if ($checkTokenLogon[0] == 0) {
+                    $checkBlocked = array_values($this->userManager->checkBlocked($post));
+                    if ($checkBlocked[0] == 0) {
+                        $user = $this->userManager->checkUser($post);
+                        if ($user != false) {
+                            $this->roleManager->replaceIdByRole($user);
+                            $user->setRole($user->getRole()->serialize());
+                            $this->imageManager->replaceIdUserByImage($user);
+                            if (!empty($user->getImage())) {
+                                $user->setImage($user->getImage()[0]->serialize());
+                            }
+                            $this->userManager->deleteTokenForgotPwd($post);
+                            $_SESSION['user'] = $user->serialize();
+                            $this->addFlash("success", "
+                            Vous êtes maintenant connecté ! :)
+                            ");
+                        } else {
+                            $this->addFlash("danger", "
+                            Votre mot de passe semble erroné, veuillez réessayer ! :/
+                            ");
                         }
-                        $_SESSION['user'] = $user->serialize();
-                        $this->addFlash("success", "
-                        Vous êtes maintenant connecté ! :)
-                        ");
                     } else {
                         $this->addFlash("danger", "
-                        Votre mot de passe semble erroné, veuillez réessayer ! :/
+                        Connexion impossible : votre compte a été suspendu ! :(
                         ");
                     }
                 } else {
                     $this->addFlash("danger", "
-                    Connexion impossible : votre compte a été suspendu ! :(
-                    ");
+                        Connexion impossible : vous n'avez pas confirmé votre compte ! :(
+                        ");
                 }
             } else {
                 $this->addFlash("danger", "
@@ -99,10 +107,16 @@ class UserController extends AbstractController
                         if ($checkPseudo[0] == 0) {
                             $token = $this->securityHelper->generateToken();
                             if ($this->userManager->createUser($post, $token) == true) {
-                                $this->mailHelper->sendMailNewUser($post, $token);
-                                $this->addFlash("warning", "
-                                Pour finir de vous inscrire, veuillez cliquer sur le lien reçu par mail ! :)
-                                ");
+                                if ($this->mailHelper->sendMailConfirmationLogon($post, $token)) {
+                                    $this->addFlash("warning", "
+                                    Pour finir de vous inscrire, veuillez cliquer sur le lien reçu par mail ! :)
+                                    ");
+                                } else {
+                                    $this->addFlash("danger", "
+                                    Une erreur s'est produite lors de l'envoi du mail de confirmation ! 
+                                    Veuillez nous contacter via le formulaire ! :(
+                                    ");
+                                }
                             } else {
                                 $this->addFlash("danger", "
                                 Une erreur s'est produite lors de la création de votre profil, veuillez réessayer ! :/
@@ -144,7 +158,7 @@ class UserController extends AbstractController
 
     public function confirmEmail($token)
     {
-        $checkToken = array_values($this->userManager->checkToken($token));
+        $checkToken = array_values($this->userManager->checkTokenLogonByToken($token));
         try {
             if ($checkToken[0] == 0) {
                 throw new NotFoundHttpException();
@@ -153,7 +167,7 @@ class UserController extends AbstractController
             return $this->errorController->notFound();
         }
         
-        $this->userManager->deleteToken($token);
+        $this->userManager->deleteTokenLogon($token);
         $this->addFlash("success", "
             Félicitations ! Votre adresse mail vient d'être validée et vous pouvez désormais vous connecter ! :)
             ");
@@ -342,9 +356,9 @@ class UserController extends AbstractController
 
     public function newPassword($token)
     {
-        $checkToken = array_values($this->userManager->checkToken($token));
+        $checkToken = array_values($this->userManager->checkTokenForgotPwd($token));
         try {
-            if ($checkToken[0] == 0) {
+            if ($checkToken[0] == null) {
                 throw new NotFoundHttpException();
             }
         } catch (NotFoundHttpException $e) {

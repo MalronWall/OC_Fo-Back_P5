@@ -147,10 +147,78 @@ class UserManager extends AbstractManager
         return $req->fetch();
     }
 
+    public function checkTokenLogonByUser($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE (pseudo = :pseudo OR email = :email) AND tokenLogon is not null
+                                    ', [
+            'pseudo' => $post['emailPseudo'],
+            'email' => $post['emailPseudo']
+        ]);
+
+        return $req->fetch();
+    }
+
+    public function checkTokenLogonByToken($token)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE tokenLogon = :token
+                                    ', [
+            'token' => $token
+        ]);
+
+        return $req->fetch();
+    }
+    
+    public function deleteTokenLogon($token)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET tokenLogon = null
+                                    WHERE tokenLogon = :token
+                                    ', [
+            'token' => $token
+        ]);
+
+        return true;
+    }
+
+    public function checkTokenForgotPwd($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT tokenForgotPwd
+                                    FROM user
+                                    WHERE pseudo = :pseudo OR email = :email
+                                    ', [
+            'pseudo' => $post['emailPseudo'],
+            'email' => $post['emailPseudo']
+        ]);
+
+        return $req->fetch();
+    }
+    
+    public function deleteTokenForgotPwd($post)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET tokenForgotPwd = null
+                                    WHERE pseudo = :pseudo OR email = :email
+                                    ', [
+            'pseudo' => $post['emailPseudo'],
+            'email' => $post['emailPseudo']
+        ]);
+
+        return true;
+    }
+
     public function createUser($post, $token)
     {
         $req = $this->db->requestDb('
-                                    INSERT INTO user (pseudo, name, firstname, email, password, token) 
+                                    INSERT INTO user (pseudo, name, firstname, email, password, tokenLogon) 
                                     VALUES (:pseudo, :lastname, :firstname, :email, :pwd, :token)
                                     ', [
             'pseudo' => $post['pseudo'],
@@ -158,32 +226,6 @@ class UserManager extends AbstractManager
             'firstname' => $post['firstname'],
             'email' => $post['email'],
             'pwd' => md5($post['password']),
-            'token' => $token
-        ]);
-
-        return true;
-    }
-
-    public function checkToken($token)
-    {
-        $req = $this->db->requestDb('
-                                    SELECT COUNT(*)
-                                    FROM user
-                                    WHERE token = :token
-                                    ', [
-            'token' => $token
-        ]);
-
-        return $req->fetch();
-    }
-
-    public function deleteToken($token)
-    {
-        $req = $this->db->requestDb('
-                                    UPDATE user
-                                    SET token = null
-                                    WHERE token = :token
-                                    ', [
             'token' => $token
         ]);
 

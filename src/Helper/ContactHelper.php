@@ -40,30 +40,4 @@ class ContactHelper
         $valide = $this->mailHelper->sendMailContact($post);
         return $valide;
     }
-
-    public function sendMail(array $post)
-    {
-        if ($_SERVER['SERVER_NAME']=='localhost') {
-            ini_set('SMTP', 'smtp.sfr.fr');
-            ini_set('sendmail_from', 'thibaut.tourte@sfr.fr');
-        }
-
-        $content =
-            '-----------------------------------------------------
-            <h2>Message envoyé à partir du formulaire de votre blog :</h2>
-            <h3>Message de <strong>'.$post['firstname'].' '.$post['lastname'].'</strong> '.
-            htmlspecialchars('<').$post['email'].htmlspecialchars('>').'<br/>
-            -----------------------------------------------------<br/><br/>
-            <h3>'.$post['subject'].'</h3><br/>'.
-            nl2br($post['content']);
-
-        $headers =
-            'Content-type: text/html' ."\r\n".
-            'From: ' . $post['email'] . "\r\n" .
-            'Reply-To: ' . $post['email'];
-        if (mail("thibaut.tourte17@gmail.com", $post['subject'], $content, $headers) === true) {
-            return true;
-        }
-        return false;
-    }
 }

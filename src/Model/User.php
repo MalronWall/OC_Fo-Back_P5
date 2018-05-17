@@ -17,7 +17,8 @@ class User implements \Serializable
     protected $email;
     protected $password;
     protected $blocked;
-    protected $token;
+    protected $tokenLogon;
+    protected $tokenForgotPwd;
     protected $Image;
     protected $Role;
 
@@ -136,17 +137,33 @@ class User implements \Serializable
     /**
      * @return mixed
      */
-    public function getToken()
+    public function getTokenLogon()
     {
-        return $this->token;
+        return $this->tokenLogon;
     }
 
     /**
-     * @param mixed $token
+     * @param mixed $tokenLogon
      */
-    public function setToken($token)
+    public function setTokenLogon($tokenLogon)
     {
-        $this->token = $token;
+        $this->tokenLogon = $tokenLogon;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTokenForgotPwd()
+    {
+        return $this->tokenForgotPwd;
+    }
+
+    /**
+     * @param mixed $tokenForgotPwd
+     */
+    public function setTokenForgotPwd($tokenForgotPwd)
+    {
+        $this->tokenForgotPwd = $tokenForgotPwd;
     }
 
     /**
@@ -191,7 +208,8 @@ class User implements \Serializable
             $this->email,
             $this->password,
             $this->blocked,
-            $this->token,
+            $this->tokenLogon,
+            $this->tokenForgotPwd,
             $this->Image,
             $this->Role
         ];
@@ -207,7 +225,8 @@ class User implements \Serializable
             $this->email,
             $this->password,
             $this->blocked,
-            $this->token,
+            $this->tokenLogon,
+            $this->tokenForgotPwd,
             $this->Image,
             $this->Role
             ) = unserialize($serialized);
