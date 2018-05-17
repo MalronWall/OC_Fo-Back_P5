@@ -369,6 +369,6 @@ class PostController extends AbstractController
                 ");
         }
 
-        $this->redirect('posts');
+        $this->redirect('admin');
     }
 }
