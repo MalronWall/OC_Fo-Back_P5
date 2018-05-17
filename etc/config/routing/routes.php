@@ -27,10 +27,12 @@ $router->get('contact', "Contact#contact");
 /****** LOGIN *****/
 $router->post('login', "User#login");
 $router->post('logon', "User#logon");
-$router->get('reset-password', "User#resetPassword");
-$router->get('reset-password/:token', "User#newPassword")->with('token', '([a-z\-0-9]+)');
 $router->get('logout', "User#logout");
 $router->get('confirm-email/:token', "User#confirmEmail");
+$router->get('reset-password', "User#resetPassword");
+$router->post('reset-password', "User#resetPassword");
+$router->get('reset-password/:token', "User#newPassword")->with('token', '([a-z\-0-9]+)');
+$router->post('reset-password/:token', "User#newPassword")->with('token', '([a-z\-0-9]+)');
 /****** MY PROFILE *****/
 $router->get('members/:pseudo', "User#profile")->with('pseudo', '([a-z\-0-9]+)');
 $router->post('members/:pseudo', "User#profile")->with('pseudo', '([a-z\-0-9]+)');

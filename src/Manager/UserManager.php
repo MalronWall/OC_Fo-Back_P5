@@ -27,6 +27,19 @@ class UserManager extends AbstractManager
         return Hydrator::hydrate(User::class, serialize(array_values($req->fetch())));
     }
 
+    public function getUserByEmail($email)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT *
+                                    FROM user
+                                    WHERE email = :email
+                                    ', [
+            'email' => $email
+        ]);
+
+        return Hydrator::hydrate(User::class, serialize(array_values($req->fetch())));
+    }
+
     public function getUsers()
     {
         $req = $this->db->requestDb('
@@ -187,12 +200,25 @@ class UserManager extends AbstractManager
         return true;
     }
 
-    public function checkTokenForgotPwd($post)
+    public function checkTokenForgotPwdByToken($token)
     {
         $req = $this->db->requestDb('
                                     SELECT tokenForgotPwd
                                     FROM user
-                                    WHERE pseudo = :pseudo OR email = :email
+                                    WHERE tokenForgotPwd = :token
+                                    ', [
+            'token' => $token
+        ]);
+
+        return $req->fetch();
+    }
+
+    public function checkTokenForgotPwdByUser($post)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE (pseudo = :pseudo OR email = :email) AND tokenForgotPwd is not null
                                     ', [
             'pseudo' => $post['emailPseudo'],
             'email' => $post['emailPseudo']
@@ -286,6 +312,34 @@ class UserManager extends AbstractManager
                                     ', [
             'pwd' => md5($password),
             'idUser' => $idUser
+        ]);
+
+        return true;
+    }
+
+    public function updatePasswordByToken($password, $token)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET password = :pwd
+                                    WHERE tokenForgotPwd = :token
+                                    ', [
+            'pwd' => md5($password),
+            'token' => $token
+        ]);
+
+        return true;
+    }
+
+    public function updateTokenForgotPwd($email, $token)
+    {
+        $req = $this->db->requestDb('
+                                    UPDATE user
+                                    SET tokenForgotPwd = :token
+                                    WHERE email = :email
+                                    ', [
+            'email' => $email,
+            'token' => $token
         ]);
 
         return true;

@@ -86,7 +86,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 text-center alert alert-{{ _flashbag.type }} alert-dismissible fade show mb-0 " data-dismiss="alert" role="alert">
-                <strong>{{ _flashbag.message }}</strong>
+                <strong>{{ _flashbag.message | raw }}</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

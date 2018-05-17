@@ -51,8 +51,8 @@ class MailHelper extends AbstractController
     {
         $preheader = 'Plus qu\'une étape pour finaliser l\'inscription !';
         $image = 'inscription.jpg';
-
         $subject = 'Confirmation d\'inscription';
+        
         $prenomNom = $post['firstname'].' '.$post['lastname'];
         $pseudo = $post['pseudo'];
         $email = $post['email'];
@@ -60,6 +60,39 @@ class MailHelper extends AbstractController
         $link = 'confirm-email/'.$token;
 
         $content = $this->render('/mails/confirmLogon.html.twig', [
+            'preheader' => $preheader,
+            'subject' => $subject,
+            'prenomNom' => $prenomNom,
+            'pseudo' => $pseudo,
+            'image' => $image,
+            'link' => $link
+        ]);
+
+        $headers =
+            'Content-type: text/html'."\r\n".
+            'Content-Transfer-Encoding: 8bit'."\r\n".
+            'From: Blog de Thibaut Tourte <contact@thibaut-tourte.com>'."\r\n".
+            'Reply-To: ' . $email;
+
+        if (mail("thibaut.tourte17@gmail.com", $subject, $content, $headers) === true) {
+            return true;
+        }
+        return false;
+    }
+    
+    public function sendMailForgotPassword($user)
+    {
+        $preheader = 'Un oubli de mot de passe ? On va arranger ça ! ;)';
+        $image = 'motDePasse.jpg';
+        $subject = 'Réinitialisation du mot de passe';
+        
+        $prenomNom = $user->getFirstname().' '.$user->getName();
+        $pseudo = $user->getPseudo();
+        $email = $user->getEmail();
+
+        $link = 'reset-password/'.$user->getTokenForgotPwd();
+
+        $content = $this->render('/mails/forgotPassword.html.twig', [
             'preheader' => $preheader,
             'subject' => $subject,
             'prenomNom' => $prenomNom,

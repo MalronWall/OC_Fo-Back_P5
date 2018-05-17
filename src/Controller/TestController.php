@@ -12,21 +12,19 @@ use Core\Application\Controller\AbstractController;
 
 class TestController extends AbstractController
 {
-
-
     public function mail()
     {
-        $preheader = 'Plus qu\'une étape pour finaliser l\'inscription !';
-        $image = 'inscription.jpg';
+        $preheader = 'Un oubli de mot de passe ? On va arranger ça !';
+        $image = 'motDePasse.jpg';
 
-        $subject = 'Confirmation d\'inscription';
+        $subject = 'Réinitialisation du mot de passe';
         $prenomNom = 'Thibaut Tourte';
         $pseudo = 'MalronWall';
         $email = 'thibaut.tourte17@gmail.com';
 
         $link = 'confirm-email/zef2z1rfazef6aze2';
 
-        return $this->render('/mails/confirmLogon.html.twig', [
+        return $this->render('/mails/forgotPassword.html.twig', [
             'preheader' => $preheader,
             'subject' => $subject,
             'prenomNom' => $prenomNom,
