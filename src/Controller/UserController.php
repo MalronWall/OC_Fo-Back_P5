@@ -206,7 +206,7 @@ class UserController extends AbstractController
                                         )) {
                                             $newImage = $this->imageManager->createAndLinkImageUser($_SESSION['user'][0]);
                                             if (is_object($newImage)) {
-                                                $_SESSION['user'][8] = $newImage->serialize();
+                                                $_SESSION['user'][9] = $newImage->serialize();
                                             }
                                         }
                                     } else {
@@ -294,7 +294,7 @@ class UserController extends AbstractController
     public function admin()
     {
         try {
-            if (!isset($_SESSION['user']) or $_SESSION['user'][9][0] == 3) {
+            if (!isset($_SESSION['user']) or $_SESSION['user'][10][0] == 3) {
                 throw new AccessDeniedException();
             }
         } catch (AccessDeniedException $e) {

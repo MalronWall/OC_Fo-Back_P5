@@ -74,7 +74,7 @@
                                                 </label>
                                             </div>
                                             {% endif %}
-                                            {% if session.user.9[1] == 'Super-administrateur' %}
+                                            {% if session.user.10[1] == 'Super-administrateur' %}
                                             {% if user.role.role == 'Administrateur' %}
                                             <div class="btn-group" data-toggle="buttons">
                                                 <label class="btn btn-secondary btn-sm btn-off" title="Donner le rôle d'administrateur">
@@ -87,7 +87,7 @@
                                         </label>
                                     </td>
                                     <td class="align-middle">
-                                        {% if (session.user.9[0] < user.role.id) or (session.user.0 == user.id) %}
+                                        {% if (session.user.10[0] < user.role.id) or (session.user.0 == user.id) %}
                                         <div class="btn-group" data-toggle="buttons">
                                             {% if user.blocked == 0 %}
                                             <label class="btn btn-secondary btn-sm btn-on active">
