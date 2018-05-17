@@ -10,6 +10,10 @@
 #Notes pour le développeur
 Notes.txt
 
+#PHPMETRICS
+phpmetrics.phar
+report.html
+
 # --------------------------------------------------
 
 #Dossier du fichier de connexion à la base
