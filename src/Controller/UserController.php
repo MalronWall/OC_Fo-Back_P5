@@ -74,7 +74,8 @@ class UserController extends AbstractController
                             Votre mot de passe semble erroné 
                             malgré votre demande de récupération de mot de passe ! :/<br/>
                             Si vous avez perdu le mail, 
-                            vous pouvez toujours en recevoir un autre en cliquant de nouveau sur 'Mot de passe oublié' ! :)
+                            vous pouvez toujours en recevoir un autre en cliquant de nouveau sur 
+                            'Mot de passe oublié' ! :)
                             ");
                         } else {
                             $this->addFlash("danger", "
@@ -204,7 +205,8 @@ class UserController extends AbstractController
                                             $_FILES['uploadImage']['tmp_name'],
                                             $_POST['pseudo']
                                         )) {
-                                            $newImage = $this->imageManager->createAndLinkImageUser($_SESSION['user'][0]);
+                                            $newImage =
+                                                $this->imageManager->createAndLinkImageUser($_SESSION['user'][0]);
                                             if (is_object($newImage)) {
                                                 $_SESSION['user'][9] = $newImage->serialize();
                                             }
@@ -231,7 +233,8 @@ class UserController extends AbstractController
                                     ");
                                 } else {
                                     $this->addFlash("danger", "
-                                    Une erreur est survenue lors de la modification du mot de passe, veuillez réessayer ! :/
+                                    Une erreur est survenue lors de la modification du mot de passe, 
+                                    veuillez réessayer ! :/
                                     ");
                                 }
                             } else {
@@ -373,7 +376,9 @@ class UserController extends AbstractController
                                 $error = 'Une erreur est survenue lors de l\'envoi du mail, veuillez réessayer ! :/';
                             }
                         } else {
-                            $error = 'Une erreur est survenue lors du paramètrage de la sécurité, veuillez réessayer ! :/';
+                            $error =
+                                'Une erreur est survenue lors du paramètrage de la sécurité, 
+                                veuillez réessayer ! :/';
                         }
                     } else {
                         $error = 'Cette adresse mail n\'existe pas ! :/';

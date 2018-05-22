@@ -7,7 +7,7 @@
  */
 namespace Core\Application\Exception;
 
-class RouterException extends \Exception
+class InternalServerErrorException extends \Exception
 {
 
 }

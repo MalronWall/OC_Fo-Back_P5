@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Core\Application\Controller;
 
+use Blog\Controller\ErrorController;
 use Core\Application\Traits\CoreTrait;
 
 abstract class AbstractController
@@ -24,7 +25,10 @@ abstract class AbstractController
         try {
             return $this->getTwig()->render($filename, $params);
         } catch (\Twig_Error $e) {
-            die("An error has occurred in AbstractController.php->render() : " . $e->getMessage());
+            $errorController = new ErrorController();
+            return $errorController->internalError(
+                "An error has occurred in AbstractController.php->render() : " . $e->getMessage()
+            );
         }
     }
 

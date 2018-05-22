@@ -14,6 +14,11 @@ use Core\Application\Database\Hydrator;
 
 class CommentManager extends AbstractManager
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
     public function getValidComments($idPost)
     {
         $req = $this->db->requestDb('

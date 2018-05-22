@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Core\Application\Database;
 
+use Blog\Controller\ErrorController;
+
 class Hydrator
 {
     public static function hydrate(string $class, string $datas)
@@ -19,7 +21,10 @@ class Hydrator
 
             return $object->unserialize($datas);
         } catch (\ReflectionException $e) {
-            die("An error has occurred in Hydrator.php->hydrate() : " . $e->getMessage());
+            $errorController = new ErrorController();
+            return $errorController->internalError(
+                "An error has occurred in Hydrator.php->hydrate() : " . $e->getMessage()
+            );
         }
     }
 }

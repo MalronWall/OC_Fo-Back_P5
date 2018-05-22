@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Core\Application\Database;
 
+use Blog\Controller\ErrorController;
+
 class AbstractManager
 {
     /** @var DatabaseConnector */
     protected $db;
 
-    public function __construct()
+    protected function __construct()
     {
         $this->loadDatabase();
     }
@@ -32,7 +34,10 @@ class AbstractManager
                 $options
             );
         } catch (\PDOException $e) {
-            die("An error has occurred in AbstractManager.php->loadDatabase() : " . $e->getMessage());
+            $errorController = new ErrorController();
+            return $errorController->internalError(
+                "An error has occurred in AbstractController.php->render() : " . $e->getMessage()
+            );
         }
     }
 
