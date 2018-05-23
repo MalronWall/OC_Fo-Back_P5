@@ -10,7 +10,9 @@
         <strong>at {{ domain }}/{{ current_page }}</strong><br/><br/>
         <i>Le serveur a rencontré une erreur interne, ou une configuration est manquante, et est donc incapable d'accèder à cette requête !</i><br/>
         <input type="hidden" value="{{ errorMessage }}">
-        <strong>Si vous voyez ce message, contactez-nous en cliquant sur <a href="{{ path }}contact">ce lien</a>, et expliquez nous ce que vous faisiez. Par avance, merci !</strong><br/>
+        <strong>
+            Si vous voyez ce message, contactez-nous en cliquant sur <a href="{{ path }}contact">ce lien</a>, et expliquez nous ce que vous faisiez. Par avance, merci !<br/></strong>
+        (ci ce dernier ne fonctionne pas, merci d'envoyer un mail à <a href="mailto:contact@thibaut-tourte.com">contact@thibaut-tourte.com</a>)<br/><br/>
         <a href="#" class="js-goPageBefore"><< Revenir à la page précédente !</a><br/>
         <a href="{{ path }}"><< Revenir à l'accueil du blog !</a>
     </section>

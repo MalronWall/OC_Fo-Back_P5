@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Core\Application\Controller;
 
-use Blog\Controller\ErrorController;
 use Core\Application\Traits\CoreTrait;
 
 abstract class AbstractController
@@ -22,14 +21,7 @@ abstract class AbstractController
             unset($_SESSION['flashbag']);
         }
 
-        try {
-            return $this->getTwig()->render($filename, $params);
-        } catch (\Twig_Error $e) {
-            $errorController = new ErrorController();
-            return $errorController->internalError(
-                "An error has occurred in AbstractController.php->render() : " . $e->getMessage()
-            );
-        }
+        return $this->getTwig()->render($filename, $params);
     }
 
     protected function redirect(string $page)
