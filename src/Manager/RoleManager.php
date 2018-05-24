@@ -14,6 +14,11 @@ use Core\Application\Database\Hydrator;
 
 class RoleManager extends AbstractManager
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
     public function getRole($idRole)
     {
         $req = $this->db->requestDb('

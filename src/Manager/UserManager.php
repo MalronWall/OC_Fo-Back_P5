@@ -14,6 +14,11 @@ use Core\Application\Database\Hydrator;
 
 class UserManager extends AbstractManager
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
     public function getUser($idUser)
     {
         $req = $this->db->requestDb('

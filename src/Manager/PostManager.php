@@ -11,16 +11,12 @@ namespace Blog\Manager;
 use Core\Application\Database\AbstractManager;
 use Blog\Model\Post;
 use Core\Application\Database\Hydrator;
-use Core\Application\Exception\NotFoundHttpException;
 
 class PostManager extends AbstractManager
 {
-    private $userManager;
-
     public function __construct()
     {
         parent::__construct();
-        $this->userManager = new UserManager();
     }
 
     public function getPosts()

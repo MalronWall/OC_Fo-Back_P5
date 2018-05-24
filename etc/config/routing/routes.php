@@ -39,9 +39,3 @@ $router->post('members/:pseudo', "User#profile")->with('pseudo', '([a-z\-0-9]+)'
 /***** ADMIN *****/
 $router->get('admin', "User#admin");
 $router->post('admin', "User#admin");
-
-/***** ROUTES TESTS *****/
-$router->get('mail', "Test#mail");
-
-/****** 404 *****/
-//$router->get(':everything', "Error#notFound")->with('everything', '([^\s]+)');

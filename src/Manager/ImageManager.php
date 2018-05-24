@@ -14,6 +14,11 @@ use Core\Application\Database\Hydrator;
 
 class ImageManager extends AbstractManager
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
     public function getImagePost($idPost)
     {
         $req = $this->db->requestDb('

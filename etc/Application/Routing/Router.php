@@ -8,6 +8,7 @@
 namespace Core\Application\Routing;
 
 use Blog\Controller\ErrorController;
+use Core\Application\Exception\InternalServerErrorException;
 use Core\Application\Exception\NotFoundHttpException;
 use Core\Application\Exception\RouterException;
 
@@ -16,10 +17,12 @@ class Router
     private $url;
     private $routes = [];
     private $namedRoutes = [];
+    private $errorController;
 
     public function __construct($url)
     {
         $this->url = $url;
+        $this->errorController = new ErrorController();
     }
 
     public function get($path, $callable, $name = null)
@@ -49,7 +52,7 @@ class Router
     {
         try {
             if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
-                throw new RouterException('REQUEST_METHOD does not exist !');
+                throw new InternalServerErrorException();
             }
 
             /** @var Route $route */
@@ -59,11 +62,12 @@ class Router
                 }
             }
             throw new NotFoundHttpException('No matching routes !');
-        } catch (RouterException $e) {
-            die("An error has occurred in Router.php->run: " . $e->getMessage());
+        } catch (InternalServerErrorException $e) {
+            return $this->errorController->internalError(
+                "An error has occurred in Router.php->run() : " . $e->getMessage()
+            );
         } catch (NotFoundHttpException $e) {
-            $error = new ErrorController();
-            return $error->notFound();
+            return $this->errorController->notFound();
         }
     }
 
@@ -71,11 +75,13 @@ class Router
     {
         try {
             if (!isset($this->namedRoutes[$name])) {
-                throw new RouterException('No route matches this name !');
+                throw new InternalServerErrorException();
             }
             return $this->namedRoutes[$name]->getUrl($params);
-        } catch (RouterException $e) {
-            die("An error has occurred in Router.php->url(): " . $e->getMessage());
+        } catch (InternalServerErrorException $e) {
+            return $this->errorController->internalError(
+                "An error has occurred in Router.php->url() : " . $e->getMessage()
+            );
         }
     }
 }

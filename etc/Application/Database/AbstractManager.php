@@ -13,7 +13,7 @@ class AbstractManager
     /** @var DatabaseConnector */
     protected $db;
 
-    public function __construct()
+    protected function __construct()
     {
         $this->loadDatabase();
     }
@@ -22,18 +22,14 @@ class AbstractManager
     {
         $config = $this->loadDatabaseConfiguration();
 
-        try {
-            $options[\PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
-            $dsn = "mysql:dbname=".$config['dbname']."; host=".$config['host'].':'.$config['port'];
-            $this->db = new DatabaseConnector(
-                $dsn,
-                $config['user'],
-                $config['password'],
-                $options
-            );
-        } catch (\PDOException $e) {
-            die("An error has occurred in AbstractManager.php->loadDatabase() : " . $e->getMessage());
-        }
+        $options[\PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
+        $dsn = "mysql:dbname=".$config['dbname']."; host=".$config['host'].':'.$config['port'];
+        $this->db = new DatabaseConnector(
+            $dsn,
+            $config['user'],
+            $config['password'],
+            $options
+        );
     }
 
     private function loadDatabaseConfiguration()

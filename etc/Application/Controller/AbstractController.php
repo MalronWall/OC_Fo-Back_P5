@@ -21,11 +21,7 @@ abstract class AbstractController
             unset($_SESSION['flashbag']);
         }
 
-        try {
-            return $this->getTwig()->render($filename, $params);
-        } catch (\Twig_Error $e) {
-            die("An error has occurred in AbstractController.php->render() : " . $e->getMessage());
-        }
+        return $this->getTwig()->render($filename, $params);
     }
 
     protected function redirect(string $page)

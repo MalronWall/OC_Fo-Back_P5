@@ -35,4 +35,13 @@ class ErrorController extends AbstractController
             'domain' => $this->domain
         ]);
     }
+
+    public function internalError($errorMessage = '')
+    {
+        return $this->render('500.html.twig', [
+            'title' => '500',
+            'domain' => $this->domain,
+            'errorMessage' => $errorMessage
+        ]);
+    }
 }

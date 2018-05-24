@@ -14,6 +14,8 @@ class MailHelper extends AbstractController
 {
     public function sendMailContact(array $post)
     {
+        $myEmailAdress = 'thibaut.tourte17@gmail.com';
+
         $preheader = 'Formulaire de contact envoyé de votre blog !';
         $image = 'contact.jpg';
 
@@ -41,7 +43,7 @@ class MailHelper extends AbstractController
             'From: Blog de Thibaut Tourte <contact@thibaut-tourte.com>'."\r\n".
             'Reply-To: ' . $email;
 
-        if (mail("thibaut.tourte17@gmail.com", $subject, $content, $headers) === true) {
+        if (mail($myEmailAdress, $subject, $content, $headers) === true) {
             return true;
         }
         return false;
@@ -74,7 +76,7 @@ class MailHelper extends AbstractController
             'From: Blog de Thibaut Tourte <contact@thibaut-tourte.com>'."\r\n".
             'Reply-To: ' . $email;
 
-        if (mail("thibaut.tourte17@gmail.com", $subject, $content, $headers) === true) {
+        if (mail($email, $subject, $content, $headers) === true) {
             return true;
         }
         return false;
@@ -107,7 +109,7 @@ class MailHelper extends AbstractController
             'From: Blog de Thibaut Tourte <contact@thibaut-tourte.com>'."\r\n".
             'Reply-To: ' . $email;
 
-        if (mail("thibaut.tourte17@gmail.com", $subject, $content, $headers) === true) {
+        if (mail($email, $subject, $content, $headers) === true) {
             return true;
         }
         return false;
