@@ -174,7 +174,7 @@
                                     <p class="text-justify">{{ post.content|raw|length > 300 ? post.content|striptags|slice(0, 300) ~ '[...]' : post.content|striptags  }}</p>
                                     <div class="btn-group float-right">
                                         <a href="{{ path }}posts/{{ post.slug }}/edit" class="btn btn-info"><i class="far fa-edit"></i></a>
-                                        <a href="{{ path }}posts/{{ post.slug }}/delete" class="btn btn-danger js-confirm"><i class="fas fa-trash-alt"></i></a>
+                                        <a href="{{ path }}posts/{{ post.slug }}/delete" class="btn btn-danger js-confirm-link"><i class="fas fa-trash-alt"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -191,7 +191,7 @@
 
                 {# COMMENTS #}
                 <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
-                    <form class="needs-validation" method="post" action="{{ path }}admin" novalidate>
+                    <form class="needs-validation js-confirm-form" method="post" action="{{ path }}admin" novalidate>
                         <table class="table table-bordered text-center">
                             <thead>
                             <tr class="thead-dark">
@@ -200,7 +200,7 @@
                                 <th scope="col">Sur l'article</th>
                             </tr>
                             <tr class="thead-light">
-                                <th colspan="4"><button type="submit" class="btn btn-primary js-confirm">Valider les changements</button></th>
+                                <th colspan="4"><button type="submit" class="btn btn-primary">Valider les changements</button></th>
                             </tr>
                             </thead>
                             {% for comment in comments %}
@@ -242,7 +242,7 @@
                             {% endfor %}
                             <tfoot class="thead-light">
                             <tr>
-                                <th colspan="4"><button type="submit" class="btn btn-primary js-confirm">Valider les changements</button></th>
+                                <th colspan="4"><button type="submit" href="{{ path }}admin" class="btn btn-primary">Valider les changements</button></th>
                             </tr>
                             </tfoot>
                         </table>
