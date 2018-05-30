@@ -78,12 +78,22 @@ $(document).ready(function() {
     });
 }( document, window, 0 ));
 
-// CLASS TO CONFIRM A DANGEROUS ACTION
+// CLASS TO CONFIRM A DANGEROUS ACTION ON A LINK
 $(function() {
-    $('.js-confirm').click(function(e) {
+    $('.js-confirm-link').click(function(e) {
         e.preventDefault();
         if (window.confirm("Etes-vous sûr d'effectuer cette action ? Les données supprimées ne pourront être récupérées !")) {
             location.href = this.href;
+        }
+    });
+});
+
+// CLASS TO CONFIRM A DANGEROUS ACTION ON A FORM
+$(function() {
+    $('.js-confirm-form').submit(function(e) {
+        e.preventDefault();
+        if (window.confirm("Etes-vous sûr d'effectuer cette action ? Les données supprimées ne pourront être récupérées !")) {
+            this.submit();
         }
     });
 });
