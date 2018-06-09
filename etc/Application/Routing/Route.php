@@ -26,28 +26,6 @@ class Route
         return $this;
     }
 
-    public function match($url)
-    {
-        $url = trim($url, '/');
-        $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
-        $regex = "#^$path$#i";
-
-        if (!preg_match($regex, $url, $matches)) {
-            return false;
-        }
-        array_shift($matches);
-        $this->matches = $matches;
-        return true;
-    }
-
-    private function paramMatch($match)
-    {
-        if (isset($this->params[$match[1]])) {
-            return '('.$this->params[$match[1]].')';
-        }
-        return '([^/]+)';
-    }
-
     public function call()
     {
         if (is_string($this->callable)) {
@@ -67,5 +45,15 @@ class Route
             $path = str_replace(":$k", $v, $path);
         }
         return $path;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    public function getParams()
+    {
+        return $this->params;
     }
 }

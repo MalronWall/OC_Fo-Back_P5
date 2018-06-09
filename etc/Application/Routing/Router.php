@@ -10,7 +10,6 @@ namespace Core\Application\Routing;
 use Blog\Controller\ErrorController;
 use Core\Application\Exception\InternalServerErrorException;
 use Core\Application\Exception\NotFoundHttpException;
-use Core\Application\Exception\RouterException;
 
 class Router
 {
@@ -57,7 +56,7 @@ class Router
 
             /** @var Route $route */
             foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
-                if ($route->match($this->url)) {
+                if ($this->match($this->url, $route)) {
                     return $route->call();
                 }
             }
@@ -83,5 +82,28 @@ class Router
                 "An error has occurred in Router.php->url() : " . $e->getMessage()
             );
         }
+    }
+
+    public function match($url, Route $route)
+    {
+        $url = trim($url, '/');
+        $path = preg_replace_callback(
+            '#:([\w]+)#',
+            function ($matches) use ($route) {
+                if (isset($route->getParams()[$matches[1]])) {
+                    return '('.$route->getParams()[$matches[1]].')';
+                }
+                return '([^/]+)';
+            },
+            $route->getPath()
+        );
+        $regex = "#^$path$#i";
+
+        if (!preg_match($regex, $url, $matches)) {
+            return false;
+        }
+        array_shift($matches);
+        $this->matches = $matches;
+        return true;
     }
 }

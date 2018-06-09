@@ -8,20 +8,45 @@ declare(strict_types=1);
 
 namespace Blog\Helper;
 
-class ContactHelper
+use Core\Application\Controller\AbstractController;
+
+class ContactHelper extends AbstractController
 {
     private $mailHelper;
 
     public function __construct()
     {
+        parent::__construct();
         $this->mailHelper = new MailHelper();
     }
 
-    public function processContactForm(array $post)
+    public function contactForm()
+    {
+        $post = [];
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $post = $_POST;
+            if ((!empty($post['firstname']) && !empty($post['lastname']) && !empty($post['email'])
+                && !empty($post['subject']) && !empty($post['content']))) {
+                if ($this->processContactForm($post, $this->getParams()["keyReCaptcha"]) === true) {
+                    $this->addFlash('success', 'Message envoyé !');
+                    $post = [];
+                } else {
+                    $this->addFlash('danger', 'Un problème est survenu lors de 
+                    l\'envoi du mail, veuillez réessayer !
+                    ');
+                }
+            } else {
+                $this->addFlash('danger', 'Un problème est survenu, veuillez réessayer !');
+            }
+        }
+        return $post;
+    }
+
+    public function processContactForm(array $post, $parameters)
     {
         $valide = false;
         if ($_SERVER['SERVER_NAME']!='localhost') {
-            $key = "6Lc0YlMUAAAAACFxZtZIVuCg1E0NczBo2jjYV8tF";
+            $key = $parameters;
             $response = $_POST['g-recaptcha-response'];
             $userIp = $_SERVER['REMOTE_ADDR'];
 

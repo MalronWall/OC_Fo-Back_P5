@@ -24,6 +24,11 @@ trait CoreTrait
         $this->parameters = require __DIR__ . '/../../config/controller/config.php';
     }
 
+    public function getParams()
+    {
+        return $this->parameters;
+    }
+
     public function getTwig()
     {
         $loader = new \Twig_Loader_Filesystem($this->parameters['templates']);
