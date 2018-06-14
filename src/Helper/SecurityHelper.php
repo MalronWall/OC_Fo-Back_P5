@@ -12,6 +12,9 @@ use Core\Application\Controller\AbstractController;
 
 class SecurityHelper extends AbstractController
 {
+    /**
+     * @return string
+     */
     public function generateToken()
     {
 //        bin2hex(random_bytes(32));

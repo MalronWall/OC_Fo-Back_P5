@@ -24,6 +24,12 @@ class PaginatorHelper
     // Nombre total de pagination
     private $totalPaging;
 
+    /**
+     * @param array $datas
+     * @param int $currentPage
+     * @param int $nbPerPage
+     * @return array
+     */
     public function getPaging(array $datas, int $currentPage = 1, int $nbPerPage = 5)
     {
         $this->datas = $datas;
@@ -43,11 +49,17 @@ class PaginatorHelper
         ];
     }
 
+    /**
+     * @return float
+     */
     private function totalPaging()
     {
         return ceil($this->getNbTotal()/$this->getNbPerPage());
     }
 
+    /**
+     * @return array
+     */
     private function previous()
     {
         $currentPage = $this->getCurrentPage();
@@ -58,6 +70,9 @@ class PaginatorHelper
         ];
     }
 
+    /**
+     * @return array
+     */
     private function next()
     {
         $currentPage = $this->getCurrentPage();
@@ -69,6 +84,9 @@ class PaginatorHelper
         ];
     }
 
+    /**
+     * @return array
+     */
     private function limitDatas()
     {
         return array_slice(

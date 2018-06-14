@@ -8,20 +8,47 @@ declare(strict_types=1);
 
 namespace Blog\Helper;
 
-class ContactHelper
-{
-    private $mailHelper;
+use Core\Application\Controller\AbstractController;
 
-    public function __construct()
+class ContactHelper extends AbstractController
+{
+    /**
+     * @param MailHelper $mailHelper
+     * @return array
+     */
+    public function contactForm(MailHelper $mailHelper)
     {
-        $this->mailHelper = new MailHelper();
+        $post = [];
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $post = $_POST;
+            if ((!empty($post['firstname']) && !empty($post['lastname']) && !empty($post['email'])
+                && !empty($post['subject']) && !empty($post['content']))) {
+                if ($this->processContactForm($post, $this->getParams()["keyReCaptcha"], $mailHelper) === true) {
+                    $this->addFlash('success', 'Message envoyé !');
+                    $post = [];
+                } else {
+                    $this->addFlash('danger', 'Un problème est survenu lors de 
+                    l\'envoi du mail, veuillez réessayer !
+                    ');
+                }
+            } else {
+                $this->addFlash('danger', 'Un problème est survenu, veuillez réessayer !');
+            }
+        }
+        return $post;
     }
 
-    public function processContactForm(array $post)
+    /**
+     * @param array $post
+     * @param $parameters
+     * @param MailHelper $mailHelper
+     * @return bool
+     */
+    public function processContactForm(array $post, $parameters, MailHelper $mailHelper)
     {
         $valide = false;
         if ($_SERVER['SERVER_NAME']!='localhost') {
-            $key = "6Lc0YlMUAAAAACFxZtZIVuCg1E0NczBo2jjYV8tF";
+            $key = $parameters;
             $response = $_POST['g-recaptcha-response'];
             $userIp = $_SERVER['REMOTE_ADDR'];
 
@@ -33,11 +60,11 @@ class ContactHelper
             $decode = json_decode(file_get_contents($api_url), true);
 
             if ($decode['success'] == true) {
-                $valide = $this->mailHelper->sendMailContact($post);
+                $valide = $mailHelper->sendMailContact($post);
             }
             return $valide;
         }
-        $valide = $this->mailHelper->sendMailContact($post);
+        $valide = $mailHelper->sendMailContact($post);
         return $valide;
     }
 }

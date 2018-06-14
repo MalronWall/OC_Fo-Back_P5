@@ -12,6 +12,11 @@ use Blog\Controller\ErrorController;
 
 class Hydrator
 {
+    /**
+     * @param string $class
+     * @param string $datas
+     * @return string
+     */
     public static function hydrate(string $class, string $datas)
     {
         try {

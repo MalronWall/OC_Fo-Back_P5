@@ -4,5 +4,6 @@
  */
 
 return [
-    'templates' => __DIR__.'/../../../templates'
+    'templates' => __DIR__.'/../../../templates',
+    'keyReCaptcha' => "6Lc0YlMUAAAAACFxZtZIVuCg1E0NczBo2jjYV8tF"
 ];

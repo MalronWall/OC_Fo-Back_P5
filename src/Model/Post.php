@@ -150,6 +150,9 @@ class Post implements \Serializable
         $this->Image = $Image;
     }
 
+    /**
+     * @return array|string
+     */
     public function serialize()
     {
         return [
@@ -164,6 +167,10 @@ class Post implements \Serializable
         ];
     }
 
+    /**
+     * @param string $serialized
+     * @return $this|void
+     */
     public function unserialize($serialized)
     {
         list(

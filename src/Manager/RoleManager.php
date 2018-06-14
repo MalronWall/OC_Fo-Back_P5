@@ -14,11 +14,18 @@ use Core\Application\Database\Hydrator;
 
 class RoleManager extends AbstractManager
 {
+    /**
+     * RoleManager constructor.
+     */
     public function __construct()
     {
         parent::__construct();
     }
-    
+
+    /**
+     * @param $idRole
+     * @return string
+     */
     public function getRole($idRole)
     {
         $req = $this->db->requestDb('
@@ -31,7 +38,11 @@ class RoleManager extends AbstractManager
 
         return Hydrator::hydrate(Role::class, serialize(array_values($req->fetch())));
     }
-    
+
+    /**
+     * @param $object
+     * @return mixed
+     */
     public function replaceIdByRole($object)
     {
         $role = $this->getRole($object->getRole());
@@ -39,6 +50,10 @@ class RoleManager extends AbstractManager
         return $object;
     }
 
+    /**
+     * @param array $objects
+     * @return array
+     */
     public function replaceIdsByRole(array $objects)
     {
         foreach ($objects as $object) {

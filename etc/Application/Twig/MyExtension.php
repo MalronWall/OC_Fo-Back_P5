@@ -10,6 +10,9 @@ namespace Core\Application\Twig;
 
 class MyExtension extends \Twig_Extension
 {
+    /**
+     * @return array|\Twig_SimpleFunction[]
+     */
     public function getFunctions()
     {
         // RETURN ALL PUBLICS FUNCTIONS
@@ -19,6 +22,11 @@ class MyExtension extends \Twig_Extension
         ];
     }
 
+    /**
+     * @param array $context
+     * @param $page
+     * @return string
+     */
     public function activePage(array $context, $page)
     {
         //$urlExploded = explode('/', $context['current_page']);
@@ -29,6 +37,11 @@ class MyExtension extends \Twig_Extension
         return '';
     }
 
+    /**
+     * @param array $context
+     * @param $page
+     * @return string
+     */
     public function currentPage(array $context, $page)
     {
         $urlExploded = $this->urlExploded($context);
@@ -38,6 +51,10 @@ class MyExtension extends \Twig_Extension
         return '';
     }
 
+    /**
+     * @param array $context
+     * @return mixed
+     */
     private function urlExploded(array $context)
     {
         //$context contient toutes les variables globales mises dans Twig
