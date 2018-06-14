@@ -14,11 +14,18 @@ use Core\Application\Database\Hydrator;
 
 class CommentManager extends AbstractManager
 {
+    /**
+     * CommentManager constructor.
+     */
     public function __construct()
     {
         parent::__construct();
     }
-    
+
+    /**
+     * @param $idPost
+     * @return array
+     */
     public function getValidComments($idPost)
     {
         $req = $this->db->requestDb('
@@ -36,6 +43,9 @@ class CommentManager extends AbstractManager
         return $results;
     }
 
+    /**
+     * @return array
+     */
     public function getPendingComments()
     {
         $req = $this->db->requestDb('
@@ -50,7 +60,13 @@ class CommentManager extends AbstractManager
 
         return $results;
     }
-    
+
+    /**
+     * @param $content
+     * @param $idPost
+     * @param $idUser
+     * @return bool
+     */
     public function createComment($content, $idPost, $idUser)
     {
         $req = $this->db->requestDb('
@@ -65,6 +81,10 @@ class CommentManager extends AbstractManager
         return true;
     }
 
+    /**
+     * @param $idComment
+     * @return bool
+     */
     public function validComment($idComment)
     {
         $req = $this->db->requestDb('
@@ -78,6 +98,10 @@ class CommentManager extends AbstractManager
         return true;
     }
 
+    /**
+     * @param $idComment
+     * @return bool
+     */
     public function deleteComment($idComment)
     {
         $req = $this->db->requestDb('
@@ -90,6 +114,10 @@ class CommentManager extends AbstractManager
         return true;
     }
 
+    /**
+     * @param $req
+     * @return array
+     */
     private function fetchAllResults($req)
     {
         $results = [];

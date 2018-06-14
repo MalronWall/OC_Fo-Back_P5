@@ -113,6 +113,9 @@ class Comment implements \Serializable
         $this->User = $User;
     }
 
+    /**
+     * @return array|string
+     */
     public function serialize()
     {
         return [
@@ -125,6 +128,10 @@ class Comment implements \Serializable
         ];
     }
 
+    /**
+     * @param string $serialized
+     * @return $this|void
+     */
     public function unserialize($serialized)
     {
         list(

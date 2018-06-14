@@ -18,22 +18,45 @@ class Router
     private $namedRoutes = [];
     private $errorController;
 
+    /**
+     * Router constructor.
+     * @param $url
+     */
     public function __construct($url)
     {
         $this->url = $url;
         $this->errorController = new ErrorController();
     }
 
+    /**
+     * @param $path
+     * @param $callable
+     * @param null $name
+     * @return Route
+     */
     public function get($path, $callable, $name = null)
     {
         return $this->add($path, $callable, $name, 'GET');
     }
 
+    /**
+     * @param $path
+     * @param $callable
+     * @param null $name
+     * @return Route
+     */
     public function post($path, $callable, $name = null)
     {
         return $this->add($path, $callable, $name, 'POST');
     }
 
+    /**
+     * @param $path
+     * @param $callable
+     * @param $name
+     * @param $method
+     * @return Route
+     */
     public function add($path, $callable, $name, $method)
     {
         $route = new Route($path, $callable);
@@ -47,6 +70,9 @@ class Router
         return $route;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function run()
     {
         try {
@@ -70,6 +96,11 @@ class Router
         }
     }
 
+    /**
+     * @param $name
+     * @param array $params
+     * @return string
+     */
     public function url($name, $params = [])
     {
         try {
@@ -84,6 +115,11 @@ class Router
         }
     }
 
+    /**
+     * @param $url
+     * @param Route $route
+     * @return bool
+     */
     public function match($url, Route $route)
     {
         $url = trim($url, '/');
@@ -98,12 +134,11 @@ class Router
             $route->getPath()
         );
         $regex = "#^$path$#i";
-
         if (!preg_match($regex, $url, $matches)) {
             return false;
         }
         array_shift($matches);
-        $this->matches = $matches;
+        $route->setMatches($matches);
         return true;
     }
 }

@@ -14,11 +14,18 @@ use Core\Application\Database\Hydrator;
 
 class ImageManager extends AbstractManager
 {
+    /**
+     * ImageManager constructor.
+     */
     public function __construct()
     {
         parent::__construct();
     }
-    
+
+    /**
+     * @param $idPost
+     * @return array
+     */
     public function getImagePost($idPost)
     {
         $req = $this->db->requestDb('
@@ -34,6 +41,10 @@ class ImageManager extends AbstractManager
         return $results;
     }
 
+    /**
+     * @param $idUser
+     * @return array
+     */
     public function getImageUser($idUser)
     {
         $req = $this->db->requestDb('
@@ -49,6 +60,10 @@ class ImageManager extends AbstractManager
         return $results;
     }
 
+    /**
+     * @param $req
+     * @return array
+     */
     private function fetchAllResults($req)
     {
         $results = [];
@@ -59,6 +74,10 @@ class ImageManager extends AbstractManager
         return $results;
     }
 
+    /**
+     * @param array $objects
+     * @return array
+     */
     public function replaceIdsPostByImages(array $objects)
     {
         foreach ($objects as $object) {
@@ -67,6 +86,10 @@ class ImageManager extends AbstractManager
         return $objects;
     }
 
+    /**
+     * @param $object
+     * @return mixed
+     */
     public function replaceIdPostByImage($object)
     {
         $image = $this->getImagePost($object->getId());
@@ -74,6 +97,10 @@ class ImageManager extends AbstractManager
         return $object;
     }
 
+    /**
+     * @param array $objects
+     * @return array
+     */
     public function replaceIdsUserByImages(array $objects)
     {
         foreach ($objects as $object) {
@@ -82,6 +109,10 @@ class ImageManager extends AbstractManager
         return $objects;
     }
 
+    /**
+     * @param $object
+     * @return mixed
+     */
     public function replaceIdUserByImage($object)
     {
         $image = $this->getImageUser($object->getId());
@@ -89,6 +120,10 @@ class ImageManager extends AbstractManager
         return $object;
     }
 
+    /**
+     * @param $idUser
+     * @return bool|mixed
+     */
     public function createAndLinkImageUser($idUser)
     {
         if (empty($this->getImageUser($idUser))) {
@@ -104,7 +139,11 @@ class ImageManager extends AbstractManager
         }
         return true;
     }
-    
+
+    /**
+     * @param $idUser
+     * @return bool
+     */
     private function createImageUser($idUser)
     {
         $req = $this->db->requestDb('
@@ -117,6 +156,11 @@ class ImageManager extends AbstractManager
         return true;
     }
 
+    /**
+     * @param $idImage
+     * @param $idUser
+     * @return bool
+     */
     private function linkImageUser($idImage, $idUser)
     {
         $req = $this->db->requestDb('
@@ -131,6 +175,10 @@ class ImageManager extends AbstractManager
         return true;
     }
 
+    /**
+     * @param $idPost
+     * @return bool|mixed
+     */
     public function createAndLinkImagePost($idPost)
     {
         if (empty($this->getImagePost($idPost))) {
@@ -147,6 +195,10 @@ class ImageManager extends AbstractManager
         return true;
     }
 
+    /**
+     * @param $idUser
+     * @return bool
+     */
     private function createImagePost($idUser)
     {
         $req = $this->db->requestDb('
@@ -159,6 +211,11 @@ class ImageManager extends AbstractManager
         return true;
     }
 
+    /**
+     * @param $idImage
+     * @param $idPost
+     * @return bool
+     */
     private function linkImagePost($idImage, $idPost)
     {
         $req = $this->db->requestDb('

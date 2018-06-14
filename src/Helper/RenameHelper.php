@@ -12,18 +12,33 @@ use Core\Application\Controller\AbstractController;
 
 class RenameHelper extends AbstractController
 {
+    /**
+     * @param $image
+     * @param $pseudo
+     * @return bool
+     */
     public function moveImageUserUploaded($image, $pseudo)
     {
         $dir = __DIR__.'/../../public/images/database/user/';
         return move_uploaded_file($image, $dir.$pseudo.'.png');
     }
 
+    /**
+     * @param $image
+     * @param $slug
+     * @return bool
+     */
     public function moveImagePostUploaded($image, $slug)
     {
         $dir = __DIR__.'/../../public/images/database/post/';
         return move_uploaded_file($image, $dir.$slug.'.png');
     }
-    
+
+    /**
+     * @param $oldPseudo
+     * @param $newPseudo
+     * @return bool
+     */
     public function renameImageUser($oldPseudo, $newPseudo)
     {
         $dir = __DIR__.'/../../public/images/database/user/';
@@ -35,6 +50,10 @@ class RenameHelper extends AbstractController
         return false;
     }
 
+    /**
+     * @param $title
+     * @return mixed
+     */
     public function renameTitleInSlug($title)
     {
         $slug = strtolower($this->removeAccents($title));
@@ -43,7 +62,11 @@ class RenameHelper extends AbstractController
         
         return $this->replaceBlanks($slug);
     }
-    
+
+    /**
+     * @param $pseudo
+     * @return mixed
+     */
     public function renamePseudo($pseudo)
     {
         $newPseudo = $this->removeAccents($pseudo);
@@ -52,7 +75,11 @@ class RenameHelper extends AbstractController
         
         return $this->removeBlanks($newPseudo);
     }
-    
+
+    /**
+     * @param $var
+     * @return mixed
+     */
     private function removeAccents($var)
     {
         $accents = array('@','À','Á','Â','Ã','Ä','Å','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ò','Ó','Ô','Õ',
@@ -63,7 +90,11 @@ class RenameHelper extends AbstractController
             'o','o','u','u','u','u','y','y');
         return str_replace($accents, $replaceAccents, $var);
     }
-    
+
+    /**
+     * @param $var
+     * @return mixed
+     */
     private function safeURL($var)
     {
         $speCharac = array(
@@ -71,13 +102,21 @@ class RenameHelper extends AbstractController
         );
         return str_replace($speCharac, '', $var);
     }
-    
+
+    /**
+     * @param $var
+     * @return mixed
+     */
     private function replaceBlanks($var)
     {
         $blanks = array(' ', '--', '_');
         return str_replace($blanks, '-', $var);
     }
-    
+
+    /**
+     * @param $var
+     * @return mixed
+     */
     private function removeBlanks($var)
     {
         return str_replace(' ', '', $var);

@@ -15,6 +15,13 @@ class DatabaseConnector extends \PDO
         'boolean' => parent::PARAM_BOOL,
     ];
 
+    /**
+     * DatabaseConnector constructor.
+     * @param $dsn
+     * @param string $username
+     * @param string $passwd
+     * @param array $options
+     */
     public function __construct($dsn, $username = '', $passwd = '', $options = [])
     {
         parent::__construct($dsn, $username, $passwd, $options);
@@ -23,6 +30,11 @@ class DatabaseConnector extends \PDO
         parent::setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
 
+    /**
+     * @param $statement
+     * @param array $params
+     * @return bool|\PDOStatement
+     */
     public function requestDb($statement, array $params = [])
     {
         if (is_string($statement)) {

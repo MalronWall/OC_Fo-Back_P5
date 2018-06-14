@@ -8,17 +8,23 @@ declare(strict_types=1);
 
 namespace Blog\Controller;
 
+use Blog\Helper\MailHelper;
 use Core\Application\Controller\AbstractController;
 use Blog\Helper\ContactHelper;
 
 class ContactController extends AbstractController
 {
     protected $contactHelper;
-    
+    protected $mailHelper;
+
+    /**
+     * ContactController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
         $this->contactHelper = new ContactHelper();
+        $this->mailHelper = new MailHelper();
     }
 
     /**
@@ -26,7 +32,7 @@ class ContactController extends AbstractController
      */
     public function contact()
     {
-        $post = $this->contactHelper->ContactForm();
+        $post = $this->contactHelper->ContactForm($this->mailHelper);
 
         return $this->render('contact.html.twig', [
             'title' => 'Contact',

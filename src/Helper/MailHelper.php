@@ -12,6 +12,13 @@ use Core\Application\Controller\AbstractController;
 
 class MailHelper extends AbstractController
 {
+    /**
+     * @param array $post
+     * @return bool
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function sendMailContact(array $post)
     {
         $myEmailAdress = 'thibaut.tourte17@gmail.com';
@@ -49,6 +56,14 @@ class MailHelper extends AbstractController
         return false;
     }
 
+    /**
+     * @param $post
+     * @param $token
+     * @return bool
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function sendMailConfirmationLogon($post, $token)
     {
         $preheader = 'Plus qu\'une étape pour finaliser l\'inscription !';
@@ -81,7 +96,14 @@ class MailHelper extends AbstractController
         }
         return false;
     }
-    
+
+    /**
+     * @param $user
+     * @return bool
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function sendMailForgotPassword($user)
     {
         $preheader = 'Un oubli de mot de passe ? On va arranger ça ! ;)';

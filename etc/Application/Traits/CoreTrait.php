@@ -14,21 +14,33 @@ trait CoreTrait
 {
     protected $parameters;
 
+    /**
+     * CoreTrait constructor.
+     */
     public function __construct()
     {
-        $this->getParameters();
+        $this->setParameters();
     }
 
-    public function getParameters()
+    /**
+     *
+     */
+    public function setParameters()
     {
         $this->parameters = require __DIR__ . '/../../config/controller/config.php';
     }
 
+    /**
+     * @return mixed
+     */
     public function getParams()
     {
         return $this->parameters;
     }
 
+    /**
+     * @return \Twig_Environment
+     */
     public function getTwig()
     {
         $loader = new \Twig_Loader_Filesystem($this->parameters['templates']);

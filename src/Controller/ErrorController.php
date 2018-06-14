@@ -14,12 +14,21 @@ class ErrorController extends AbstractController
 {
     protected $domain;
 
+    /**
+     * ErrorController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
         $this->domain = $_SERVER['SERVER_NAME'];
     }
 
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function accessDenied()
     {
         return $this->render('403.html.twig', [
@@ -28,6 +37,12 @@ class ErrorController extends AbstractController
         ]);
     }
 
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function notFound()
     {
         return $this->render('404.html.twig', [
@@ -36,6 +51,13 @@ class ErrorController extends AbstractController
         ]);
     }
 
+    /**
+     * @param string $errorMessage
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function internalError($errorMessage = '')
     {
         return $this->render('500.html.twig', [

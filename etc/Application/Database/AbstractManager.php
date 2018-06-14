@@ -13,11 +13,17 @@ class AbstractManager
     /** @var DatabaseConnector */
     protected $db;
 
+    /**
+     * AbstractManager constructor.
+     */
     protected function __construct()
     {
         $this->loadDatabase();
     }
 
+    /**
+     *
+     */
     protected function loadDatabase()
     {
         $config = $this->loadDatabaseConfiguration();
@@ -32,6 +38,9 @@ class AbstractManager
         );
     }
 
+    /**
+     * @return mixed
+     */
     private function loadDatabaseConfiguration()
     {
         if (file_exists(__DIR__ . '/../../config/database/connection_loc.php')) {

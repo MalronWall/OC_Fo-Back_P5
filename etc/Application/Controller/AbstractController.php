@@ -14,6 +14,14 @@ abstract class AbstractController
 {
     use CoreTrait;
 
+    /**
+     * @param $filename
+     * @param array $params
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     protected function render($filename, $params = [])
     {
         if (isset($_SESSION['flashbag'])) {
@@ -24,6 +32,9 @@ abstract class AbstractController
         return $this->getTwig()->render($filename, $params);
     }
 
+    /**
+     * @param string $page
+     */
     protected function redirect(string $page)
     {
         $host  = $_SERVER['HTTP_HOST'];
@@ -36,6 +47,10 @@ abstract class AbstractController
         exit();
     }
 
+    /**
+     * @param string $type
+     * @param string $message
+     */
     protected function addFlash(string $type, string $message)
     {
         $_SESSION['flashbag'] = compact('type', 'message');

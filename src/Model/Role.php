@@ -45,6 +45,9 @@ class Role implements \Serializable
         $this->role = $role;
     }
 
+    /**
+     * @return array|string
+     */
     public function serialize()
     {
         return [
@@ -53,6 +56,10 @@ class Role implements \Serializable
         ];
     }
 
+    /**
+     * @param string $serialized
+     * @return $this|void
+     */
     public function unserialize($serialized)
     {
         list(
