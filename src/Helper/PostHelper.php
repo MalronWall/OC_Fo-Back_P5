@@ -34,6 +34,7 @@ class PostHelper extends AbstractController
         PaginatorHelper $paginatorHelper,
         $id
     ) {
+        $id = intval($id);
         // Récup des posts
         $posts = $postManager->getPosts();
         // Remplacement de l'idUser par User
@@ -99,7 +100,7 @@ class PostHelper extends AbstractController
                 if ($commentManager->createComment(
                     $_POST['commentContent'],
                     $post->getId(),
-                    $post->getUser()->getId()
+                    $_SESSION['user'][0]
                 )) {
                     $this->addFlash("success", "
                     Votre commentaire à bien été envoyé ! Il sera visible lorsqu'un administrateur l'aura confirmé ! :)
@@ -123,7 +124,7 @@ class PostHelper extends AbstractController
      * @param ImageManager $imageManager
      * @param RenameHelper $renameHelper
      * @param ErrorController $errorController
-     * @return array
+     * @return array|int|string
      */
     public function newPostProcess(
         PostManager $postManager,
@@ -131,7 +132,10 @@ class PostHelper extends AbstractController
         RenameHelper $renameHelper,
         ErrorController $errorController
     ) {
-        $this->adminControl($errorController);
+        $err = $this->adminControl($errorController);
+        if (is_string($err)) {
+            return $err;
+        }
 
         $post = [];
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -224,7 +228,7 @@ class PostHelper extends AbstractController
      * @param RenameHelper $renameHelper
      * @param $slug
      * @param ErrorController $errorController
-     * @return array
+     * @return array|int|string
      */
     public function editPostProcess(
         PostManager $postManager,
@@ -233,7 +237,10 @@ class PostHelper extends AbstractController
         $slug,
         ErrorController $errorController
     ) {
-        $this->adminControl($errorController);
+        $err = $this->adminControl($errorController);
+        if (is_string($err)) {
+            return $err;
+        }
 
         $currentPost = $postManager->getPostBySlug($slug);
 
@@ -243,14 +250,20 @@ class PostHelper extends AbstractController
                 iconv_strlen($post['title'])<=25 &&
                 iconv_strlen($post['content'])>=50) {
                 $lastUpdate = 0;
-                // UPDATE TITLE & SLUG
+                // UPDATE TITLE & SLUG + IMAGE NAME
                 if ($post['title'] != $currentPost->getTitle()) {
                     if ($postManager->checkTitle($post['title'])[0] == 0) {
                         $oldSlug = $slug;
                         $slug = $renameHelper->renameTitleInSlug($post['title']);
                         if ($postManager->checkSlug($slug)[0] == 0) {
                             if ($postManager->updateSlugTitle($oldSlug, $slug, $post['title'])) {
-                                $lastUpdate = 1;
+                                if ($renameHelper->renameImagePost($oldSlug, $slug)) {
+                                    $lastUpdate = 1;
+                                } else {
+                                    $this->addFlash("danger", "
+                                    Une erreur s'est produite lors du renommage de l'image ! :(
+                                    ");
+                                }
                             } else {
                                 $this->addFlash("danger", "
                                 Une erreur s'est produite lors de la mise à jour du titre ! :(
@@ -281,12 +294,13 @@ class PostHelper extends AbstractController
                 if (!empty($post['chapo'])) {
                     if (iconv_strlen($post['chapo']) <= 100) {
                         if ($post['chapo'] != $currentPost->getChapo()) {
-                            if ($postManager->updateChapo($slug, $post['chapo']) != true) {
+                            if ($postManager->updateChapo($slug, $post['chapo'])) {
+                                $lastUpdate = 1;
+                            } else {
                                 $this->addFlash("danger", "
                                     Une erreur est survenue lors de l'enregistrement du chapo ! 
                                     Veuillez réessayer ! :(
                                     ");
-                                $lastUpdate = 1;
                             }
                         }
                     } else {
@@ -354,10 +368,14 @@ class PostHelper extends AbstractController
      * @param PostManager $postManager
      * @param $slug
      * @param ErrorController $errorController
+     * @return int|string
      */
     public function deletePostProcess(PostManager $postManager, $slug, ErrorController $errorController)
     {
-        $this->adminControl($errorController);
+        $err = $this->adminControl($errorController);
+        if (is_string($err)) {
+            return $err;
+        }
 
         if ($postManager->getPostBySlug($slug) != false) {
             if ($postManager->deletePost($slug)) {
@@ -375,12 +393,12 @@ class PostHelper extends AbstractController
                 ");
         }
 
-        $this->redirect('admin');
+        $this->redirect('posts');
     }
 
     /**
      * @param ErrorController $errorController
-     * @return string
+     * @return int|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -394,5 +412,7 @@ class PostHelper extends AbstractController
         } catch (AccessDeniedException $e) {
             return $errorController->accessDenied();
         }
+
+        return 0;
     }
 }

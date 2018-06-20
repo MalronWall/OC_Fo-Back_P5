@@ -29,11 +29,11 @@ class CommentManager extends AbstractManager
     public function getValidComments($idPost)
     {
         $req = $this->db->requestDb('
-                                    SELECT id, content, DATE_FORMAT(published, "%d/%m/%y à %Hh%m") published, valid,
+                                    SELECT id, content, DATE_FORMAT(published, "%d/%m/%y à %Hh%i") published, valid,
                                     id_Post, id_User
                                     FROM comment
                                     WHERE id_Post = :idPost AND valid = 1
-                                    ORDER BY id DESC
+                                    ORDER BY id
                                     ', [
                                     'idPost' => $idPost
         ]);
@@ -49,7 +49,7 @@ class CommentManager extends AbstractManager
     public function getPendingComments()
     {
         $req = $this->db->requestDb('
-                                    SELECT id, content, DATE_FORMAT(published, "%d/%m/%y à %Hh%m") published, valid,
+                                    SELECT id, content, DATE_FORMAT(published, "%d/%m/%y à %Hh%i") published, valid,
                                     id_Post, id_User
                                     FROM comment
                                     WHERE valid = 0
