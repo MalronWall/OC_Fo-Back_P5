@@ -29,6 +29,9 @@
                             {% endif %}
                         <p class="text-justify">
                             {{ (post.content|raw|length) > 300 ? (post.content | striptags | slice(0, 300)) ~ '[...]' : post.content|striptags  }}
+                            {#
+                            {{ post.content|truncate(300, true, '...')|raw }}
+                            #}
                         </p>
                         <small class="float-right">Mis à jour le {{ post.lastUpdate }} par <a href="{{ path }}members/{{ post.User.pseudo }}">{{ post.User.pseudo }}</a></small>
                     </div>

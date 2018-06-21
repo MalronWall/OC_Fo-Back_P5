@@ -10,7 +10,50 @@ function onUserSubmit(response) {
 }
 
 // TYNYMCE
-tinymce.init({ selector:'.tinymce' });
+/*
+tinymce.init({
+    selector:'.tinymce'
+});
+*/
+tinymce.init({
+    selector : ".tinymce",
+    plugins: [
+        "advlist autolink lists link charmap print preview anchor textcolor",
+        "searchreplace visualblocks code fullscreen",
+        "insertdatetime table contextmenu paste textcolor"
+    ],
+    toolbar: "insertfile undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor",
+    formats: {
+        alignleft: {
+            inline: 'span',
+            styles: {
+                display: 'block',
+                textAlign: 'left'
+            }
+        },
+        aligncenter: {
+            inline: 'span',
+            styles: {
+                display: 'block',
+                textAlign: 'center'
+            }
+        },
+        alignright: {
+            inline: 'span',
+            styles: {
+                display: 'block',
+                textAlign: 'right'
+            }
+        },
+        alignjustify: {
+            inline: 'span',
+            styles: {
+                display: 'block',
+                textAlign: 'justify'
+            }
+        },
+    }
+});
 
 // SHOW OR HIDE PASSWORD
 $(document).ready(function() {
