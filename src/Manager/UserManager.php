@@ -155,6 +155,25 @@ class UserManager extends AbstractManager
 
     /**
      * @param $post
+     * @param $id
+     * @return mixed
+     */
+    public function checkEmailOthers($post, $id)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE email = :email AND id <> :id
+                                    ', [
+            'email' => $post['email'],
+            'id' => $id
+        ]);
+
+        return $req->fetch();
+    }
+
+    /**
+     * @param $post
      * @return mixed
      */
     public function checkPseudo($post)
@@ -165,6 +184,25 @@ class UserManager extends AbstractManager
                                     WHERE pseudo = :pseudo
                                     ', [
             'pseudo' => $post['pseudo']
+        ]);
+
+        return $req->fetch();
+    }
+
+    /**
+     * @param $post
+     * @param $id
+     * @return mixed
+     */
+    public function checkPseudoOthers($post, $id)
+    {
+        $req = $this->db->requestDb('
+                                    SELECT COUNT(*)
+                                    FROM user
+                                    WHERE pseudo = :pseudo AND id <> :id
+                                    ', [
+            'pseudo' => $post['pseudo'],
+            'id' => $id
         ]);
 
         return $req->fetch();

@@ -51,6 +51,22 @@ class RenameHelper extends AbstractController
     }
 
     /**
+     * @param $oldSlug
+     * @param $newSlug
+     * @return bool
+     */
+    public function renameImagePost($oldSlug, $newSlug)
+    {
+        $dir = __DIR__.'/../../public/images/database/post/';
+        $oldFile = $dir.$oldSlug.'.png';
+        if (file_exists($oldFile)) {
+            $newFile = $dir.$newSlug.'.png';
+            return rename($oldFile, $newFile);
+        }
+        return false;
+    }
+
+    /**
      * @param $title
      * @return mixed
      */

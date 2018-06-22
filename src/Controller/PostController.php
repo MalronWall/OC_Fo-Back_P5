@@ -80,7 +80,7 @@ class PostController extends AbstractController
 
     /**
      * @param $slugPost
-     * @return string
+     * @return array|string
      */
     public function show($slugPost)
     {
@@ -90,7 +90,7 @@ class PostController extends AbstractController
     /**
      * @param $slugPost
      * @param $id
-     * @return string
+     * @return array|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -109,6 +109,10 @@ class PostController extends AbstractController
                 $id
             );
 
+        if (is_string($arrayPage)) {
+            return $arrayPage;
+        }
+
         return $this->render('posts-show.html.twig', [
             'title' => 'Article',
             'post' => $arrayPage["post"],
@@ -117,7 +121,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @return string
+     * @return array|int|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -132,6 +136,10 @@ class PostController extends AbstractController
                 $this->errorController
             );
 
+        if (is_string($post)) {
+            return $post;
+        }
+
         return $this->render('posts-admin.html.twig', [
             'title' => 'Nouvel article',
             'post' => $post
@@ -140,7 +148,7 @@ class PostController extends AbstractController
 
     /**
      * @param $slug
-     * @return string
+     * @return array|int|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -156,6 +164,10 @@ class PostController extends AbstractController
                 $this->errorController
             );
 
+        if (is_string($arrayPost)) {
+            return $arrayPost;
+        }
+
         return $this->render('posts-admin.html.twig', [
             'title' => 'Edition de '.$arrayPost["titlePost"],
             'post' => $arrayPost["currentPost"]
@@ -164,9 +176,13 @@ class PostController extends AbstractController
 
     /**
      * @param $slug
+     * @return int|string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function deletePost($slug)
     {
-        $this->postHelper->deletePostProcess($this->postManager, $slug, $this->errorController);
+        return $this->postHelper->deletePostProcess($this->postManager, $slug, $this->errorController);
     }
 }

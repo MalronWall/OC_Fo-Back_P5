@@ -10,59 +10,63 @@
     </header>
 
     <section class="container">
-        <div class="row">
-            {% if pagination.nbTotal > 0 %}
-            {% for post in pagination.datas %}
-            <div class="col-sm-6 mb-3">
-                <a href="{{ path }}posts/{{ post.slug }}">
-                    {% if post.image is not empty %}
-                    <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail" alt="Image pour l'article : {{ post.title }}">
-                    {% else %}
-                    <img src="{{ path }}images/database/post/default.png" class="img-thumbnail" alt="Image par défaut d'un article">
-                    {% endif %}
-                </a>
+        {% if pagination.nbTotal > 0 %}
+            <div class="row">
+                {% for post in pagination.datas %}
+                    <div class="col-sm-6 mb-3">
+                        <a href="{{ path }}posts/{{ post.slug }}">
+                            {% if post.image is not empty %}
+                                <img src="{{ path }}images/database/post/{{ post.slug }}.png" class="img-thumbnail" alt="Image pour l'article : {{ post.title }}">
+                            {% else %}
+                                <img src="{{ path }}images/database/post/default.png" class="img-thumbnail" alt="Image par défaut d'un article">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <h3><a href="{{ path }}posts/{{ post.slug }}">{{ post.title }}</a></h3>
+                            {% if post.chapo is not empty %}
+                                <i class="h6">{{ post.chapo }}</i><br/><br/>
+                            {% endif %}
+                        <p class="text-justify">
+                            {{ (post.content|raw|length) > 300 ? (post.content | striptags | slice(0, 300)) ~ '[...]' : post.content|striptags  }}
+                            {#
+                            {{ post.content|truncate(300, true, '...')|raw }}
+                            #}
+                        </p>
+                        <small class="float-right">Mis à jour le {{ post.lastUpdate }} par <a href="{{ path }}members/{{ post.User.pseudo }}">{{ post.User.pseudo }}</a></small>
+                    </div>
+                {% endfor %}
             </div>
-            <div class="col-sm-6 mb-3">
-                <h3><a href="{{ path }}posts/{{ post.slug }}">{{ post.title }}</a></h3>
-                {% if post.chapo is not empty %}
-                <i class="h6">{{ post.chapo }}</i><br/><br/>
-                {% endif %}
-                <p class="text-justify">
-                    {{ (post.content|raw|length) > 300 ? (post.content | striptags | slice(0, 300)) ~ '[...]' : post.content|striptags  }}
-                </p>
-                <small class="float-right">Mis à jour le {{ post.lastUpdate }} par <a href="{{ path }}members/{{ post.User.pseudo }}">{{ post.User.pseudo }}</a></small>
-            </div>
-            {% endfor %}
 
             {# PAGINATION #}
             {% if pagination.totalPaging > 1 %}
-            </div>
-            <div class="row justify-content-center">
-                <nav aria-label="Navigation des articles">
-                    <ul class="pagination">
-                        <!-- PREVIOUS -->
-                        <li class="page-item {{ pagination.previous.display }}">
-                            <a class="page-link" href="{{ path }}posts/{{ pagination.previous.href }}"><</a>
-                        </li>
-                        {% for page in 1..pagination.totalPaging  %}
-                        {% if page == pagination.currentPage %}
-                        <li class="page-item active">
-                            <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
-                        </li>
-                        {% else %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }}</a>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                        <!-- NEXT -->
-                        <li class="page-item {{ pagination.next.display }}">
-                            <a class="page-link" href="{{ path }}posts/{{ pagination.next.href }}">></a>
-                        </li>
-                    </ul>
-                </nav>
+                <div class="row justify-content-center">
+                    <nav aria-label="Navigation des articles">
+                        <ul class="pagination">
+                            <!-- PREVIOUS -->
+                            <li class="page-item {{ pagination.previous.display }}">
+                                <a class="page-link" href="{{ path }}posts/{{ pagination.previous.href }}"><</a>
+                            </li>
+                                {% for page in 1..pagination.totalPaging  %}
+                                    {% if page == pagination.currentPage %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }} <span class="sr-only">(current)</span></a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ path }}posts/{{ page }}">{{ page }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            <!-- NEXT -->
+                            <li class="page-item {{ pagination.next.display }}">
+                                <a class="page-link" href="{{ path }}posts/{{ pagination.next.href }}">></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             {% endif %}
-            {% else %}
+        {% else %}
             <div class="row">
                 <div class="col-sm-12">
                     <div class="alert alert-info col-sm-12 text-center mb-0" role="alert">
@@ -71,7 +75,6 @@
                     <img src="{{ path }}images/posts/noPost.png" alt="Un carnet vierge" class="img-fluid">
                 </div>
             </div>
-            {% endif %}
-        </div>
+        {% endif %}
     </section>
 {% endblock %}

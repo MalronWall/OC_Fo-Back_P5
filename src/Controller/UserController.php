@@ -83,10 +83,14 @@ class UserController extends AbstractController
 
     /**
      * @param $token
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function confirmEmail($token)
     {
-        $this->userHelper->confirmEmailProcess($this->userManager, $token, $this->errorController);
+        return $this->userHelper->confirmEmailProcess($this->userManager, $token, $this->errorController);
     }
 
     /**
@@ -108,6 +112,10 @@ class UserController extends AbstractController
                 $this->errorController
             );
 
+        if (is_string($profile)) {
+            return $profile;
+        }
+
         return $this->render('profile.html.twig', [
             'title' => 'Profil',
             'profile' => $profile
@@ -115,7 +123,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @return string
+     * @return array|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -130,6 +138,10 @@ class UserController extends AbstractController
                 $this->roleManager,
                 $this->errorController
             );
+
+        if (is_string($arrayAdmin)) {
+            return $arrayAdmin;
+        }
         
         return $this->render('admin.html.twig', [
             'title' => 'Espace admin',
@@ -169,10 +181,14 @@ class UserController extends AbstractController
     {
         $error = $this->userHelper->newPasswordProcess($this->userManager, $token, $this->errorController);
 
+        if (is_string($error)) {
+            return $error;
+        }
+
         return $this->render('new_password.html.twig', [
            'title' => 'Nouveau mot de passe',
             'token' => $token,
-            'error' => $error
+            'error' => $error["error"]
         ]);
     }
 }

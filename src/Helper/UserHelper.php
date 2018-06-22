@@ -88,6 +88,9 @@ class UserHelper extends AbstractController
      * @param RenameHelper $renameHelper
      * @param SecurityHelper $securityHelper
      * @param MailHelper $mailHelper
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function logonProcess(
         UserManager $userManager,
@@ -193,7 +196,7 @@ class UserHelper extends AbstractController
      * @param RenameHelper $renameHelper
      * @param $pseudo
      * @param ErrorController $errorController
-     * @return string
+     * @return bool|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -215,75 +218,87 @@ class UserHelper extends AbstractController
             ) {
                 if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                     $_POST['pseudo'] = $renameHelper->renamePseudo($_POST['pseudo']);
-                    if ($userManager->updateDatas($_POST, $_SESSION['user'][0])) {
-                        if (!empty($_FILES['uploadImage']['name'])) {
-                            if ($_FILES['uploadImage']['error'] == 0) {
-                                $extensions = array('.png', '.jpg', '.jpeg');
-                                $extension = strrchr($_FILES['uploadImage']['name'], '.');
-                                if (in_array($extension, $extensions)) {
-                                    if ($_FILES['uploadImage']['size'] < 700000) {
-                                        if ($renameHelper->moveImageUserUploaded(
-                                            $_FILES['uploadImage']['tmp_name'],
-                                            $_POST['pseudo']
-                                        )) {
-                                            $newImage =
-                                                $imageManager->createAndLinkImageUser($_SESSION['user'][0]);
-                                            if (is_object($newImage)) {
-                                                $_SESSION['user'][9] = $newImage->serialize();
-                                            }
-                                        }
-                                    } else {
-                                        $this->addFlash("warning", "
+                    if (array_values($userManager->checkEmailOthers($_POST, $_SESSION["user"][0]))[0] == 0) {
+                        if (array_values($userManager->checkPseudoOthers($_POST, $_SESSION["user"][0]))[0] == 0) {
+                            if ($userManager->updateDatas($_POST, $_SESSION['user'][0])) {
+                                if (!empty($_FILES['uploadImage']['name'])) {
+                                    if ($_FILES['uploadImage']['error'] == 0) {
+                                        $extensions = array('.png', '.jpg', '.jpeg');
+                                        $extension = strrchr($_FILES['uploadImage']['name'], '.');
+                                        if (in_array($extension, $extensions)) {
+                                            if ($_FILES['uploadImage']['size'] < 700000) {
+                                                if ($renameHelper->moveImageUserUploaded(
+                                                    $_FILES['uploadImage']['tmp_name'],
+                                                    $_POST['pseudo']
+                                                )) {
+                                                    $newImage =
+                                                        $imageManager->createAndLinkImageUser($_SESSION['user'][0]);
+                                                    if (is_object($newImage)) {
+                                                        $_SESSION['user'][9] = $newImage->serialize();
+                                                    }
+                                                }
+                                            } else {
+                                                $this->addFlash("warning", "
                                         Les données personnelles ont été mises à jour mais 
                                         la taille de l'image est trop grande ! :/
                                         ");
-                                    }
-                                } else {
-                                    $this->addFlash("warning", "
+                                            }
+                                        } else {
+                                            $this->addFlash("warning", "
                                         Les données personnelles ont été mises à jour mais 
                                         le format du fichier envoyé n'est pas une image ! :/
                                         ");
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                        if (!empty($_POST['password'])) {
-                            if ($_POST['password'] == $_POST['confPassword']) {
-                                if ($userManager->updatePassword($_POST['password'], $_SESSION['user'][0])) {
-                                    $this->addFlash("success", "
+                                if (!empty($_POST['password'])) {
+                                    if ($_POST['password'] == $_POST['confPassword']) {
+                                        if ($userManager->updatePassword($_POST['password'], $_SESSION['user'][0])) {
+                                            $this->addFlash("success", "
                                     Les données personnelles et le mot de passe ont été mis à jour ! :)
                                     ");
-                                } else {
-                                    $this->addFlash("danger", "
+                                        } else {
+                                            $this->addFlash("danger", "
                                     Une erreur est survenue lors de la modification du mot de passe, 
                                     veuillez réessayer ! :/
                                     ");
-                                }
-                            } else {
-                                $this->addFlash("warning", "
+                                        }
+                                    } else {
+                                        $this->addFlash("warning", "
                                 Les données personnelles ont été mises à jour 
                                 mais les deux mots de passe ne correspondaient pas ! :/
                                 ");
-                            }
-                        }
-                        // Renommage de l'image par le nouveau pseudo
-                        $renameHelper->renameImageUser($_SESSION['user'][1], $_POST['pseudo']);
+                                    }
+                                }
+                                // Renommage de l'image par le nouveau pseudo
+                                $renameHelper->renameImageUser($_SESSION['user'][1], $_POST['pseudo']);
 
-                        // Mise à jour des variables de la SESSION
-                        $_SESSION['user'][1] = $_POST['pseudo'];
-                        $_SESSION['user'][2] = $_POST['lastname'];
-                        $_SESSION['user'][3] = $_POST['firstname'];
-                        $_SESSION['user'][4] = $_POST['email'];
+                                // Mise à jour des variables de la SESSION
+                                $_SESSION['user'][1] = $_POST['pseudo'];
+                                $_SESSION['user'][2] = $_POST['lastname'];
+                                $_SESSION['user'][3] = $_POST['firstname'];
+                                $_SESSION['user'][4] = $_POST['email'];
 
-                        if (!isset($_SESSION['flashbag'])) {
-                            $this->addFlash("success", "
+                                if (!isset($_SESSION['flashbag'])) {
+                                    $this->addFlash("success", "
                                     Les données personnelles ont été mises à jour ! :)
                                     ");
-                        }
+                                }
 
-                        $this->redirect('members/' . $_POST['pseudo']);
+                                $this->redirect('members/' . $_POST['pseudo']);
+                            } else {
+                                $this->addFlash("danger", "
+                        Une erreur est survenue lors de la modification des données, veuillez réessayer ! :/
+                        ");
+                            }
+                        } else {
+                            $this->addFlash("danger", "
+                            Ce pseudo existe déjà, veuillez réessayer ! :/
+                            ");
+                        }
                     } else {
                         $this->addFlash("danger", "
-                        Une erreur est survenue lors de la modification des données, veuillez réessayer ! :/
+                        Cet email existe déjà, veuillez réessayer ! :/
                         ");
                     }
                 } else {
@@ -299,6 +314,7 @@ class UserHelper extends AbstractController
         }
 
         $profile = $userManager->getProfile($pseudo);
+
         try {
             if ($profile == false) {
                 throw new NotFoundHttpException();
@@ -308,6 +324,8 @@ class UserHelper extends AbstractController
         }
 
         $roleManager->replaceIdByRole($profile);
+
+        return $profile;
     }
 
     /**
@@ -393,6 +411,9 @@ class UserHelper extends AbstractController
      * @param SecurityHelper $securityHelper
      * @param MailHelper $mailHelper
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function resetPasswordProcess(
         UserManager $userManager,
@@ -438,7 +459,7 @@ class UserHelper extends AbstractController
      * @param UserManager $userManager
      * @param $token
      * @param ErrorController $errorController
-     * @return string
+     * @return array|string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -454,7 +475,7 @@ class UserHelper extends AbstractController
             return $errorController->notFound();
         }
 
-        $error = '';
+        $error["errorValue"] = '';
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!empty($_POST['password']) or !empty($_POST['confPassword'])) {
                 if ($_POST['password'] == $_POST['confPassword']) {
@@ -464,14 +485,14 @@ class UserHelper extends AbstractController
                                     ");
                         $this->redirect('');
                     } else {
-                        $error = "Une erreur est survenue lors de la modification du mot de passe, 
+                        $error["errorValue"] = "Une erreur est survenue lors de la modification du mot de passe, 
                         veuillez réessayer ! :/";
                     }
                 } else {
-                    $error = "Les deux mots de passe ne correspondent pas ! :/";
+                    $error["errorValue"] = "Les deux mots de passe ne correspondent pas ! :/";
                 }
             } else {
-                $error = "Tous les champs n'ont pas été renseignés ! :(";
+                $error["errorValue"] = "Tous les champs n'ont pas été renseignés ! :(";
             }
         }
 
