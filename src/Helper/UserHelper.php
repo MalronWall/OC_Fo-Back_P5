@@ -281,7 +281,8 @@ class UserHelper extends AbstractController
 
                                 if (!isset($_SESSION['flashbag'])) {
                                     $this->addFlash("success", "
-                                    Les données personnelles ont été mises à jour ! :)
+                                    Les données personnelles ont été mises à jour ! :) 
+                                    (Si l'image voulue ne s'affiche pas, appuyez sur Ctrl + F5 en même temps !)
                                     ");
                                 }
 
