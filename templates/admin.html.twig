@@ -182,9 +182,15 @@
                         </tbody>
                         {% endfor %}
                         <tfoot class="thead-light">
+                            {% if posts is not empty %}
                             <tr>
                                 <th colspan="4"><button type="submit" class="btn btn-success">Créer un article</button></th>
                             </tr>
+                            {% else %}
+                            <tr>
+                                <th colspan="4" class="text-danger">Aucun article existant !</th>
+                            </tr>
+                            {% endif %}
                         </tfoot>
                     </table>
                 </div>
@@ -199,9 +205,11 @@
                                 <th scope="col">Par</th>
                                 <th scope="col">Sur l'article</th>
                             </tr>
+                            {% if comments is not empty %}
                             <tr class="thead-light">
-                                <th colspan="4"><button type="submit" class="btn btn-primary">Valider les changements</button></th>
+                                <th colspan="3"><button type="submit" class="btn btn-primary">Valider les changements</button></th>
                             </tr>
+                            {% endif %}
                             </thead>
                             {% for comment in comments %}
                             <tbody>
@@ -241,9 +249,15 @@
                             </tbody>
                             {% endfor %}
                             <tfoot class="thead-light">
+                            {% if comments is not empty %}
                             <tr>
-                                <th colspan="4"><button type="submit" href="{{ path }}admin" class="btn btn-primary">Valider les changements</button></th>
+                                <th colspan="3"><button type="submit" href="{{ path }}admin" class="btn btn-primary">Valider les changements</button></th>
                             </tr>
+                            {% else %}
+                            <tr>
+                                <th colspan="3" class="text-danger">Aucun commentaire en attente !</th>
+                            </tr>
+                            {% endif %}
                             </tfoot>
                         </table>
                     </form>
